@@ -381,7 +381,7 @@ select.rsm{width:auto;padding:6px 28px 6px 10px;}
 
     <div class="sbl">
       <button class="btn-reset" id="btn-reset"><svg class="ico"><use href="#i-reset"/></svg>Limpiar filtros</button>
-      <p class="sb-foot">Mapa &copy; colaboradores de OpenStreetMap. Datos de las instituciones educativas oficiales de Medellín.</p>
+      <p class="sb-foot">Mapa &copy; colaboradores de OpenStreetMap. Datos de las instituciones educativas oficiales de Medellín.<br><span style="font-family:var(--mono)">Versión 2.2 · 2026-10-19</span></p>
     </div>
 
   </div>
@@ -655,11 +655,32 @@ function addBase(map,bl,onFail){
     }
     function onOk(){ok++;clearTimeout(timer);}
     function onErr(){if(++err>=4)fail();}
-    layer.on('tileload',onOk).on('tileerror',onErr);
-    timer=setTimeout(fail,9000);
-    layer.addTo(map);
+    function start(){
+      layer.on('tileload',onOk).on('tileerror',onErr);
+      timer=setTimeout(fail,9000);
+      layer.addTo(map);
+    }
+    /* Un servidor que bloquea puede responder con una imagen de aviso ("Access blocked"),
+       que el navegador muestra como si fuera válida. Por eso se prueba antes un tile de Medellín. */
+    probe(order[i]).then(function(good){
+      if(good)start();
+      else{use(i+1);if(i+1<order.length&&map===MAP)toast('Mapa: usando capa «'+order[i+1]+'»');}
+    });
   }
   use(0);
+}
+var PROBE_URL={
+  'OpenStreetMap':'https://tile.openstreetmap.org/12/1188/1976.png',
+  'OSM Humanitario':'https://a.tile.openstreetmap.fr/hot/12/1188/1976.png'
+};
+var PROBES={};
+function probe(name){
+  var u=PROBE_URL[name];
+  if(!u||!window.fetch)return Promise.resolve(true);
+  if(!PROBES[name])PROBES[name]=fetch(u,{mode:'cors',referrerPolicy:'strict-origin-when-cross-origin'})
+    .then(function(r){return r.ok;})
+    .catch(function(){return true;}); /* sin CORS o error de red: se deja decidir a la carga normal */
+  return PROBES[name];
 }
 function pinIcon(ie,sel){
   var n=ie._n;
@@ -689,7 +710,7 @@ function togFull(on){
   setTimeout(function(){MAP.invalidateSize();},50);
 }
 function initMap(){
-  MAP=L.map('map',{center:[6.2476,-75.5658],zoom:12,zoomControl:true,minZoom:10,maxBounds:[[5.9,-76.0],[6.6,-75.1]],maxBoundsViscosity:.8});
+  MAP=L.map('map',{center:[6.2476,-75.5658],zoom:12,zoomControl:true,minZoom:10,maxZoom:19,maxBounds:[[5.9,-76.0],[6.6,-75.1]],maxBoundsViscosity:.8});
   var bl=baseLayers();
   addBase(MAP,bl,function(){var m=$('map-msg');m.hidden=false;m.textContent='No se pudo cargar el fondo del mapa. Revisa tu conexión a internet; los marcadores siguen disponibles.';});
   L.control.layers(bl,null,{position:'topright'}).addTo(MAP);
@@ -824,7 +845,7 @@ function buildInfo(ie){
     s2.appendChild(lk);b.appendChild(s2);
     setTimeout(function(){
       if(MINI){MINI.remove();MINI=null;}
-      MINI=L.map(mm,{center:[ie.lat,ie.lon],zoom:16,scrollWheelZoom:false,attributionControl:true});
+      MINI=L.map(mm,{center:[ie.lat,ie.lon],zoom:16,maxZoom:19,scrollWheelZoom:false,attributionControl:true});
       addBase(MINI,baseLayers());
       L.marker([ie.lat,ie.lon],{icon:pinIcon(ie,true)}).addTo(MINI);
     },30);
