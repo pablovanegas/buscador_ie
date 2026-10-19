@@ -159,7 +159,12 @@ select:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-bg);}
 .map-panel{position:absolute;z-index:500;background:var(--sur);border:1px solid var(--bdr);border-radius:10px;box-shadow:var(--sh2);}
 #map-cnt{top:12px;left:56px;padding:8px 12px;font-size:12.5px;color:var(--ink3);}
 #map-cnt b{font-family:var(--mono);color:var(--acc);font-size:14px;}
-.mleg{bottom:28px;left:12px;padding:10px 12px;}
+.mleg{bottom:26px;right:10px;padding:9px 11px;}
+body.map-full #vm{position:fixed;inset:0;z-index:1150;display:block!important;}
+body.map-full #tb,body.map-full #sb{visibility:hidden;}
+.leaflet-control-ico a{display:flex!important;align-items:center;justify-content:center;}
+.leaflet-control-ico a.on{background:var(--ink)!important;color:#fff!important;}
+.map-msg{position:absolute;inset:auto 50% 50% auto;transform:translate(50%,50%);z-index:600;max-width:320px;padding:14px 16px;text-align:center;font-size:13px;color:var(--ink2);}
 .mleg h4{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;}
 .mleg-row{display:flex;gap:4px;}
 .mleg-row div{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;color:var(--ink2);}
@@ -168,13 +173,14 @@ select:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-bg);}
 .leaflet-bar a{color:var(--ink)!important;}
 .leaflet-control-layers{border-radius:10px!important;border:1px solid var(--bdr)!important;box-shadow:var(--sh2)!important;}
 .leaflet-control-layers-expanded{padding:8px 12px;font-size:12.5px;}
-.leaflet-control-locate a{display:flex!important;align-items:center;justify-content:center;}
 .pin{width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;}
 .pin b{transform:rotate(45deg);color:#fff;font-size:11px;font-weight:700;font-family:var(--font);}
 .pin.sel{width:34px;height:34px;box-shadow:0 0 0 4px rgba(200,70,10,.35),0 2px 8px rgba(0,0,0,.4);}
 .me-dot{width:16px;height:16px;border-radius:50%;background:#2563eb;border:3px solid #fff;box-shadow:0 0 0 6px rgba(37,99,235,.25);}
-.marker-cluster-small,.marker-cluster-medium,.marker-cluster-large{background:rgba(200,70,10,.25)!important;}
-.marker-cluster-small div,.marker-cluster-medium div,.marker-cluster-large div{background:var(--acc)!important;color:#fff!important;font-weight:700;font-family:var(--font);}
+.marker-cluster{background:rgba(200,70,10,.22);border-radius:50%;background-clip:padding-box;}
+.marker-cluster div{width:30px;height:30px;margin:5px;border-radius:50%;background:var(--acc);color:#fff;font-weight:700;font-size:12px;font-family:var(--font);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.3);}
+.marker-cluster-medium{background:rgba(160,50,6,.25);}.marker-cluster-medium div{background:#a8390a;}
+.marker-cluster-large{background:rgba(120,35,4,.28);}.marker-cluster-large div{background:#7a2a05;}
 .leaflet-popup-content-wrapper{border-radius:12px!important;padding:0!important;overflow:hidden;box-shadow:var(--sh2)!important;}
 .leaflet-popup-content{margin:0!important;width:auto!important;}
 .mpop{padding:14px 16px;min-width:230px;max-width:270px;display:flex;flex-direction:column;gap:8px;}
@@ -281,8 +287,11 @@ select.rsm{width:auto;padding:6px 28px 6px 10px;}
   #modal{border-radius:0;min-height:100%;max-width:none;border:none;}
   .m-body{max-height:none;}
   .igrid,.svc4{grid-template-columns:1fr;}
-  #map-cnt{left:auto;right:12px;}
-  .mleg{bottom:20px;}
+  #map-cnt{top:10px;left:52px;padding:6px 10px;font-size:12px;}
+  .mleg{bottom:22px;padding:7px 8px;}
+  .mleg h4{display:none;}
+  .mleg-row i{width:18px;height:18px;font-size:9px;}
+  .leaflet-control-scale{display:none;}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
 </style>
@@ -309,6 +318,7 @@ select.rsm{width:auto;padding:6px 28px 6px 10px;}
   <symbol id="i-nav" viewBox="0 0 24 24"><path d="m3 11 19-9-9 19-2-8-8-2z"/></symbol>
   <symbol id="i-locate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7"/></symbol>
   <symbol id="i-share" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></symbol>
+  <symbol id="i-expand" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
 </svg>
 
@@ -404,8 +414,9 @@ select.rsm{width:auto;padding:6px 28px 6px 10px;}
   <div id="vm">
     <div id="map" aria-label="Mapa de instituciones educativas"></div>
     <div id="map-cnt" class="map-panel"><b>0</b> IEs en el mapa</div>
+    <div id="map-msg" class="map-panel map-msg" hidden></div>
     <div class="mleg map-panel">
-      <h4>Servicios disponibles</h4>
+      <h4>N.º de servicios</h4>
       <div class="mleg-row" id="mleg"></div>
     </div>
   </div>
@@ -533,7 +544,7 @@ function init(){
   $('m-close').addEventListener('click',closeM);
   $('ov').addEventListener('click',function(e){if(e.target===this)closeM();});
   document.addEventListener('keydown',function(e){
-    if(e.key==='Escape'){if($('ov').classList.contains('open'))closeM();else if(document.body.classList.contains('sb-open'))togSB(false);}
+    if(e.key==='Escape'){if($('ov').classList.contains('open'))closeM();else if(document.body.classList.contains('map-full'))togFull(false);else if(document.body.classList.contains('sb-open'))togSB(false);}
     if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&!$('ov').classList.contains('open')){e.preventDefault();$('srch').focus();}
     if(e.key==='Tab'&&$('ov').classList.contains('open'))trapFocus(e);
   });
@@ -615,11 +626,40 @@ function renderCards(lista){
 }
 
 /* ── MAPA (OpenStreetMap, sin API key) ── */
+var OSM_ATTR='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+/* OSM exige el encabezado Referer: se fuerza la política para que el navegador lo envíe */
+var TILE_OPT={maxZoom:19,referrerPolicy:'strict-origin-when-cross-origin'};
 function baseLayers(){
-  var osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
-  var hot=L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',{maxZoom:19,subdomains:'abc',attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, estilo HOT'});
-  var sat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,attribution:'Imágenes &copy; Esri, Maxar, Earthstar Geographics'});
-  return {'OpenStreetMap':osm,'OSM Humanitario':hot,'Satélite (Esri)':sat};
+  return {
+    'OpenStreetMap':L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',Object.assign({attribution:OSM_ATTR},TILE_OPT)),
+    'Calles (Esri)':L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',Object.assign({attribution:'Mapa &copy; Esri, HERE, Garmin, '+OSM_ATTR},TILE_OPT)),
+    'OSM Humanitario':L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',Object.assign({subdomains:'abc',attribution:OSM_ATTR+', estilo HOT'},TILE_OPT)),
+    'Satélite (Esri)':L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',Object.assign({attribution:'Imágenes &copy; Esri, Maxar, Earthstar Geographics'},TILE_OPT))
+  };
+}
+/* Agrega la primera capa que funcione: si una no carga (bloqueo, sin Referer al abrir
+   el archivo localmente, sin red), pasa automáticamente a la siguiente. */
+var FALLBACK=['OpenStreetMap','Calles (Esri)','OSM Humanitario','Satélite (Esri)'];
+function addBase(map,bl,onFail){
+  var order=FALLBACK.slice();
+  if(location.protocol==='file:')order.push(order.shift()); // sin Referer, OSM bloquea los tiles
+  var idx=0;
+  function use(i){
+    if(i>=order.length){if(onFail)onFail();return;}
+    idx=i;var layer=bl[order[i]],ok=0,err=0,timer;
+    function fail(){
+      if(ok||!map.hasLayer(layer))return;
+      clearTimeout(timer);layer.off('tileload',onOk).off('tileerror',onErr);
+      map.removeLayer(layer);use(i+1);
+      if(i+1<order.length&&map===MAP)toast('Mapa: usando capa «'+order[i+1]+'»');
+    }
+    function onOk(){ok++;clearTimeout(timer);}
+    function onErr(){if(++err>=4)fail();}
+    layer.on('tileload',onOk).on('tileerror',onErr);
+    timer=setTimeout(fail,9000);
+    layer.addTo(map);
+  }
+  use(0);
 }
 function pinIcon(ie,sel){
   var n=ie._n;
@@ -632,20 +672,35 @@ function popHtml(ie){
     +'<p>'+H(ie.dir||'')+'<br>'+H(phones(ie.tel)[0]||'Tel. N/D')+'</p>'
     +'<button class="mpop-btn" data-open="'+H(ie.dane)+'">Ver ficha completa '+ico('arrow',13)+'</button></div>';
 }
+function mapBtn(title,icon,fn){
+  var C=L.Control.extend({options:{position:'topleft'},onAdd:function(){
+    var d=L.DomUtil.create('div','leaflet-bar leaflet-control leaflet-control-ico');
+    d.innerHTML='<a href="#" role="button" title="'+title+'" aria-label="'+title+'">'+ico(icon,16)+'</a>';
+    L.DomEvent.on(d,'click',function(e){L.DomEvent.preventDefault(e);fn(d.firstChild);});
+    L.DomEvent.disableClickPropagation(d);return d;}});
+  return new C();
+}
+var LASTB=[];
+function fitAll(){if(LASTB.length)MAP.fitBounds(LASTB,{padding:[50,50],maxZoom:15});}
+function togFull(on){
+  if(on===undefined)on=!document.body.classList.contains('map-full');
+  document.body.classList.toggle('map-full',on);
+  var a=document.querySelector('.ctl-full a');if(a){a.classList.toggle('on',on);a.title=on?'Salir de pantalla completa':'Pantalla completa';}
+  setTimeout(function(){MAP.invalidateSize();},50);
+}
 function initMap(){
-  MAP=L.map('map',{center:[6.2476,-75.5658],zoom:12,zoomControl:true});
-  var bl=baseLayers(),cur=bl['OpenStreetMap'],errs=0;
-  cur.addTo(MAP);
-  /* Si los tiles de OSM fallan (bloqueo/red), cambia al estilo alterno */
-  cur.on('tileerror',function(){if(++errs===6&&MAP.hasLayer(cur)){MAP.removeLayer(cur);bl['OSM Humanitario'].addTo(MAP);toast('Cambiando a capa de mapa alterna');}});
+  MAP=L.map('map',{center:[6.2476,-75.5658],zoom:12,zoomControl:true,minZoom:10,maxBounds:[[5.9,-76.0],[6.6,-75.1]],maxBoundsViscosity:.8});
+  var bl=baseLayers();
+  addBase(MAP,bl,function(){var m=$('map-msg');m.hidden=false;m.textContent='No se pudo cargar el fondo del mapa. Revisa tu conexión a internet; los marcadores siguen disponibles.';});
   L.control.layers(bl,null,{position:'topright'}).addTo(MAP);
   L.control.scale({imperial:false}).addTo(MAP);
-  var Loc=L.Control.extend({options:{position:'topleft'},onAdd:function(){
-    var d=L.DomUtil.create('div','leaflet-bar leaflet-control leaflet-control-locate');
-    d.innerHTML='<a href="#" role="button" title="Mi ubicación" aria-label="Mi ubicación">'+ico('locate',16)+'</a>';
-    L.DomEvent.on(d,'click',function(e){L.DomEvent.preventDefault(e);locateMe();});
-    L.DomEvent.disableClickPropagation(d);return d;}});
-  MAP.addControl(new Loc());
+  MAP.addControl(mapBtn('Ver todas las instituciones','grid',fitAll));
+  MAP.addControl(mapBtn('Mi ubicación','locate',locateMe));
+  var fb=mapBtn('Pantalla completa','expand',function(){togFull();});
+  MAP.addControl(fb);fb.getContainer().classList.add('ctl-full');
+  MAP.on('baselayerchange',function(){$('map-msg').hidden=true;});
+  /* Recalcula el tamaño cuando cambia el contenedor (barra lateral, rotación, filtros) */
+  if(window.ResizeObserver)new ResizeObserver(function(){MAP.invalidateSize();}).observe($('vm'));
   ML=(typeof L.markerClusterGroup==='function')?L.markerClusterGroup({showCoverageOnHover:false,maxClusterRadius:40,disableClusteringAtZoom:16}):L.layerGroup();
   ML.addTo(MAP);
 }
@@ -658,11 +713,12 @@ function renderMap(lista,keepView){
     if(!ie.lat||!ie.lon)return;
     bnds.push([ie.lat,ie.lon]);
     var isSel=SEL&&SEL.dane===ie.dane;
-    var m=L.marker([ie.lat,ie.lon],{icon:pinIcon(ie,isSel),zIndexOffset:isSel?1000:0,title:tc(ie.nombre),riseOnHover:true}).bindPopup(popHtml(ie),{maxWidth:280,closeButton:true});
+    var m=L.marker([ie.lat,ie.lon],{icon:pinIcon(ie,isSel),zIndexOffset:isSel?1000:0,title:tc(ie.nombre),riseOnHover:true}).bindPopup(popHtml(ie),{maxWidth:280,closeButton:true,autoPanPaddingTopLeft:[60,70],autoPanPaddingBottomRight:[20,60]});
     MK[ie.dane]=m;ML.addLayer(m);
   });
   $('map-cnt').innerHTML='<b>'+bnds.length+'</b> IEs en el mapa';
-  if(!keepView&&bnds.length)MAP.fitBounds(bnds,{padding:[40,40],maxZoom:15});
+  LASTB=bnds;
+  if(!keepView)fitAll();
 }
 function showOnMap(ie){
   if(SEL)closeM();
@@ -769,7 +825,7 @@ function buildInfo(ie){
     setTimeout(function(){
       if(MINI){MINI.remove();MINI=null;}
       MINI=L.map(mm,{center:[ie.lat,ie.lon],zoom:16,scrollWheelZoom:false,attributionControl:true});
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(MINI);
+      addBase(MINI,baseLayers());
       L.marker([ie.lat,ie.lon],{icon:pinIcon(ie,true)}).addTo(MINI);
     },30);
   }
@@ -839,6 +895,7 @@ function makeTags(){
 
 function setView(v,keep){
   VIEW=v;
+  if(v!=='map'&&document.body.classList.contains('map-full'))document.body.classList.remove('map-full');
   $('vc').style.display=v==='cards'?'block':'none';
   $('vm').style.display=v==='map'?'block':'none';
   $('vt-c').setAttribute('aria-pressed',v==='cards');
