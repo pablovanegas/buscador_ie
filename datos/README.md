@@ -12,13 +12,14 @@
 2. **Qué se agregó a cada institución** (variable `SINEB` en `index.html`):
    - jornadas escolares;
    - grados ofrecidos, incluidos los ciclos para adultos (CLEI), Aceleración del aprendizaje y la formación complementaria de la Normal;
-   - modelos educativos flexibles y si atiende adultos;
+   - modelos educativos flexibles, separando los dirigidos a adultos (población «ADULTOS» de la hoja Modelos), y si atiende adultos;
    - discapacidades atendidas, capacidades excepcionales, etnias e idiomas;
    - tipo, carácter, especialidad, género, zona y prestador del servicio;
    - todas las sedes activas, con su dirección, teléfono, jornadas, grados y modelos;
    - teléfonos, correos y rector según SINEB.
 3. **Datos de contacto:** se conservan los datos de contacto del buscador. Cuando SINEB tiene otros, la ficha los muestra aparte, marcados como «según SINEB».
-4. **Lo que no se usó:** las columnas de tarifas, ICFES, computadores, internet y estrato vienen vacías o casi vacías para las instituciones oficiales, así que no se incluyeron.
+4. **Jornada nocturna excluida:** por decisión del proyecto, el buscador no publica la jornada nocturna. El script la omite tanto en las instituciones como en sus sedes. Los libros de Excel de `datos/` conservan las columnas originales de la fuente.
+5. **Lo que no se usó:** las columnas de tarifas, ICFES, computadores, internet y estrato vienen vacías o casi vacías para las instituciones oficiales, así que no se incluyeron.
 
 ## Actualizar
 
