@@ -23,6 +23,8 @@
   --sh1:0 1px 2px rgba(26,23,20,.06),0 1px 1px rgba(26,23,20,.04);
   --sh2:0 8px 28px rgba(26,23,20,.12);
   --tb-h:60px;--sb-w:300px;
+  /* Series validadas (paleta de referencia, slots 1-3, all-pairs, CVD ΔE ≥ 9.2) */
+  --s-flex:#2a78d6;--s-clei:#eb6834;--s-noc:#1baf7a;
   --font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
   --mono:'JetBrains Mono',ui-monospace,monospace;
 }
@@ -310,6 +312,61 @@ details.more-f .field:first-of-type{margin-top:12px;}
 .bar[aria-pressed=true] .bt i{background:var(--acc);}
 .st-foot{font-size:11.5px;color:var(--ink3);margin-top:14px;line-height:1.5;}
 @media (max-width:640px){.ladder{grid-template-columns:repeat(7,1fr);}.ladder-lbl{display:none;}}
+/* ── Foco: modelos flexibles, CLEI y nocturna ── */
+#focus{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--sur2);border-bottom:1px solid var(--bdr);overflow-x:auto;}
+#focus .f-lbl{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);white-space:nowrap;margin-right:4px;}
+.fbtn{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 10px;border-radius:10px;border:1px solid var(--bdr2);background:var(--sur);white-space:nowrap;font-size:12.5px;font-weight:600;color:var(--ink2);transition:all .15s;}
+.fbtn:hover{border-color:var(--ink3);}
+.fbtn b{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ink);}
+.fbtn em{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--ink3);}
+.fbtn[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);background:#fff;}
+.sw{width:10px;height:10px;border-radius:3px;flex-shrink:0;display:inline-block;}
+.sw.flex{background:var(--s-flex);}.sw.clei{background:var(--s-clei);}.sw.noc{background:var(--s-noc);}
+.fb{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;border:1px solid var(--bdr2);background:var(--sur);color:var(--ink2);}
+.fb .sw{width:8px;height:8px;border-radius:50%;}
+/* Pin de foco: tres puntos (flexible · CLEI · nocturna) */
+.tri{display:flex;gap:3px;padding:4px 5px;background:#fff;border:1.5px solid var(--ink);border-radius:9px;box-shadow:0 2px 6px rgba(0,0,0,.3);position:relative;}
+.tri::after{content:"";position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink);border-bottom:0;}
+.tri i{width:8px;height:8px;border-radius:50%;background:#e4dfd7;}
+.tri i.flex{background:var(--s-flex);}.tri i.clei{background:var(--s-clei);}.tri i.noc{background:var(--s-noc);}
+.tri.sel{transform:scale(1.35);transform-origin:bottom center;border-color:var(--acc);}
+.tri.sel::after{border-top-color:var(--acc);}
+.mleg-f{display:flex;flex-direction:column;align-items:flex-start;gap:4px;font-size:11.5px;color:var(--ink2);}
+.mleg-row .mleg-f div{display:flex;flex-direction:row;align-items:center;gap:6px;font-size:11.5px;}
+/* Resumen: sección destacada */
+.st-focus{background:var(--sur);border:1px solid var(--bdr);border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:var(--sh1);}
+.st-focus>h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:24px;color:var(--ink);}
+.st-focus>p.sub{font-size:12.5px;color:var(--ink3);margin:2px 0 14px;}
+.fk{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:16px;}
+.fk button{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;padding:12px 14px;border:1px solid var(--bdr);border-radius:11px;background:var(--bg);}
+.fk button:hover{border-color:var(--ink3);}
+.fk button[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);}
+.fk .t{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--ink2);}
+.fk b{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--ink);line-height:1.1;}
+.fk em{font-style:normal;font-size:12px;color:var(--ink3);}
+.fgrid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px;}
+.fgrid>.st-card{box-shadow:none;background:var(--bg);}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--ink2);margin-bottom:10px;}
+.legend span{display:inline-flex;align-items:center;gap:6px;}
+.ctab{width:100%;border-collapse:collapse;font-size:12px;}
+.ctab th{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);text-align:left;padding:0 6px 6px;}
+.ctab td{padding:5px 6px;border-top:1px solid var(--bdr);vertical-align:middle;}
+.ctab tr.row{cursor:pointer;}
+.ctab tr.row:hover td{background:var(--sur2);}
+.ctab tr.row.on td{background:rgba(26,74,122,.07);}
+.ctab td.cn{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);font-weight:500;}
+.ctab td.n{font-family:var(--mono);color:var(--ink3);text-align:right;}
+.mb{display:flex;align-items:center;gap:6px;min-width:80px;}
+.mb span{flex:1;height:8px;border-radius:4px;background:var(--sur2);overflow:hidden;}
+.mb span i{display:block;height:100%;border-radius:0 4px 4px 0;}
+.mb b{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--ink2);min-width:18px;text-align:right;}
+.combo{display:inline-flex;gap:2px;margin-right:4px;vertical-align:middle;}
+.combo i{width:7px;height:7px;border-radius:50%;background:#e4dfd7;}
+.combo i.flex{background:var(--s-flex);}.combo i.clei{background:var(--s-clei);}.combo i.noc{background:var(--s-noc);}
+.st-focus .bar .bl{white-space:normal;}
+.ad-tag{white-space:nowrap;font-size:9.5px;font-weight:700;color:var(--ink3);border:1px solid var(--bdr2);border-radius:8px;padding:0 5px;margin-left:5px;}
+@media (max-width:900px){.fgrid{grid-template-columns:1fr;}}
+@media (max-width:640px){#focus{padding:8px 12px;}#focus .f-lbl{display:none;}.ctab .hide-m{display:none;}}
 #toast{position:fixed;bottom:20px;left:50%;z-index:99999;background:var(--ink);color:#f6f4f0;padding:10px 16px;border-radius:9px;font-size:13px;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.3);opacity:0;transform:translate(-50%,8px);transition:all .22s;pointer-events:none;border-left:3px solid var(--acc);max-width:calc(100vw - 32px);}
 #toast.show{opacity:1;transform:translate(-50%,0);}
 #scrim{display:none;}
@@ -469,7 +526,7 @@ details.more-f .field:first-of-type{margin-top:12px;}
 
     <div class="sbl">
       <button class="btn-reset" id="btn-reset"><svg class="ico"><use href="#i-reset"/></svg>Limpiar filtros</button>
-      <p class="sb-foot">Mapa &copy; colaboradores de OpenStreetMap. Datos de las instituciones educativas oficiales de Medellín. Oferta educativa y sedes: SINEB – MinEducación (<span id="sineb-date"></span>).<br><span style="font-family:var(--mono)">Versión 3.0 · 2026-10-19</span></p>
+      <p class="sb-foot">Mapa &copy; colaboradores de OpenStreetMap. Datos de las instituciones educativas oficiales de Medellín. Oferta educativa y sedes: SINEB – MinEducación (<span id="sineb-date"></span>).<br><span style="font-family:var(--mono)">Versión 3.1 · 2026-10-20</span></p>
     </div>
 
   </div>
@@ -499,6 +556,13 @@ details.more-f .field:first-of-type{margin-top:12px;}
     </div>
   </div>
 
+  <div id="focus" role="group" aria-label="Oferta para jóvenes y adultos">
+    <span class="f-lbl">Oferta para jóvenes y adultos</span>
+    <button class="fbtn" data-fk="flex" aria-pressed="false" title="Filtrar: con modelos educativos flexibles"><span class="sw flex"></span>Modelos flexibles <b id="fk-flex">0</b><em id="fp-flex"></em></button>
+    <button class="fbtn" data-fk="clei" aria-pressed="false" title="Filtrar: con ciclos para adultos (CLEI)"><span class="sw clei"></span>Ciclos CLEI <b id="fk-clei">0</b><em id="fp-clei"></em></button>
+    <button class="fbtn" data-fk="noc" aria-pressed="false" title="Filtrar: con jornada nocturna"><span class="sw noc"></span>Jornada nocturna <b id="fk-noc">0</b><em id="fp-noc"></em></button>
+  </div>
+
   <div id="vc"><div class="cgrid" id="cgrid"></div></div>
 
   <div id="vs" aria-live="polite"></div>
@@ -509,8 +573,8 @@ details.more-f .field:first-of-type{margin-top:12px;}
     <div id="map-msg" class="map-panel map-msg" hidden></div>
     <div class="mleg map-panel">
       <label class="sr" for="map-color">Colorear marcadores por</label>
-      <select id="map-color"><option value="svc">Color: servicios</option><option value="jor">Color: n.º de jornadas</option><option value="flex">Color: modelos flexibles</option><option value="adu">Color: educación adultos</option></select>
-      <h4 id="mleg-t">N.º de servicios</h4>
+      <select id="map-color"><option value="focus">Flexibles · CLEI · Nocturna</option><option value="clei">Color: ciclos CLEI</option><option value="noc">Color: jornada nocturna</option><option value="svc">Color: servicios</option><option value="jor">Color: n.º de jornadas</option><option value="flex">Color: modelos flexibles</option><option value="adu">Color: educación adultos</option></select>
+      <h4 id="mleg-t"></h4>
       <div class="mleg-row" id="mleg"></div>
     </div>
   </div>
@@ -555,7 +619,7 @@ var SINEB_META={"fuente": "SINEB – MinEducación (Buscando Colegio)", "fecha":
 </script>
 <script>
 var EMPTY_F={q:'',com:'',nuc:'',trans:false,mt:false,jc:false,pae:false,pmt:'',pjc:'',trt:'',
-  jor:'',gr:'',mf:'',adu:false,disc:false,cap:false,rural:false,tipo:'',esp:'',gen:''};
+  jor:'',gr:'',mf:'',flex:false,clei:false,adu:false,disc:false,cap:false,rural:false,tipo:'',esp:'',gen:''};
 var F=Object.assign({},EMPTY_F);
 var VIEW='cards',SORT='nombre',ME=null,MAP=null,ML=null,MINI=null,SEL=null,ATAB='info',PAGE=60,SHOWN=PAGE,LASTFOCUS=null;
 var SVC=[
@@ -565,7 +629,12 @@ var SVC=[
   {k:'pae',l:'PAE',ico:'apple',cls:'sv-pae'}
 ];
 var SCALE=['#8a847b','#b8860b','#d9730d','#c8460a','#8f2a05'];
-var MAPCOLOR='svc';
+var MAPCOLOR='focus';
+var SERIES=[{k:'flex',l:'Modelos flexibles'},{k:'clei',l:'Ciclos CLEI'},{k:'noc',l:'Jornada nocturna'}];
+/* Modelos con población ADULTOS en SINEB */
+var ADULT_MF={'Programa para Jóvenes en Extraedad y Adultos':1,'SER':1,'Tejiendo Saberes':1,'Grupos Juveniles Creativos':1,'Modalidad Virtual Asistida UCN':1};
+function fflags(ie){return {flex:!!(ie.s.mf||[]).length,clei:(ie.s.gr||[]).some(isCLEI),noc:(ie.s.jor||[]).indexOf('Nocturna')>-1};}
+function focusBadges(ie){var f=ie._f;return SERIES.filter(function(x){return f[x.k];}).map(function(x){return '<span class="fb"><span class="sw '+x.k+'"></span>'+x.l.replace('Modelos flexibles','Flexible').replace('Ciclos CLEI','CLEI').replace('Jornada nocturna','Nocturna')+'</span>';}).join('');}
 
 /* ── Oferta educativa (SINEB – MinEducación) ── */
 var JORS=['Mañana','Tarde','Única','Completa','Nocturna','Fin de semana'];
@@ -631,6 +700,7 @@ DATA.forEach(function(ie){
     .concat(ie.prg_mt,ie.prg_jc,s.mf||[],s.esp||[],s.jor||[],s.disc||[],(s.sedes||[]).map(function(x){return x.n+' '+x.dir;})).join(' '));
   ie._n=nSvc(ie);
   ie._rural=(s.zona||[]).indexOf('Rural')>-1;
+  ie._f=fflags(ie);
 });
 
 function fillSelect(id,map,sorter,labeler){
@@ -698,6 +768,8 @@ function init(){
   document.addEventListener('click',function(e){
     var t=e.target.closest('[data-open]');
     if(t){e.preventDefault();var ie=byDane(t.dataset.open);if(ie)openM(ie,t.dataset.tab||'info');return;}
+    t=e.target.closest('[data-fk]');
+    if(t){applyF(t.dataset.fk,'1');return;}
     t=e.target.closest('[data-f]');
     if(t){applyF(t.dataset.f,t.dataset.v);return;}
     t=e.target.closest('[data-locate]');
@@ -728,6 +800,7 @@ function syncControls(){
   document.querySelectorAll('.chip,.kpi[data-k]').forEach(function(b){b.setAttribute('aria-pressed',F[b.dataset.k]?'true':'false');});
   $('f-com').value=F.com;$('f-nuc').value=F.nuc;$('f-pmt').value=F.pmt;$('f-pjc').value=F.pjc;$('f-trt').value=F.trt;
   $('f-gr').value=F.gr;$('f-mf').value=F.mf;$('f-tipo').value=F.tipo;$('f-esp').value=F.esp;$('f-gen').value=F.gen;
+  document.querySelectorAll('[data-fk]').forEach(function(b){var k=b.dataset.fk;b.setAttribute('aria-pressed',k==='noc'?jorSet().indexOf('Nocturna')>-1:!!F[k]);});
   var js=jorSet();document.querySelectorAll('.jchip').forEach(function(b){b.setAttribute('aria-pressed',js.indexOf(b.dataset.j)>-1?'true':'false');});
   if(F.tipo||F.esp||F.gen)document.querySelector('details.more-f').open=true;
   var n=activeCount();$('fcount').textContent=n;$('fcount').hidden=!n;
@@ -751,6 +824,8 @@ function filtrar(){
     if(F.jor){var js=F.jor.split('|'),oj=s.jor||[];for(var j=0;j<js.length;j++)if(oj.indexOf(js[j])===-1)return false;}
     if(F.gr&&!hasGr(ie,F.gr))return false;
     if(F.mf&&!(F.mf==='*'?(s.mf||[]).length:(s.mf||[]).indexOf(F.mf)>-1))return false;
+    if(F.flex&&!ie._f.flex)return false;
+    if(F.clei&&!ie._f.clei)return false;
     if(F.adu&&!s.adu)return false;
     if(F.disc&&!(s.disc||[]).length)return false;
     if(F.cap&&!(s.cap||[]).length)return false;
@@ -775,6 +850,7 @@ function render(){
   $('cnt').textContent=lista.length;
   $('k-total').textContent=lista.length;
   SVC.forEach(function(s){$('k-'+s.k).textContent=lista.filter(function(r){return r[s.k];}).length;});
+  SERIES.forEach(function(x){var k=lista.filter(function(r){return r._f[x.k];}).length;$('fk-'+x.k).textContent=k;$('fp-'+x.k).textContent=lista.length?Math.round(k*100/lista.length)+'%':'';});
   if(VIEW==='cards')renderCards(lista);else if(VIEW==='stats')renderStats(lista);else renderMap(lista);
 }
 
@@ -797,7 +873,7 @@ function renderCards(lista){
       +'<div class="cbody">'
       +'<div class="ctop"><span class="ccom" title="'+H(ie.comuna)+'">'+H(com||'Sin comuna')+'</span><span class="cdane">Núcleo '+H(ie.nucleo)+dist+'</span></div>'
       +'<button class="cname" data-open="'+H(ie.dane)+'">'+H(tc(ie.nombre))+'</button>'
-      +'<div class="svc-row">'+svBadges(ie)+'</div>'
+      +'<div class="svc-row">'+svBadges(ie)+focusBadges(ie)+'</div>'
       +'<div class="cinfo">'
       +'<div>'+ico('pin')+'<span>'+H(ie.dir||'Dirección N/D')+(ie.barrio?' · '+H(ie.barrio):'')+'</span></div>'
       +'<div>'+ico('user')+'<span>'+H(ie.rector||'Rector/a N/D')+'</span></div>'
@@ -871,6 +947,9 @@ function probe(name){
 }
 /* Dimensiones para colorear el mapa: bin 0–4 sobre la escala secuencial SCALE */
 var MAPDIM={
+  focus:{t:'Oferta para jóvenes y adultos',focus:true},
+  clei:{t:'Ciclos para adultos (CLEI)',lbl:['No','Sí'],col:['#b9b3aa','var(--s-clei)'],bin:function(ie){return ie._f.clei?1:0;}},
+  noc:{t:'Jornada nocturna',lbl:['No','Sí'],col:['#b9b3aa','var(--s-noc)'],bin:function(ie){return ie._f.noc?1:0;}},
   svc:{t:'N.º de servicios',lbl:['0','1','2','3','4'],bin:function(ie){return ie._n;}},
   jor:{t:'N.º de jornadas escolares',lbl:['≤2','3','4','5','6'],bin:function(ie){return Math.max(0,Math.min(4,(ie.s.jor||[]).length-2));}},
   flex:{t:'Modelos flexibles',lbl:['0','1','2','3','4+'],bin:function(ie){return Math.min(4,(ie.s.mf||[]).length);}},
@@ -878,16 +957,21 @@ var MAPDIM={
 };
 function drawLegend(){
   var d=MAPDIM[MAPCOLOR];$('mleg-t').textContent=d.t;
+  if(d.focus){$('mleg').innerHTML='<div class="mleg-f">'+SERIES.map(function(x){return '<div><span class="sw '+x.k+'" style="border-radius:50%"></span>'+x.l+'</div>';}).join('')+'<div><span class="sw" style="background:#e4dfd7;border-radius:50%"></span>No ofrece</div></div>';return;}
+  if(d.col){$('mleg').innerHTML=d.lbl.map(function(l,i){return '<div><i style="background:'+d.col[i]+'">'+l+'</i></div>';}).join('');return;}
   $('mleg').innerHTML=d.lbl.map(function(l,i){return l===null?'':'<div><i style="background:'+SCALE[i]+'">'+(l.length<3?l:'')+'</i>'+(l.length<3?'':l)+'</div>';}).join('');
 }
 function pinIcon(ie,sel){
-  var d=MAPDIM[MAPCOLOR],n=d.bin(ie),t=MAPCOLOR==='adu'?(ie.s.adu?'A':''):d.lbl[n];
+  var d=MAPDIM[MAPCOLOR];
+  if(d.focus){var f=ie._f;return L.divIcon({className:'',html:'<div class="tri'+(sel?' sel':'')+'" title="'+SERIES.map(function(x){return x.l+': '+(f[x.k]?'sí':'no');}).join(' · ')+'">'+SERIES.map(function(x){return '<i class="'+(f[x.k]?x.k:'')+'"></i>';}).join('')+'</div>',iconSize:[36,22],iconAnchor:[18,24],popupAnchor:[0,-24]});}
+  if(d.col){var b=d.bin(ie);return L.divIcon({className:'',html:'<div class="pin'+(sel?' sel':'')+'" style="background:'+d.col[b]+'"><b>'+(b?'✓':'')+'</b></div>',iconSize:sel?[34,34]:[26,26],iconAnchor:sel?[17,34]:[13,26],popupAnchor:[0,sel?-34:-26]});}
+  var n=d.bin(ie),t=MAPCOLOR==='adu'?(ie.s.adu?'A':''):d.lbl[n];
   return L.divIcon({className:'',html:'<div class="pin'+(sel?' sel':'')+'" style="background:'+SCALE[n]+'"><b>'+H(t)+'</b></div>',iconSize:sel?[34,34]:[26,26],iconAnchor:sel?[17,34]:[13,26],popupAnchor:[0,sel?-34:-26]});
 }
 function popHtml(ie){
   var com=comName(ie.comuna);
   return '<div class="mpop"><h3>'+H(tc(ie.nombre))+'</h3><div class="mpop-m">'+H(ie.barrio?ie.barrio+' · ':'')+H(com)+'</div>'
-    +'<div class="svc-row">'+svBadges(ie,true)+'</div>'
+    +'<div class="svc-row">'+svBadges(ie,true)+focusBadges(ie)+'</div>'
     +'<p>'+H(ie.dir||'')+'<br>'+H(phones(ie.tel)[0]||'Tel. N/D')+'</p>'
     +(ie.s.jor?'<p><b>Jornadas:</b> '+H(ie.s.jor.join(', '))+'<br><b>Grados:</b> '+H(grSummary(ie.s.gr))+'</p>':'')
     +'<button class="mpop-btn" data-open="'+H(ie.dane)+'">Ver ficha completa '+ico('arrow',13)+'</button></div>';
@@ -1199,6 +1283,8 @@ function makeTags(){
   if(F.jor)ft('jor','Jornada: '+F.jor.split('|').join(' + '));
   if(F.gr)ft('gr','Grado: '+($('f-gr').selectedOptions[0]?$('f-gr').selectedOptions[0].textContent.replace(/\s*\(\d+\)$/,''):F.gr));
   if(F.mf)ft('mf',F.mf==='*'?'Modelo flexible':F.mf);
+  if(F.flex)ft('flex','Modelos flexibles');
+  if(F.clei)ft('clei','Ciclos CLEI');
   if(F.adu)ft('adu','Adultos');
   if(F.disc)ft('disc','Discapacidad');
   if(F.cap)ft('cap','Talentos excepcionales');
@@ -1213,6 +1299,7 @@ function makeTags(){
 
 /* Aplica un filtro desde el Resumen o la ficha. En listas (jornada) alterna el valor. */
 function applyF(k,v,exclusive){
+  if(k==='noc'){k='jor';v='Nocturna';}
   if(exclusive){F=Object.assign({},EMPTY_F);$('srch').value='';$('srch-clr').classList.remove('show');}
   if(k==='jor'){var set=jorSet(),i=set.indexOf(v);if(i>-1)set.splice(i,1);else set.push(v);F.jor=JORS.filter(function(x){return set.indexOf(x)>-1;}).join('|');}
   else if(typeof EMPTY_F[k]==='boolean')F[k]=!F[k];
@@ -1222,11 +1309,52 @@ function applyF(k,v,exclusive){
 }
 
 /* ── RESUMEN: indicadores del conjunto filtrado ── */
+/* Sección destacada del Resumen: modelos flexibles, CLEI y jornada nocturna */
+function focusSection(lista,n,c,pct){
+  var cnt={flex:0,clei:0,noc:0};lista.forEach(function(ie){SERIES.forEach(function(x){if(ie._f[x.k])cnt[x.k]++;});});
+  var pressed=function(k){return k==='noc'?jorSet().indexOf('Nocturna')>-1:!!F[k];};
+  var kp='<div class="fk">'+SERIES.map(function(x){
+    return '<button data-fk="'+x.k+'" aria-pressed="'+pressed(x.k)+'" title="Clic para filtrar"><span class="t"><span class="sw '+x.k+'"></span>'+x.l+'</span><b>'+cnt[x.k]+'</b><em>'+pct(cnt[x.k])+' de '+n+' instituciones</em></button>';}).join('')+'</div>';
+  var legend='<div class="legend">'+SERIES.map(function(x){return '<span><span class="sw '+x.k+'"></span>'+x.l+'</span>';}).join('')+'</div>';
+  /* Por comuna: % de instituciones de la comuna con cada oferta (misma escala 0–100 %) */
+  var com={};lista.forEach(function(ie){var k=ie.comuna;var o=com[k]||(com[k]={n:0,flex:0,clei:0,noc:0});o.n++;SERIES.forEach(function(x){if(ie._f[x.k])o[x.k]++;});});
+  var rows=Object.keys(com).sort(function(a,b){var A=com[a],B=com[b];return (B.flex+B.clei+B.noc)-(A.flex+A.clei+A.noc)||numFirst(a,b);});
+  var mb=function(o,k){var w=o.n?o[k]*100/o.n:0;return '<div class="mb" title="'+o[k]+' de '+o.n+' ('+Math.round(w)+'%)"><span><i style="width:'+w.toFixed(1)+'%;background:var(--s-'+k+')"></i></span><b>'+o[k]+'</b></div>';};
+  var tab='<table class="ctab"><thead><tr><th>Comuna</th><th class="hide-m" style="text-align:right">IEs</th>'+SERIES.map(function(x){return '<th><span class="sw '+x.k+'" style="margin-right:4px"></span>'+{flex:'Flexibles',clei:'CLEI',noc:'Nocturna'}[x.k]+'</th>';}).join('')+'</tr></thead><tbody>'
+    +rows.map(function(k){var o=com[k];return '<tr class="row'+(F.com===k?' on':'')+'" data-f="com" data-v="'+H(k)+'" title="Clic para filtrar por '+H(comName(k)||k)+'"><td class="cn">'+H(comName(k)||k)+'</td><td class="n hide-m">'+o.n+'</td>'+SERIES.map(function(x){return '<td>'+mb(o,x.k)+'</td>';}).join('')+'</tr>';}).join('')
+    +'</tbody></table>';
+  /* Combinaciones */
+  var combos={};lista.forEach(function(ie){var f=ie._f,k=(f.flex?'1':'0')+(f.clei?'1':'0')+(f.noc?'1':'0');combos[k]=(combos[k]||0)+1;});
+  var CNAME={'111':'Las tres','110':'Flexible + CLEI','101':'Flexible + nocturna','011':'CLEI + nocturna','100':'Solo modelos flexibles','010':'Solo CLEI','001':'Solo nocturna','000':'Ninguna de las tres'};
+  var cmax=Math.max.apply(null,Object.keys(combos).map(function(k){return combos[k];}).concat([1]));
+  var comb=Object.keys(CNAME).filter(function(k){return combos[k];}).sort(function(a,b){return combos[b]-combos[a];}).map(function(k){
+    var dots='<span class="combo">'+SERIES.map(function(x,i){return '<i class="'+(k[i]==='1'?x.k:'')+'"></i>';}).join('')+'</span>';
+    return '<div class="bar" title="'+CNAME[k]+': '+combos[k]+' instituciones ('+pct(combos[k])+')"><span class="bl">'+dots+CNAME[k]+'</span><span class="bv">'+combos[k]+' <em>'+pct(combos[k])+'</em></span><span class="bt"><i style="width:'+(combos[k]*100/cmax).toFixed(1)+'%;background:var(--ink3)"></i></span></div>';}).join('');
+  /* Ciclos CLEI y modelos flexibles */
+  var clei=[21,22,23,24,25,26].map(function(g){return [grLbl(g),c(function(ie){return (ie.s.gr||[]).indexOf(g)>-1;}),'gr',String(g)];});
+  var mfc={};lista.forEach(function(ie){(ie.s.mf||[]).forEach(function(m){mfc[m]=(mfc[m]||0)+1;});});
+  var mfr=Object.keys(mfc).sort(function(a,b){return mfc[b]-mfc[a]||a.localeCompare(b,'es');});
+  var bars=function(rs,col){return rs.filter(function(r){return r[1]>0;}).map(function(r){var on=F[r[2]]===r[3];
+    return '<button class="bar" data-f="'+r[2]+'" data-v="'+H(r[3])+'" aria-pressed="'+on+'" title="'+H(r[0])+': '+r[1]+' de '+n+' ('+pct(r[1])+'). Clic para filtrar"><span class="bl">'+H(r[0])+(r[4]||'')+'</span><span class="bv">'+r[1]+' <em>'+pct(r[1])+'</em></span><span class="bt"><i style="width:'+(r[1]*100/n).toFixed(1)+'%;background:'+col+'"></i></span></button>';}).join('')||'<p class="mini-note">Ninguna en la selección.</p>';};
+  return '<section class="st-focus"><h2>Modelos flexibles, ciclos CLEI y jornada nocturna</h2>'
+    +'<p class="sub">Oferta para estudiantes en extraedad, jóvenes y adultos. Las cifras corresponden a la selección actual; haz clic en una tarjeta, comuna o barra para filtrar.</p>'
+    +kp
+    +'<div class="fgrid">'
+      +'<section class="st-card"><h3>Por comuna</h3><p class="sub">Instituciones con cada oferta; la barra muestra el % de las IEs de la comuna.</p>'+legend+tab+'</section>'
+      +'<div style="display:flex;flex-direction:column;gap:14px;min-width:0">'
+        +'<section class="st-card"><h3>Cómo se combinan</h3><p class="sub">Instituciones según cuáles de las tres ofertas tienen.</p>'+legend+comb+'</section>'
+        +'<section class="st-card"><h3>Ciclos CLEI ofrecidos</h3><p class="sub">Ciclos lectivos especiales integrados para jóvenes y adultos.</p>'+bars(clei,'var(--s-clei)')+'</section>'
+        +'<section class="st-card"><h3>Modelos educativos flexibles</h3><p class="sub">Instituciones que ofrecen cada modelo. <span class="ad-tag">ADULTOS</span> = dirigido a población adulta.</p>'
+          +bars(mfr.map(function(m){return [m,mfc[m],'mf',m,ADULT_MF[m]?'<span class="ad-tag">ADULTOS</span>':''];}),'var(--s-flex)')+'</section>'
+      +'</div>'
+    +'</div></section>';
+}
+
 function renderStats(lista){
   var n=lista.length,v=$('vs');
   if(!n){v.innerHTML='<div class="empty">'+ico('chart')+'<h3>Sin datos</h3><p>Ninguna institución coincide con los filtros actuales.</p><button onclick="resetAll()">Limpiar filtros</button></div>';return;}
   var c=function(fn){var k=0;lista.forEach(function(ie){if(fn(ie))k++;});return k;};
-  var pct=function(k){return Math.round(k*100/n)+'%';};
+  var pct=function(k){var r=Math.round(k*100/n);return (k&&!r?'<1':r)+'%';};
   var sedes=lista.reduce(function(a,ie){return a+(ie.s.nsed||0);},0);
   var flex=c(function(ie){return (ie.s.mf||[]).length;}),adu=c(function(ie){return ie.s.adu;});
   var noc=c(function(ie){return (ie.s.jor||[]).indexOf('Nocturna')>-1;});
@@ -1247,7 +1375,7 @@ function renderStats(lista){
   var comc={};lista.forEach(function(ie){var k=ie.comuna;comc[k]=(comc[k]||0)+1;});
   var sortDesc=function(o,f){return Object.keys(o).sort(function(a,b){return o[b]-o[a]||a.localeCompare(b,'es');}).map(function(k){return [f?f(k):k,o[k]];});};
   var comMax=Math.max.apply(null,Object.keys(comc).map(function(k){return comc[k];}));
-  v.innerHTML='<div class="st-kpis">'+kp.map(function(k){return '<div class="st-kpi"><b>'+k[0]+'</b><span>'+k[1]+'</span></div>';}).join('')+'</div>'
+  v.innerHTML=focusSection(lista,n,c,pct)+'<div class="st-kpis">'+kp.map(function(k){return '<div class="st-kpi"><b>'+k[0]+'</b><span>'+k[1]+'</span></div>';}).join('')+'</div>'
     +'<div class="st-grid">'
     +panel('Jornadas escolares','Instituciones que ofrecen cada jornada. Clic para filtrar.',JORS.map(function(j){return [j,c(function(ie){return (ie.s.jor||[]).indexOf(j)>-1;}),'jor',j];}))
     +panel('Niveles y programas','Instituciones con al menos un grado del nivel.',[
@@ -1258,7 +1386,6 @@ function renderStats(lista){
       ['Ciclos para adultos (CLEI)',hasG(isCLEI),'gr','clei'],
       ['Aceleración del aprendizaje',hasG(function(g){return g===99;}),'gr','99'],
       ['Normal superior (PFC)',hasG(isPFC),'gr','pfc']])
-    +panel('Modelos educativos flexibles','Alternativas a la educación tradicional.',sortDesc(mfc).map(function(r){return [r[0],r[1],'mf',r[0]];}))
     +panel('Atención e inclusión','Poblaciones con atención específica.',[
       ['Educación para adultos',adu,'adu','1'],
       ['Atiende estudiantes con discapacidad',c(function(ie){return (ie.s.disc||[]).length;}),'disc','1'],
