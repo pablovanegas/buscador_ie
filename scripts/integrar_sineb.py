@@ -119,6 +119,10 @@ def main():
     cons = xl.parse("Consolidado")
     filt = xl.parse("Filtros")
     sedes = xl.parse("Sedes")
+    # Población de cada modelo flexible (fila a nivel de institución): ADULTOS o NIÑOS Y JOVENES
+    mods = xl.parse("Modelos")
+    mods = mods[mods["Código sede"].astype(str).str.startswith("(") & (mods["Tipo de modelo"] == "Flexible")]
+    mod_adultos = {str(k): sorted({tc(m) for m in g["Modelo"]}) for k, g in mods[mods["Población"] == "ADULTOS"].groupby("Código DANE")}
     for df, col in ((cons, "Código DANE"), (filt, "Código DANE"), (sedes, "Código DANE institución")):
         df["_k"] = df[col].astype(str)
 
@@ -162,6 +166,7 @@ def main():
             "gr": grades(c["Grados (códigos)"]),
             "mf": modelos_flexibles(c["Modelos flexibles"]),
             "adu": c["Atiende adultos"] == "Sí",
+            "mfad": mod_adultos.get(k, []),  # modelos flexibles dirigidos a adultos
             "disc": [tc(d) for d in split_list(c["Discapacidades"])],
             "cap": [tc(d) for d in split_list(c["Capacidades excepcionales"])],
             "etn": [tc(d) for d in split_list(c["Etnias"])],

@@ -12,7 +12,7 @@
 2. **Qué se agregó a cada institución** (variable `SINEB` en `index.html`):
    - jornadas escolares;
    - grados ofrecidos, incluidos los ciclos para adultos (CLEI), Aceleración del aprendizaje y la formación complementaria de la Normal;
-   - modelos educativos flexibles y si atiende adultos;
+   - modelos educativos flexibles, separando los dirigidos a adultos (población «ADULTOS» de la hoja Modelos), y si atiende adultos;
    - discapacidades atendidas, capacidades excepcionales, etnias e idiomas;
    - tipo, carácter, especialidad, género, zona y prestador del servicio;
    - todas las sedes activas, con su dirección, teléfono, jornadas, grados y modelos;
