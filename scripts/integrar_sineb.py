@@ -92,8 +92,9 @@ def grades(v):
 
 
 # Orden fijo de jornadas (igual en filtros, tarjetas y estadísticas)
+# La jornada NOCTURNA se excluye a propósito: el buscador no publica esa información.
 JORNADAS = [("MAÑANA", "Mañana"), ("TARDE", "Tarde"), ("ÚNICA", "Única"),
-            ("COMPLETA", "Completa"), ("NOCTURNA", "Nocturna"), ("FIN DE SEMANA", "Fin de semana")]
+            ("COMPLETA", "Completa"), ("FIN DE SEMANA", "Fin de semana")]
 JOR_MAP = dict(JORNADAS)
 
 
