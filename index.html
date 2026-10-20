@@ -367,6 +367,38 @@ details.more-f .field:first-of-type{margin-top:12px;}
 .ad-tag{white-space:nowrap;font-size:9.5px;font-weight:700;color:var(--ink3);border:1px solid var(--bdr2);border-radius:8px;padding:0 5px;margin-left:5px;}
 @media (max-width:900px){.fgrid{grid-template-columns:1fr;}}
 @media (max-width:640px){#focus{padding:8px 12px;}#focus .f-lbl{display:none;}.ctab .hide-m{display:none;}}
+/* ── Buscador guiado: jornada · grado · modelo ── */
+#finder{flex-shrink:0;background:var(--sur);border-bottom:1px solid var(--bdr);padding:12px 16px;}
+.fd-head{display:flex;align-items:center;gap:10px;}
+.fd-head h2{font-size:13.5px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:7px;}
+.fd-head h2 .ico{color:var(--acc);}
+.fd-head p{font-size:12px;color:var(--ink3);}
+#fd-toggle{display:none;margin-left:auto;}
+.fd-body{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px;align-items:end;margin-top:10px;}
+.fd-body label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;}
+.fd-body select{background-color:var(--bg);font-size:13.5px;padding:10px 30px 10px 12px;}
+.fd-body select.set{border-color:var(--acc);background-color:#fff;box-shadow:0 0 0 3px var(--acc-bg);font-weight:600;}
+#fd-toggle .badge{background:var(--acc);color:#fff;border-radius:10px;font-size:10px;padding:1px 6px;font-family:var(--mono);}
+#fd-clear{height:42px;padding:0 14px;border-radius:var(--r);border:1px solid var(--bdr2);background:transparent;font-size:12.5px;font-weight:600;color:var(--ink2);white-space:nowrap;}
+#fd-clear:hover{border-color:var(--acc);color:var(--acc);}
+#fd-clear:disabled{opacity:.4;cursor:default;}
+.fd-note{grid-column:1/-1;font-size:11.5px;color:var(--ink3);}
+.fd-note b{color:var(--ink2);}
+#focus .f-lbl{min-width:0;}
+/* Sede que cumple la búsqueda */
+.match{position:relative;z-index:1;width:100%;text-align:left;cursor:pointer;margin-top:2px;padding:8px 10px;border-radius:8px;background:rgba(200,70,10,.06);border:1px solid rgba(200,70,10,.2);font-size:12px;color:var(--ink2);display:flex;flex-direction:column;gap:3px;}
+.match b{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--acc);}
+.match span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sede.hit{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc-bg);background:#fff;}
+.sede h5 .hit-pill,.hit-pill{font-family:var(--font);font-size:10px;font-weight:700;color:#fff;background:var(--acc);padding:2px 7px;border-radius:10px;white-space:nowrap;}
+@media (max-width:900px){.fd-body{grid-template-columns:1fr 1fr;}#fd-clear{grid-column:1/-1;height:38px;}}
+@media (max-width:640px){
+  #finder{padding:10px 12px;}
+  .fd-head p{display:none;}
+  #fd-toggle{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 10px;border-radius:8px;border:1px solid var(--bdr2);background:var(--bg);font-size:12px;font-weight:600;}
+  #finder:not(.open) .fd-body{display:none;}
+  .fd-body{grid-template-columns:1fr;}
+}
 #toast{position:fixed;bottom:20px;left:50%;z-index:99999;background:var(--ink);color:#f6f4f0;padding:10px 16px;border-radius:9px;font-size:13px;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.3);opacity:0;transform:translate(-50%,8px);transition:all .22s;pointer-events:none;border-left:3px solid var(--acc);max-width:calc(100vw - 32px);}
 #toast.show{opacity:1;transform:translate(-50%,0);}
 #scrim{display:none;}
@@ -492,7 +524,7 @@ details.more-f .field:first-of-type{margin-top:12px;}
         <p class="hint-txt">Si eliges varias, se muestran las que ofrecen todas.</p>
       </div>
       <div class="field"><label for="f-gr">Grado o programa</label><select id="f-gr"><option value="">Todos los grados</option></select></div>
-      <div class="field"><label for="f-mf">Modelo educativo flexible</label><select id="f-mf"><option value="">Todos</option><option value="*">Cualquier modelo flexible</option></select></div>
+      <div class="field"><label for="f-mf">Modelo educativo</label><select id="f-mf"><option value="">Todos</option><option value="*">Cualquier modelo flexible</option></select></div>
     </div>
 
     <div class="sbl">
@@ -526,7 +558,7 @@ details.more-f .field:first-of-type{margin-top:12px;}
 
     <div class="sbl">
       <button class="btn-reset" id="btn-reset"><svg class="ico"><use href="#i-reset"/></svg>Limpiar filtros</button>
-      <p class="sb-foot">Mapa &copy; colaboradores de OpenStreetMap. Datos de las instituciones educativas oficiales de Medellín. Oferta educativa y sedes: SINEB – MinEducación (<span id="sineb-date"></span>).<br><span style="font-family:var(--mono)">Versión 3.1 · 2026-10-20</span></p>
+      <p class="sb-foot">Mapa &copy; colaboradores de OpenStreetMap. Datos de las instituciones educativas oficiales de Medellín. Oferta educativa y sedes: SINEB – MinEducación (<span id="sineb-date"></span>).<br><span style="font-family:var(--mono)">Versión 3.2 · 2026-10-20</span></p>
     </div>
 
   </div>
@@ -556,8 +588,23 @@ details.more-f .field:first-of-type{margin-top:12px;}
     </div>
   </div>
 
-  <div id="focus" role="group" aria-label="Oferta para jóvenes y adultos">
-    <span class="f-lbl">Oferta para jóvenes y adultos</span>
+  <section id="finder" aria-labelledby="fd-title">
+    <div class="fd-head">
+      <h2 id="fd-title"><svg class="ico"><use href="#i-search"/></svg>Encuentra una institución</h2>
+      <p>Elige la jornada, el grado y el modelo que necesitas.</p>
+      <button id="fd-toggle" aria-expanded="false" aria-controls="fd-body">Buscar <span class="badge" id="fd-n" hidden></span></button>
+    </div>
+    <div class="fd-body" id="fd-body">
+      <div><label for="q-jor">Jornada</label><select id="q-jor"><option value="">Cualquier jornada</option></select></div>
+      <div><label for="q-gr">Grado o programa</label><select id="q-gr"></select></div>
+      <div><label for="q-mf">Modelo educativo</label><select id="q-mf"></select></div>
+      <button id="fd-clear" disabled>Limpiar búsqueda</button>
+      <p class="fd-note" id="fd-note"></p>
+    </div>
+  </section>
+
+  <div id="focus" role="group" aria-label="Accesos rápidos">
+    <span class="f-lbl">Accesos rápidos</span>
     <button class="fbtn" data-fk="flex" aria-pressed="false" title="Filtrar: con modelos educativos flexibles"><span class="sw flex"></span>Modelos flexibles <b id="fk-flex">0</b><em id="fp-flex"></em></button>
     <button class="fbtn" data-fk="clei" aria-pressed="false" title="Filtrar: con ciclos para adultos (CLEI)"><span class="sw clei"></span>Ciclos CLEI <b id="fk-clei">0</b><em id="fp-clei"></em></button>
     <button class="fbtn" data-fk="noc" aria-pressed="false" title="Filtrar: con jornada nocturna"><span class="sw noc"></span>Jornada nocturna <b id="fk-noc">0</b><em id="fp-noc"></em></button>
@@ -655,8 +702,22 @@ function grSummary(gr){
   return out.join(' · ');
 }
 var LEVELS={pre:[-2,0],pri:[1,5],sec:[6,9],med:[10,11]};
-function hasGr(ie,v){
-  var gr=ie.s.gr||[];
+function hasGr(ie,v){return grMatch(ie.s.gr||[],v);}
+/* ¿Algún criterio de oferta (jornada, grado, modelo) activo? */
+function sedeCrit(){return !!(F.jor||F.gr||F.mf);}
+function mfMatch(mf,v){return v==='*'?mf.length>0:mf.indexOf(v)>-1;}
+/* Sedes que cumplen A LA VEZ jornada(s), grado y modelo. Si la IE no trae sedes, se evalúa la institución. */
+function sedeMatch(ie){
+  var js=F.jor?F.jor.split('|'):[],s=ie.s;
+  var units=(s.sedes&&s.sedes.length)?s.sedes:[{n:'',jor:s.jor||[],gr:s.gr||[],mf:s.mf||[]}];
+  return units.filter(function(u){
+    var uj=u.jor||[];for(var i=0;i<js.length;i++)if(uj.indexOf(js[i])===-1)return false;
+    if(F.gr&&!grMatch(u.gr||[],F.gr))return false;
+    if(F.mf&&!mfMatch(u.mf||[],F.mf))return false;
+    return true;
+  });
+}
+function grMatch(gr,v){
   if(v==='pfc')return gr.some(isPFC);
   if(v==='clei')return gr.some(isCLEI);
   if(LEVELS[v])return gr.some(function(g){return g>=LEVELS[v][0]&&g<=LEVELS[v][1];});
@@ -742,7 +803,23 @@ function init(){
     +grp('Media',[grOpt('med','Cualquier grado de media')].concat(range(10,11)))
     +grp('Jóvenes y adultos',[grOpt('clei','Cualquier ciclo CLEI')].concat(range(21,26)))
     +grp('Otros programas',[grOpt('99','Aceleración del aprendizaje'),grOpt('pfc','Normal superior (formación complementaria)')]));
-  fillSelect('f-mf',countBy(function(ie){return ie.s.mf;}),alpha);
+  /* Modelos agrupados por población */
+  var mfc=countBy(function(ie){return ie.s.mf;}),mfk=Object.keys(mfc).sort(alpha);
+  var mfOpt=function(k){return '<option value="'+H(k)+'">'+H(k)+' ('+mfc[k]+')</option>';};
+  $('f-mf').insertAdjacentHTML('beforeend',
+    '<optgroup label="Para niños y jóvenes">'+mfk.filter(function(k){return !ADULT_MF[k];}).map(mfOpt).join('')+'</optgroup>'
+    +'<optgroup label="Para jóvenes y adultos">'+mfk.filter(function(k){return ADULT_MF[k];}).map(mfOpt).join('')+'</optgroup>');
+  /* El buscador guiado reutiliza las mismas opciones que el panel lateral */
+  $('q-gr').innerHTML=$('f-gr').innerHTML.replace('Todos los grados','Cualquier grado');
+  $('q-mf').innerHTML=$('f-mf').innerHTML.replace('>Todos<','>Cualquier modelo<');
+  $('q-jor').insertAdjacentHTML('beforeend',JORS.map(function(j){
+    var n=DATA.filter(function(ie){return (ie.s.jor||[]).indexOf(j)>-1;}).length;
+    return n?'<option value="'+j+'">'+j+' ('+n+')</option>':'';}).join('')+'<option value="__multi" hidden>Varias jornadas</option>');
+  $('q-jor').addEventListener('change',function(){if(this.value!=='__multi'){F.jor=this.value;update();}});
+  $('q-gr').addEventListener('change',function(){F.gr=this.value;update();});
+  $('q-mf').addEventListener('change',function(){F.mf=this.value;update();});
+  $('fd-clear').addEventListener('click',function(){F.jor='';F.gr='';F.mf='';update();});
+  $('fd-toggle').addEventListener('click',function(){var o=$('finder').classList.toggle('open');this.setAttribute('aria-expanded',o);});
   fillSelect('f-esp',countBy(function(ie){return ie.s.esp;}),alpha);
   fillSelect('f-gen',countBy(function(ie){return ie.s.gen;}),alpha);
   $('mleg').innerHTML='';
@@ -799,7 +876,10 @@ function update(){SHOWN=PAGE;syncControls();render();makeTags();}
 function syncControls(){
   document.querySelectorAll('.chip,.kpi[data-k]').forEach(function(b){b.setAttribute('aria-pressed',F[b.dataset.k]?'true':'false');});
   $('f-com').value=F.com;$('f-nuc').value=F.nuc;$('f-pmt').value=F.pmt;$('f-pjc').value=F.pjc;$('f-trt').value=F.trt;
-  $('f-gr').value=F.gr;$('f-mf').value=F.mf;$('f-tipo').value=F.tipo;$('f-esp').value=F.esp;$('f-gen').value=F.gen;
+  $('f-gr').value=F.gr;$('f-mf').value=F.mf;
+  $('q-jor').value=F.jor.indexOf('|')>-1?'__multi':F.jor;$('q-gr').value=F.gr;$('q-mf').value=F.mf;
+  [['q-jor',F.jor],['q-gr',F.gr],['q-mf',F.mf]].forEach(function(x){$(x[0]).classList.toggle('set',!!x[1]);});
+  var nq_=(F.jor?1:0)+(F.gr?1:0)+(F.mf?1:0);$('fd-clear').disabled=!nq_;$('fd-n').textContent=nq_;$('fd-n').hidden=!nq_;$('f-tipo').value=F.tipo;$('f-esp').value=F.esp;$('f-gen').value=F.gen;
   document.querySelectorAll('[data-fk]').forEach(function(b){var k=b.dataset.fk;b.setAttribute('aria-pressed',k==='noc'?jorSet().indexOf('Nocturna')>-1:!!F[k]);});
   var js=jorSet();document.querySelectorAll('.jchip').forEach(function(b){b.setAttribute('aria-pressed',js.indexOf(b.dataset.j)>-1?'true':'false');});
   if(F.tipo||F.esp||F.gen)document.querySelector('details.more-f').open=true;
@@ -821,9 +901,8 @@ function filtrar(){
     if(F.pjc&&ie.prg_jc.indexOf(F.pjc)===-1)return false;
     if(F.trt&&(ie.trans_t||'').indexOf(F.trt)===-1)return false;
     var s=ie.s;
-    if(F.jor){var js=F.jor.split('|'),oj=s.jor||[];for(var j=0;j<js.length;j++)if(oj.indexOf(js[j])===-1)return false;}
-    if(F.gr&&!hasGr(ie,F.gr))return false;
-    if(F.mf&&!(F.mf==='*'?(s.mf||[]).length:(s.mf||[]).indexOf(F.mf)>-1))return false;
+    ie._m=null;
+    if(sedeCrit()){var m=sedeMatch(ie);if(!m.length)return false;ie._m=m;}
     if(F.flex&&!ie._f.flex)return false;
     if(F.clei&&!ie._f.clei)return false;
     if(F.adu&&!s.adu)return false;
@@ -848,12 +927,25 @@ function ordenar(l){
 function render(){
   var lista=ordenar(filtrar());
   $('cnt').textContent=lista.length;
+  var note=$('fd-note');
+  if(sedeCrit()){
+    var ns=lista.reduce(function(a,ie){return a+(ie._m?ie._m.length:0);},0);
+    note.innerHTML='<b>'+lista.length+(lista.length!==1?' instituciones':' institución')+'</b> con al menos una sede que cumple todo lo elegido ('+ns+' sede'+(ns!==1?'s':'')+'). La sede aparece resaltada en cada resultado.';
+  }else note.textContent='Al combinar criterios, se buscan sedes que cumplan todos a la vez. Fuente: SINEB – MinEducación.';
   $('k-total').textContent=lista.length;
   SVC.forEach(function(s){$('k-'+s.k).textContent=lista.filter(function(r){return r[s.k];}).length;});
   SERIES.forEach(function(x){var k=lista.filter(function(r){return r._f[x.k];}).length;$('fk-'+x.k).textContent=k;$('fp-'+x.k).textContent=lista.length?Math.round(k*100/lista.length)+'%':'';});
   if(VIEW==='cards')renderCards(lista);else if(VIEW==='stats')renderStats(lista);else renderMap(lista);
 }
 
+function matchBox(ie){
+  if(!ie._m||!ie.s.sedes||!ie.s.sedes.length)return '';
+  var m=ie._m,tot=ie.s.sedes.length;
+  return '<button class="match" data-open="'+H(ie.dane)+'" data-tab="sedes" title="Ver sedes">'
+    +'<b>'+(tot>1?m.length+' de '+tot+' sedes cumplen':'La sede cumple')+'</b>'
+    +m.slice(0,2).map(function(x){return '<span>'+ico('pin',12)+' '+H(x.n)+(x.dir?' · '+H(x.dir):'')+'</span>';}).join('')
+    +(m.length>2?'<span>+'+(m.length-2)+' más</span>':'')+'</button>';
+}
 function cardOferta(ie){
   var s=ie.s;if(!s.jor)return '';
   var mf=(s.mf||[]).length;
@@ -877,7 +969,7 @@ function renderCards(lista){
       +'<div class="cinfo">'
       +'<div>'+ico('pin')+'<span>'+H(ie.dir||'Dirección N/D')+(ie.barrio?' · '+H(ie.barrio):'')+'</span></div>'
       +'<div>'+ico('user')+'<span>'+H(ie.rector||'Rector/a N/D')+'</span></div>'
-      +'</div>'+cardOferta(ie)+'</div>'
+      +'</div>'+cardOferta(ie)+matchBox(ie)+'</div>'
       +'<div class="cfoot">'
       +(tel?'<a href="tel:'+H(tel.replace(/\D/g,''))+'">'+ico('phone')+'Llamar</a>':'')
       +'<button data-locate="'+H(ie.dane)+'">'+ico('map')+'Ver en mapa</button>'
@@ -973,6 +1065,7 @@ function popHtml(ie){
   return '<div class="mpop"><h3>'+H(tc(ie.nombre))+'</h3><div class="mpop-m">'+H(ie.barrio?ie.barrio+' · ':'')+H(com)+'</div>'
     +'<div class="svc-row">'+svBadges(ie,true)+focusBadges(ie)+'</div>'
     +'<p>'+H(ie.dir||'')+'<br>'+H(phones(ie.tel)[0]||'Tel. N/D')+'</p>'
+    +(ie._m&&ie.s.sedes&&ie.s.sedes.length>1?'<p><b>Sede que cumple:</b> '+H(ie._m[0].n)+(ie._m.length>1?' (+'+(ie._m.length-1)+')':'')+'</p>':'')
     +(ie.s.jor?'<p><b>Jornadas:</b> '+H(ie.s.jor.join(', '))+'<br><b>Grados:</b> '+H(grSummary(ie.s.gr))+'</p>':'')
     +'<button class="mpop-btn" data-open="'+H(ie.dane)+'">Ver ficha completa '+ico('arrow',13)+'</button></div>';
 }
@@ -1206,10 +1299,12 @@ function buildOferta(ie){
 function buildSedes(ie){
   var b=$('tp-sedes'),sd=ie.s.sedes||[];b.innerHTML='';
   var sec=mkSec(sd.length+' sede'+(sd.length!==1?'s':'')+' activa'+(sd.length!==1?'s':''));
+  var hits=sedeCrit()?sedeMatch(ie).map(function(x){return x.c;}):[];
   sd.forEach(function(x){
+    var hit=hits.indexOf(x.c)>-1;
     var tel=(x.tel||[]).map(function(p){return '<a href="tel:'+H(p)+'">'+H(p)+'</a>';}).join(' · ');
     var q=encodeURIComponent(x.dir+', Medellín, Antioquia');
-    sec.insertAdjacentHTML('beforeend','<div class="sede"><h5>'+H(x.n)+'<span>'+H(x.c)+'</span></h5>'
+    sec.insertAdjacentHTML('beforeend','<div class="sede'+(hit?' hit':'')+'"><h5>'+H(x.n)+(hit?'<span class="hit-pill">Cumple tu búsqueda</span>':'<span>'+H(x.c)+'</span>')+'</h5>'
       +'<div class="sede-row">'+ico('pin')+'<span>'+H(x.dir||'Sin dirección')+(x.z?' · '+H(x.z):'')
         +(x.dir?' · <a href="https://www.google.com/maps/search/?api=1&query='+q+'" target="_blank" rel="noopener">ver mapa</a>':'')
         +(x.e&&!/activo/i.test(x.e)?' <span class="warn-pill">'+H(x.e)+'</span>':'')+'</span></div>'
@@ -1265,7 +1360,7 @@ function buildNL(ie,km,wrap){
     .filter(function(x){return km>=9999||x.km<=km;})
     .sort(function(a,b){return a.km-b.km;}).slice(0,12);
   if(!cerca.length){wrap.innerHTML='<div class="nabanner">No hay otras instituciones en ese radio. Prueba ampliándolo.</div>';return;}
-  wrap.innerHTML='<div style="font-size:12px;color:var(--ink3);margin-bottom:8px">'+cerca.length+' institución'+(cerca.length!==1?'es':'')+' (máx. 12)</div><div class="cgr3">'
+  wrap.innerHTML='<div style="font-size:12px;color:var(--ink3);margin-bottom:8px">'+cerca.length+(cerca.length!==1?' instituciones':' institución')+' (máx. 12)</div><div class="cgr3">'
     +cerca.map(function(x){return '<button class="cc" data-open="'+H(x.ie.dane)+'"><div class="cc-top"><span class="cc-n">'+H(tc(x.ie.nombre))+'</span><span class="cc-d">'+fmtKm(x.km)+'</span></div><div class="svc-row">'+svBadges(x.ie,true)+'</div></button>';}).join('')
     +'</div>';
 }
@@ -1280,7 +1375,7 @@ function makeTags(){
   if(F.trt)ft('trt',F.trt);
   if(F.pmt)ft('pmt',F.pmt);
   if(F.pjc)ft('pjc',F.pjc);
-  if(F.jor)ft('jor','Jornada: '+F.jor.split('|').join(' + '));
+  if(F.jor)ft('jor','Jornada '+F.jor.split('|').join(' + ').toLowerCase());
   if(F.gr)ft('gr','Grado: '+($('f-gr').selectedOptions[0]?$('f-gr').selectedOptions[0].textContent.replace(/\s*\(\d+\)$/,''):F.gr));
   if(F.mf)ft('mf',F.mf==='*'?'Modelo flexible':F.mf);
   if(F.flex)ft('flex','Modelos flexibles');
