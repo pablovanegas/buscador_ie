@@ -4,6 +4,7 @@
 |---|---|
 | `fuente/colegios_medellin_sineb.xlsx` | Base de SINEB – MinEducación («Buscando Colegio»), Medellín, consulta del 2026-10-16. 568 instituciones y 759 sedes. **Copia saneada:** sin rectores, correos personales ni celulares (ver «Privacidad»). |
 | `instituciones_no_incluidas.xlsx` | Las 338 instituciones de la base que **no** están en el buscador: 335 no oficiales (privadas) y 3 oficiales. Incluye sus sedes, modelos, grados y tarifas publicadas. |
+| `instituciones_clei.xlsx` | Instituciones con CLEI activo: 70 del buscador y 46 de la base que no están en él. Distingue la jornada de **fin de semana** (filas en amarillo, y si CLEI y fin de semana coinciden en la misma sede) y la **atención e inclusión** (adultos, discapacidad, talentos excepcionales, zona rural). Incluye un resumen, un cruce fin de semana × inclusión y el detalle por sede. |
 | `reporte_cruce_html_sineb.xlsx` | Calidad del cruce entre el buscador y SINEB, con las diferencias de nombre, teléfono y correo institucionales de cada institución. |
 
 ## Cómo se integró
@@ -32,4 +33,4 @@ python3 scripts/integrar_sineb.py --sanear-fuente
 
 `--sanear-fuente` quita los datos personales de la consulta nueva antes de guardarla en el repositorio. No subas la consulta original sin sanear.
 
-El script es idempotente: vuelve a generar la variable `SINEB` en `index.html` y los dos libros de Excel.
+El script es idempotente: vuelve a generar la variable `SINEB` en `index.html` y los libros de Excel.

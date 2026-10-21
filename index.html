@@ -305,13 +305,6 @@ details.more-f .field:first-of-type{margin-top:12px;}
 #map-color{width:auto;padding:5px 26px 5px 9px;font-size:12px;margin-bottom:8px;background-color:var(--sur);}
 @media (max-width:640px){.ladder{grid-template-columns:repeat(7,1fr);}.ladder-lbl{display:none;}}
 /* ── Foco: modelos flexibles y CLEI ── */
-#focus{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--sur2);border-bottom:1px solid var(--bdr);overflow-x:auto;}
-#focus .f-lbl{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);white-space:nowrap;margin-right:4px;}
-.fbtn{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 10px;border-radius:10px;border:1px solid var(--bdr2);background:var(--sur);white-space:nowrap;font-size:12.5px;font-weight:600;color:var(--ink2);transition:all .15s;}
-.fbtn:hover{border-color:var(--ink3);}
-.fbtn b{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ink);}
-.fbtn em{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--ink3);}
-.fbtn[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);background:#fff;}
 .sw{width:10px;height:10px;border-radius:3px;flex-shrink:0;display:inline-block;}
 .sw.flex{background:var(--s-flex);}.sw.clei{background:var(--s-clei);}
 .fb{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;border:1px solid var(--bdr2);background:var(--sur);color:var(--ink2);}
@@ -326,7 +319,6 @@ details.more-f .field:first-of-type{margin-top:12px;}
 .mleg-f{display:flex;flex-direction:column;align-items:flex-start;gap:4px;font-size:11.5px;color:var(--ink2);}
 .mleg-row .mleg-f div{display:flex;flex-direction:row;align-items:center;gap:6px;font-size:11.5px;}
 /* Resumen: sección destacada */
-@media (max-width:640px){#focus{padding:8px 12px;}#focus .f-lbl{display:none;}}
 /* ── Buscador guiado: jornada · grado · modelo ── */
 #finder{flex-shrink:0;background:var(--sur);border-bottom:1px solid var(--bdr);padding:12px 16px;}
 .fd-head{display:flex;align-items:center;gap:10px;}
@@ -344,7 +336,6 @@ details.more-f .field:first-of-type{margin-top:12px;}
 #fd-clear:disabled{opacity:.4;cursor:default;}
 .fd-note{grid-column:1/-1;font-size:11.5px;color:var(--ink3);}
 .fd-note b{color:var(--ink2);}
-#focus .f-lbl{min-width:0;}
 /* Sede que cumple la búsqueda */
 .match{position:relative;z-index:1;width:100%;text-align:left;cursor:pointer;margin-top:2px;padding:8px 10px;border-radius:8px;background:rgba(0,119,168,.06);border:1px solid rgba(0,119,168,.2);font-size:12px;color:var(--ink2);display:flex;flex-direction:column;gap:3px;}
 .match b{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--acc);}
@@ -389,7 +380,7 @@ details.help p{margin-top:6px;line-height:1.55;}
 .msec h4 .kbq{vertical-align:0;}
 .kb-link{font-size:12px;font-weight:600;color:var(--blu);background:none;border:none;padding:0;text-align:left;text-decoration:underline;text-underline-offset:2px;}
 /* ── Guía (base de conocimiento) ── */
-#finder[hidden],#focus[hidden]{display:none;}
+#finder[hidden]{display:none;}
 #vk{flex:1;overflow-y:auto;display:none;}
 .kb{display:grid;grid-template-columns:250px minmax(0,1fr);gap:24px;max-width:1180px;margin:0 auto;padding:20px 20px 40px;}
 .kb-nav{position:sticky;top:0;align-self:start;display:flex;flex-direction:column;gap:14px;padding-top:4px;}
@@ -560,7 +551,7 @@ details.help p{margin-top:6px;line-height:1.55;}
 
     <div class="sbl">
       <button class="btn-reset" id="btn-reset"><span class="ico" aria-hidden="true">restart_alt</span>Limpiar filtros</button>
-      <p class="sb-foot"><b style="color:var(--am-prof)">Alcaldía de Medellín · Secretaría de Educación</b><br>Mapa &copy; colaboradores de OpenStreetMap. Datos de las instituciones educativas oficiales de Medellín. Oferta educativa y sedes: SINEB – MinEducación (<span id="sineb-date"></span>).<br><span style="font-family:var(--mono)">Versión 4.0 · 2026-10-21</span></p>
+      <p class="sb-foot"><b style="color:var(--am-prof)">Alcaldía de Medellín · Secretaría de Educación</b><br>Mapa &copy; colaboradores de OpenStreetMap. Datos de las instituciones educativas oficiales de Medellín. Oferta educativa y sedes: SINEB – MinEducación (<span id="sineb-date"></span>).<br><span style="font-family:var(--mono)">Versión 4.1 · 2026-10-21</span></p>
     </div>
 
   </div>
@@ -604,12 +595,6 @@ details.help p{margin-top:6px;line-height:1.55;}
       <p class="fd-note" id="fd-note"></p>
     </div>
   </section>
-
-  <div id="focus" role="group" aria-label="Accesos rápidos">
-    <span class="f-lbl">Accesos rápidos</span>
-    <button class="fbtn" data-fk="flex" aria-pressed="false" title="Filtrar: con modelos educativos flexibles"><span class="sw flex"></span>Modelos flexibles <b id="fk-flex">0</b><em id="fp-flex"></em></button>
-    <button class="fbtn" data-fk="clei" aria-pressed="false" title="Ciclos Lectivos Especiales Integrados: los grados de 1° a 11° agrupados en 6 ciclos para jóvenes y adultos. Clic para filtrar."><span class="sw clei"></span>Ciclos CLEI <b id="fk-clei">0</b><em id="fp-clei"></em></button>
-  </div>
 
   <div id="vc"><div class="cgrid" id="cgrid"></div></div>
 
@@ -857,8 +842,6 @@ function init(){
     if(t){e.preventDefault();e.stopPropagation();openKB(t.dataset.kb);return;}
     t=e.target.closest('[data-kbf]');
     if(t){F=Object.assign({},EMPTY_F,JSON.parse(t.dataset.kbf));$('srch').value='';$('srch-clr').classList.remove('show');setView('cards');update();toast('Mostrando: '+t.dataset.kbl);return;}
-    t=e.target.closest('[data-fk]');
-    if(t){applyF(t.dataset.fk,'1');return;}
     t=e.target.closest('[data-f]');
     if(t){applyF(t.dataset.f,t.dataset.v);return;}
     t=e.target.closest('[data-locate]');
@@ -893,7 +876,6 @@ function syncControls(){
   $('q-jor').value=F.jor.indexOf('|')>-1?'__multi':F.jor;$('q-gr').value=F.gr;$('q-mf').value=F.mf;
   [['q-jor',F.jor],['q-gr',F.gr],['q-mf',F.mf]].forEach(function(x){$(x[0]).classList.toggle('set',!!x[1]);});
   var nq_=(F.jor?1:0)+(F.gr?1:0)+(F.mf?1:0);$('fd-clear').disabled=!nq_;$('fd-n').textContent=nq_;$('fd-n').hidden=!nq_;$('f-tipo').value=F.tipo;$('f-esp').value=F.esp;$('f-gen').value=F.gen;
-  document.querySelectorAll('[data-fk]').forEach(function(b){var k=b.dataset.fk;b.setAttribute('aria-pressed',!!F[k]);});
   var js=jorSet();document.querySelectorAll('.jchip').forEach(function(b){b.setAttribute('aria-pressed',js.indexOf(b.dataset.j)>-1?'true':'false');});
   if(F.tipo||F.esp||F.gen)document.querySelector('details.more-f').open=true;
   var n=activeCount();$('fcount').textContent=n;$('fcount').hidden=!n;
@@ -947,7 +929,6 @@ function render(){
   }else note.textContent='Al combinar criterios, se buscan sedes que cumplan todos a la vez. Fuente: SINEB – MinEducación.';
   $('k-total').textContent=lista.length;
   SVC.forEach(function(s){$('k-'+s.k).textContent=lista.filter(function(r){return r[s.k];}).length;});
-  SERIES.forEach(function(x){var k=lista.filter(function(r){return r._f[x.k];}).length;$('fk-'+x.k).textContent=k;$('fp-'+x.k).textContent=lista.length?Math.round(k*100/lista.length)+'%':'';});
   if(VIEW==='cards')renderCards(lista);else if(VIEW==='kb')renderKB();else renderMap(lista);
 }
 
@@ -1477,9 +1458,8 @@ function kbArticles(){
   var add=function(id,cat,t,b,act,n){A.push({id:id,cat:cat,t:t,b:b,act:act||[],n:n||''});};
   /* Cómo usar */
   add('como-buscar','Empezar','Cómo encontrar una institución',
-    '<p>Hay tres formas de buscar, y se pueden combinar:</p><ul>'
+    '<p>Hay dos formas de buscar, y se pueden combinar:</p><ul>'
     +'<li><b>Encuentra una institución</b> (arriba de los resultados): elige jornada, grado y modelo educativo. Cuando combinas criterios, se buscan <b>sedes</b> que los cumplan todos a la vez, y cada tarjeta muestra cuál es.</li>'
-    +'<li><b>Accesos rápidos</b>: un clic para ver las instituciones con modelos flexibles o con ciclos CLEI.</li>'
     +'<li><b>Panel de filtros</b>: servicios, ubicación (comuna, núcleo), inclusión, tipo, especialidad y búsqueda por texto (nombre, barrio, dirección, programa…).</li></ul>'
     +'<p>Cada tarjeta resume la oferta de la institución. El botón <b>Ficha</b> abre el detalle: contacto, oferta educativa, sedes, servicios e instituciones cercanas. Los botones <b>?</b> abren el artículo de esta guía que explica cada dato.</p>');
   /* Jornadas */
@@ -1568,7 +1548,7 @@ function kbArticles(){
     '<ul><li><b>Jornada y grado no se cruzan</b>: la base dice qué jornadas y qué grados tiene cada sede, pero no qué grado se dicta en qué jornada.</li>'
     +'<li><b>Datos de contacto</b>: en muchas instituciones el teléfono o el correo de SINEB difieren de los del buscador. La ficha muestra los del buscador y, aparte, «Otros contactos institucionales registrados en SINEB».</li>'
     +'<li><b>Adultos y CLEI</b>: en unas pocas instituciones el modelo para adultos y los ciclos CLEI no coinciden (ver el artículo sobre la diferencia).</li>'
-    +'<li><b>Modelos por sede</b>: en un caso la base registra un modelo a nivel de institución pero en ninguna de sus sedes; por eso «cualquier modelo flexible» puede diferir en 1 del contador de accesos rápidos.</li>'
+    +'<li><b>Modelos por sede</b>: en un caso la base registra un modelo a nivel de institución pero en ninguna de sus sedes; por eso, al buscar por modelo, esa institución no aparece.</li>'
     +'<li><b>Sedes sin coordenadas</b>: solo la sede principal está en el mapa.</li>'
     +'<li><b>Datos no publicados</b>: tarifas, resultados ICFES, computadores, internet y estrato vienen vacíos para las instituciones oficiales y no se muestran.</li></ul>',
     [],'Ante cualquier diferencia, la institución es la fuente más actualizada: confirma por teléfono o correo antes de hacer un trámite.');
@@ -1616,7 +1596,7 @@ function setView(v,keep){
   $('vc').style.display=v==='cards'?'block':'none';
   $('vm').style.display=v==='map'?'block':'none';
   $('vk').style.display=v==='kb'?'block':'none';
-  $('finder').hidden=$('focus').hidden=v==='kb';
+  $('finder').hidden=v==='kb';
   $('vt-c').setAttribute('aria-pressed',v==='cards');
   $('vt-m').setAttribute('aria-pressed',v==='map');
   $('vt-k').setAttribute('aria-pressed',v==='kb');
