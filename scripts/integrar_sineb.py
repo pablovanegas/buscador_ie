@@ -310,6 +310,136 @@ def main():
     print("datos/reporte_cruce_html_sineb.xlsx")
     print(stats.to_string(index=False))
 
+    exportar_clei(cons, sedes, html_by_key, mod_adultos)
+
+
+# ── Excel 3: instituciones con CLEI activo ───────────────────────────
+def cleis(gr):
+    return [g for g in gr if 20 <= g <= 26]
+
+
+def clei_txt(gr):
+    """'CLEI 1 a 6' si son seguidos; 'CLEI 1, 3 y 5' si hay saltos."""
+    n = [g - 20 for g in cleis(gr)]
+    if not n:
+        return ""
+    if len(n) == 1:
+        return f"CLEI {n[0]}"
+    if n == list(range(n[0], n[-1] + 1)):
+        return f"CLEI {n[0]} a {n[-1]}"
+    return "CLEI " + ", ".join(map(str, n[:-1])) + f" y {n[-1]}"
+
+
+def exportar_clei(cons, sedes, html_by_key, mod_adultos):
+    """Una fila por institución con CLEI, con columnas que distinguen fin de semana e inclusión.
+    La jornada nocturna se omite (decisión del proyecto) y los contactos son solo institucionales."""
+    si_no = lambda b: "Sí" if b else "No"
+    filas, filas_sede = [], []
+    for _, c in cons.iterrows():
+        gr = grades(c["Grados (códigos)"])
+        if not cleis(gr):
+            continue
+        k = c["_k"]
+        h = html_by_key.get(k)
+        sd = sedes[sedes["_k"] == k]
+        jor = jornadas(c["Jornadas (ficha)"])
+        # sedes donde se ofrece CLEI y fin de semana a la vez
+        sedes_fs = []
+        for _, x in sd.iterrows():
+            xgr, xjor = grades(x["Grados (códigos)"]), jornadas(x["Jornadas"])
+            filas_sede.append({
+                "DANE institución": k, "Institución": tc(c["Nombre"]), "En el buscador": si_no(h),
+                "Código sede": str(x["Código sede"]), "Sede": tc(x["Nombre sede"]),
+                "Dirección": x["Dirección"] if isinstance(x["Dirección"], str) else "",
+                "Teléfono fijo": " - ".join(fijos(x["Teléfono"])), "Zona": tc(x["Zona"]),
+                "Jornadas": ", ".join(xjor), "Ciclos CLEI": clei_txt(xgr),
+                "Fin de semana": si_no("Fin de semana" in xjor),
+                "CLEI y fin de semana en la sede": si_no(cleis(xgr) and "Fin de semana" in xjor),
+            })
+            if cleis(xgr) and "Fin de semana" in xjor:
+                sedes_fs.append(tc(x["Nombre sede"]))
+        rural = "RURAL" in str(c["Zona"]).upper() or sd["Zona"].astype(str).str.upper().eq("RURAL").any()
+        disc = [tc(d) for d in split_list(c["Discapacidades"])]
+        fila = {
+            "DANE institución": k, "Institución": tc(c["Nombre"]), "Sector": tc(c["Sector"]),
+            "En el buscador": si_no(h),
+            "Comuna": h["comuna"] if h else "", "Núcleo": h["nucleo"] if h else "",
+            "Dirección": (h or {}).get("dir") or (c["Dirección"] if isinstance(c["Dirección"], str) else ""),
+            "Teléfono fijo": (h or {}).get("tel") or " - ".join(fijos(c["Teléfono"])),
+            "Correo institucional": (h or {}).get("correo") or " ".join(correos_inst(c["Correo electrónico"])),
+            "Ciclos CLEI": clei_txt(gr),
+        }
+        for g in range(21, 27):
+            fila[f"CLEI {g - 20}"] = si_no(g in gr)
+        fila.update({
+            "Modelo para adultos": ", ".join(mod_adultos.get(k, [])),
+            "Jornadas": ", ".join(jor),
+            "Fin de semana": si_no("Fin de semana" in jor),
+            "Sedes con CLEI y fin de semana": len(sedes_fs),
+            "Cuáles sedes (CLEI y fin de semana)": ", ".join(sedes_fs),
+            "Educación para adultos": si_no(c["Atiende adultos"] == "Sí"),
+            "Atiende discapacidad": si_no(disc),
+            "Tipos de discapacidad": ", ".join(disc),
+            "Talentos excepcionales": si_no(split_list(c["Capacidades excepcionales"])),
+            "Sede en zona rural": si_no(rural),
+            "Sedes activas": int(c["Sedes activas"]),
+        })
+        filas.append(fila)
+    df = pd.DataFrame(filas).sort_values(["Fin de semana", "Institución"], ascending=[False, True])
+    en = df[df["En el buscador"] == "Sí"].drop(columns=["En el buscador"])
+    fuera = df[df["En el buscador"] == "No"].drop(columns=["En el buscador", "Comuna", "Núcleo"])
+    df_sedes = pd.DataFrame(filas_sede)
+    df_sedes = df_sedes[df_sedes["DANE institución"].isin(df["DANE institución"])]
+
+    def resumen(d, nombre):
+        n = len(d)
+        pct = lambda x: f"{x * 100 / n:.0f}%" if n else ""
+        r = [{"Grupo": nombre, "Indicador": "Instituciones con CLEI", "Instituciones": n, "%": "100%"}]
+        for col in ("Fin de semana", "Educación para adultos", "Atiende discapacidad", "Talentos excepcionales", "Sede en zona rural"):
+            k = int((d[col] == "Sí").sum())
+            r.append({"Grupo": nombre, "Indicador": col, "Instituciones": k, "%": pct(k)})
+        k = int((d["Sedes con CLEI y fin de semana"] > 0).sum())
+        r.append({"Grupo": nombre, "Indicador": "CLEI y fin de semana en la misma sede", "Instituciones": k, "%": pct(k)})
+        return r
+    res = pd.DataFrame(resumen(en, "En el buscador") + resumen(fuera, "Fuera del buscador (base SINEB)"))
+    cruce = (en.assign(**{"Total": 1})
+             .pivot_table(index="Fin de semana", values=["Total", "Educación para adultos", "Atiende discapacidad", "Talentos excepcionales", "Sede en zona rural"],
+                          aggfunc=lambda v: int(((v == "Sí") | (v == 1)).sum()))
+             .reindex(columns=["Total", "Educación para adultos", "Atiende discapacidad", "Talentos excepcionales", "Sede en zona rural"])
+             .reset_index().rename(columns={"Fin de semana": "¿Tiene fin de semana?"}))
+    notas = pd.DataFrame({"Notas": [
+        "Instituciones con CLEI activo (Ciclos Lectivos Especiales Integrados: educación formal de jóvenes y adultos).",
+        "Fuente: SINEB – MinEducación (Buscando Colegio), consulta 2026-10-16; comuna, núcleo y contacto del buscador.",
+        "CLEI 1 = 1° a 3°, CLEI 2 = 4° y 5°, CLEI 3 = 6° y 7°, CLEI 4 = 8° y 9°, CLEI 5 = 10°, CLEI 6 = 11°.",
+        "Las filas en amarillo tienen jornada de FIN DE SEMANA. 'CLEI y fin de semana en la misma sede' confirma que ambas se ofrecen en la misma sede.",
+        "Atención e inclusión: Educación para adultos, Atiende discapacidad, Talentos excepcionales y Sede en zona rural (columnas Sí/No).",
+        "La jornada nocturna no se incluye, por decisión del proyecto.",
+        "Privacidad: solo teléfonos fijos y correos institucionales; sin nombres de rectores.",
+        "La base no indica qué grado se dicta en qué jornada: confirme con la institución.",
+    ]})
+    path = OUT / "instituciones_clei.xlsx"
+    write_xlsx(path, {"Leeme": notas, "Resumen": res, "Fin de semana x inclusión": cruce,
+                      "CLEI en el buscador": en, "CLEI fuera del buscador": fuera, "Sedes": df_sedes})
+    resaltar_fin_de_semana(path, ["CLEI en el buscador", "CLEI fuera del buscador", "Sedes"])
+    print(f"datos/instituciones_clei.xlsx: {len(en)} en el buscador + {len(fuera)} fuera; "
+          f"fin de semana {int((en['Fin de semana'] == 'Sí').sum())}/{len(en)}")
+
+
+def resaltar_fin_de_semana(path, hojas):
+    """Pinta en amarillo institucional las filas con jornada de fin de semana."""
+    from openpyxl import load_workbook
+    wb = load_workbook(path)
+    amarillo = PatternFill("solid", fgColor="FFF4B8")
+    for h in hojas:
+        ws = wb[h]
+        cab = [c.value for c in ws[1]]
+        col = cab.index("Fin de semana") + 1
+        for fila in ws.iter_rows(min_row=2):
+            if fila[col - 1].value == "Sí":
+                for c in fila:
+                    c.fill = amarillo
+    wb.save(path)
+
 
 def sanear_fuente():
     """Reescribe la fuente sin datos personales (todas las hojas), conservando la estructura."""
