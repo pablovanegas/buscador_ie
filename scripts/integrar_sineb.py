@@ -12,7 +12,12 @@ Qué hace:
        - instituciones_no_incluidas.xlsx: las instituciones de la base que NO están en el HTML.
        - reporte_cruce_html_sineb.xlsx: calidad del cruce y diferencias de contacto.
 
+Privacidad: no se publica ningún dato personal. Se eliminan los nombres de rectores, los
+correos no institucionales (Gmail, Hotmail, Yahoo…) y los números de celular. Solo quedan
+teléfonos fijos y correos de dominios .gov.co / .edu.co. Esto aplica a la página y a todos los Excel.
+
 Uso:  python3 scripts/integrar_sineb.py [ruta_excel]
+      python3 scripts/integrar_sineb.py --sanear-fuente [ruta_excel]   (reescribe la fuente sin datos personales)
 Es idempotente: si `var SINEB=` ya existe en index.html, la reemplaza.
 """
 import json
@@ -27,7 +32,8 @@ from openpyxl.utils import get_column_letter
 
 ROOT = Path(__file__).resolve().parent.parent
 HTML = ROOT / "index.html"
-SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "datos/fuente/colegios_medellin_sineb.xlsx"
+ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
+SRC = Path(ARGS[0]) if ARGS else ROOT / "datos/fuente/colegios_medellin_sineb.xlsx"
 OUT = ROOT / "datos"
 
 # ── utilidades de texto ──────────────────────────────────────────────
@@ -87,6 +93,54 @@ def emails(v):
     return [e.lower() for e in re.findall(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+", str(v or ""))]
 
 
+# ── privacidad ───────────────────────────────────────────────────────
+# Buzones con el nombre de una persona, aunque estén en un dominio institucional
+# (las siglas de la institución, como mjb = Manuel J. Betancur, sí son institucionales)
+CORREOS_PERSONALES = {"alexandralatorre", "diego.garcia"}
+
+
+def es_institucional(correo):
+    """Solo dominios institucionales (.gov.co de la Alcaldía o .edu.co de la propia institución)
+    y buzones de cargo o de la institución, no de una persona."""
+    usuario, _, dom = correo.lower().rpartition("@")
+    if usuario in CORREOS_PERSONALES:
+        return False
+    return dom.endswith(".gov.co") or dom.endswith(".edu.co")
+
+
+def es_fijo(tel):
+    """Teléfono fijo: 7 dígitos o 10 con indicativo 60x. Los celulares (3xx…) se excluyen."""
+    return len(tel) == 7 or (len(tel) == 10 and tel.startswith("60"))
+
+
+def correos_inst(v):
+    return [e for e in emails(v) if es_institucional(e)]
+
+
+def fijos(v):
+    return [t for t in phones(v) if es_fijo(t)]
+
+
+def sanear_df(df):
+    """Quita rectores, correos personales y celulares de cualquier hoja de la base."""
+    df = df.drop(columns=[c for c in df.columns if "rector" in c.lower()])
+    for c in df.columns:
+        if c.lower().startswith("correo"):
+            df[c] = df[c].map(lambda v: " ".join(correos_inst(v)) or None)
+        elif c.lower().startswith("teléfono"):
+            df[c] = df[c].map(lambda v: " - ".join(fijos(v)) or None)
+    return df
+
+
+def sanear_data(data):
+    """Datos originales del buscador: sin rector y solo teléfonos fijos y correos institucionales."""
+    for r in data:
+        r.pop("rector", None)
+        r["tel"] = " - ".join(fijos(r.get("tel", "")))
+        r["correo"] = " ".join(correos_inst(r.get("correo", "")))
+    return data
+
+
 def grades(v):
     return sorted({int(g) for g in split_list(str(v)) if re.fullmatch(r"-?\d+", g)})
 
@@ -127,6 +181,7 @@ def main():
         df["_k"] = df[col].astype(str)
 
     html, data = load_html_data()
+    data = sanear_data(data)
     html_by_key = {r["dane"][:12]: r for r in data}
     assert len(html_by_key) == len(data), "Llaves DANE duplicadas en el HTML"
 
@@ -147,7 +202,7 @@ def main():
                 "c": str(s["Código sede"]),
                 "n": tc(s["Nombre sede"]),
                 "dir": s["Dirección"] if isinstance(s["Dirección"], str) else "",
-                "tel": phones(s["Teléfono"]),
+                "tel": fijos(s["Teléfono"]),
                 "z": tc(s["Zona"]),
                 "e": tc(s["Estado sede"]),
                 "jor": jornadas(s["Jornadas"]),
@@ -171,9 +226,8 @@ def main():
             "cap": [tc(d) for d in split_list(c["Capacidades excepcionales"])],
             "etn": [tc(d) for d in split_list(c["Etnias"])],
             "idi": [tc(d) for d in split_list(c["Idiomas"])],
-            "rec": tc(re.sub(r"\.$", "", str(c["Rector"]).strip())) if isinstance(c["Rector"], str) else "",
-            "mail": emails(c["Correo electrónico"]),
-            "tel": phones(c["Teléfono"]),
+            "mail": correos_inst(c["Correo electrónico"]),
+            "tel": fijos(c["Teléfono"]),
             "nsed": int(c["Sedes activas"]),
             "sedes": sed,
             "act": str(c["Actualizado"])[:10],
@@ -190,6 +244,7 @@ def main():
     lines = html.split("\n")
     lines = [l for l in lines if not l.startswith("var SINEB=") and not l.startswith("var SINEB_META=")]
     i = next(n for n, l in enumerate(lines) if l.startswith("var DATA="))
+    lines[i] = "var DATA=" + json.dumps(data, ensure_ascii=False) + ";"
     lines[i + 1:i + 1] = [line, meta_line]
     HTML.write_text("\n".join(lines), encoding="utf-8")
     print(f"index.html actualizado: SINEB con {len(sineb)} instituciones ({len(line)/1024:.0f} KB)")
@@ -202,9 +257,9 @@ def main():
     vacias = [c for c in no_inc.columns if no_inc[c].isna().all()]
     sheets = {
         "Resumen": resumen,
-        "Instituciones": no_inc.drop(columns=vacias),
-        "Filtros": filt[~filt["_k"].isin(keys_html)].drop(columns="_k"),
-        "Sedes": sedes[~sedes["_k"].isin(keys_html)].drop(columns="_k"),
+        "Instituciones": sanear_df(no_inc.drop(columns=vacias)),
+        "Filtros": sanear_df(filt[~filt["_k"].isin(keys_html)].drop(columns="_k")),
+        "Sedes": sanear_df(sedes[~sedes["_k"].isin(keys_html)].drop(columns="_k")),
     }
     for name in ("Modelos", "Niveles_Grados", "Jornadas", "Tarifas", "Tarifas_por_grado"):
         if name in xl.sheet_names:
@@ -217,6 +272,7 @@ def main():
         f"Columnas sin ningún dato en estas instituciones (omitidas en 'Instituciones'): {', '.join(vacias) or 'ninguna'}.",
         "Las instituciones NO OFICIALES (privadas) incluyen tarifas cuando el colegio las publica en SINEB.",
         "Estas instituciones no tienen coordenadas en la base: para ubicarlas en el mapa hay que geocodificar su dirección.",
+        "Privacidad: se omiten los nombres de rectores, los correos no institucionales y los números de celular.",
     ]})
     write_xlsx(OUT / "instituciones_no_incluidas.xlsx", {"Leeme": notas, **sheets})
     print(f"datos/instituciones_no_incluidas.xlsx: {len(no_inc)} instituciones")
@@ -225,21 +281,17 @@ def main():
     rows = []
     for k in matched:
         h, c = html_by_key[k], cons_k.loc[k]
-        h_tel = {p[-7:] for p in phones(h.get("tel", ""))}
-        s_tel = {p[-7:] for p in phones(c["Teléfono"])}
-        h_mail = set(emails(h.get("correo", "")))
-        s_mail = set(emails(c["Correo electrónico"]))
-        h_rec = {norm(w) for w in (h.get("rector") or "").split()}
-        s_rec = {norm(w) for w in str(c["Rector"]).split()}
+        h_tel = {p[-7:] for p in fijos(h.get("tel", ""))}
+        s_tel = {p[-7:] for p in fijos(c["Teléfono"])}
+        h_mail = set(correos_inst(h.get("correo", "")))
+        s_mail = set(correos_inst(c["Correo electrónico"]))
         rows.append({
             "DANE (HTML)": h["dane"], "DANE institución": k,
             "Nombre (HTML)": h["nombre"], "Nombre (SINEB)": c["Nombre"],
             "Nombre coincide": "Sí" if norm(h["nombre"]) == norm(c["Nombre"]) else "No",
-            "Rector (HTML)": h.get("rector", ""), "Rector (SINEB)": c["Rector"],
-            "Rector coincide": "Sí" if h_rec and h_rec <= s_rec else "No",
-            "Teléfono (HTML)": h.get("tel", ""), "Teléfono (SINEB)": c["Teléfono"],
+            "Teléfono (HTML)": h.get("tel", ""), "Teléfono (SINEB)": " - ".join(sorted(fijos(c["Teléfono"]))),
             "Teléfono coincide": "Sí" if h_tel & s_tel else "No",
-            "Correo (HTML)": h.get("correo", ""), "Correo (SINEB)": c["Correo electrónico"],
+            "Correo (HTML)": h.get("correo", ""), "Correo (SINEB)": " ".join(correos_inst(c["Correo electrónico"])),
             "Correo coincide": "Sí" if h_mail & s_mail else "No",
             "Dirección (HTML)": h.get("dir", ""), "Dirección (SINEB)": c["Dirección"],
             "Sedes activas": int(c["Sedes activas"]),
@@ -252,11 +304,19 @@ def main():
         {"Indicador": "HTML sin registro en SINEB", "Valor": len(missing_html)},
         {"Indicador": "SINEB no incluidas en el HTML", "Valor": len(no_inc)},
         *[{"Indicador": f"{c.replace(' coincide', '')} distinto (HTML vs SINEB)", "Valor": int((cruce[c] == "No").sum())}
-          for c in ("Nombre coincide", "Rector coincide", "Teléfono coincide", "Correo coincide")],
+          for c in ("Nombre coincide", "Teléfono coincide", "Correo coincide")],
     ])
     write_xlsx(OUT / "reporte_cruce_html_sineb.xlsx", {"Resumen": stats, "Cruce": cruce})
     print("datos/reporte_cruce_html_sineb.xlsx")
     print(stats.to_string(index=False))
+
+
+def sanear_fuente():
+    """Reescribe la fuente sin datos personales (todas las hojas), conservando la estructura."""
+    xl = pd.ExcelFile(SRC)
+    hojas = {n: (xl.parse(n) if n == "Leeme" else sanear_df(xl.parse(n))) for n in xl.sheet_names}
+    write_xlsx(SRC, hojas)
+    print(f"{SRC.name}: fuente saneada ({', '.join(hojas)})")
 
 
 def write_xlsx(path, sheets):
@@ -278,4 +338,6 @@ def write_xlsx(path, sheets):
 
 
 if __name__ == "__main__":
+    if "--sanear-fuente" in sys.argv:
+        sanear_fuente()
     main()

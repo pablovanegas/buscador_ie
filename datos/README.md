@@ -2,9 +2,9 @@
 
 | Archivo | Contenido |
 |---|---|
-| `fuente/colegios_medellin_sineb.xlsx` | Base original de SINEB – MinEducación («Buscando Colegio»), Medellín, consulta del 2026-10-16. 568 instituciones y 759 sedes. |
+| `fuente/colegios_medellin_sineb.xlsx` | Base de SINEB – MinEducación («Buscando Colegio»), Medellín, consulta del 2026-10-16. 568 instituciones y 759 sedes. **Copia saneada:** sin rectores, correos personales ni celulares (ver «Privacidad»). |
 | `instituciones_no_incluidas.xlsx` | Las 338 instituciones de la base que **no** están en el buscador: 335 no oficiales (privadas) y 3 oficiales. Incluye sus sedes, modelos, grados y tarifas publicadas. |
-| `reporte_cruce_html_sineb.xlsx` | Calidad del cruce entre el buscador y SINEB, con las diferencias de nombre, rector, teléfono y correo de cada institución. |
+| `reporte_cruce_html_sineb.xlsx` | Calidad del cruce entre el buscador y SINEB, con las diferencias de nombre, teléfono y correo institucionales de cada institución. |
 
 ## Cómo se integró
 
@@ -15,18 +15,21 @@
    - modelos educativos flexibles, separando los dirigidos a adultos (población «ADULTOS» de la hoja Modelos), y si atiende adultos;
    - discapacidades atendidas, capacidades excepcionales, etnias e idiomas;
    - tipo, carácter, especialidad, género, zona y prestador del servicio;
-   - todas las sedes activas, con su dirección, teléfono, jornadas, grados y modelos;
-   - teléfonos, correos y rector según SINEB.
-3. **Datos de contacto:** se conservan los datos de contacto del buscador. Cuando SINEB tiene otros, la ficha los muestra aparte, marcados como «según SINEB».
-4. **Jornada nocturna excluida:** por decisión del proyecto, el buscador no publica la jornada nocturna. El script la omite tanto en las instituciones como en sus sedes. Los libros de Excel de `datos/` conservan las columnas originales de la fuente.
-5. **Lo que no se usó:** las columnas de tarifas, ICFES, computadores, internet y estrato vienen vacías o casi vacías para las instituciones oficiales, así que no se incluyeron.
+   - todas las sedes activas, con su dirección, teléfono fijo, jornadas, grados y modelos;
+   - teléfonos fijos y correos institucionales según SINEB.
+3. **Privacidad:** no se publica ningún dato personal, ni en la página ni en los Excel. Se eliminan los nombres de rectores, los correos que no son de un dominio institucional (`.gov.co` o `.edu.co`), los correos institucionales con el nombre de una persona (lista `CORREOS_PERSONALES` del script) y los números de celular. Solo quedan teléfonos fijos y correos institucionales.
+4. **Datos de contacto:** se conservan los datos de contacto del buscador. Cuando SINEB tiene otros, la ficha los muestra aparte, marcados como «según SINEB».
+5. **Jornada nocturna excluida:** por decisión del proyecto, el buscador no publica la jornada nocturna. El script la omite tanto en las instituciones como en sus sedes. Los libros de Excel de `datos/` conservan las columnas originales de la fuente.
+6. **Lo que no se usó:** las columnas de tarifas, ICFES, computadores, internet y estrato vienen vacías o casi vacías para las instituciones oficiales, así que no se incluyeron.
 
 ## Actualizar
 
 Reemplaza el Excel de `fuente/` por una consulta nueva y ejecuta:
 
 ```bash
-python3 scripts/integrar_sineb.py
+python3 scripts/integrar_sineb.py --sanear-fuente
 ```
+
+`--sanear-fuente` quita los datos personales de la consulta nueva antes de guardarla en el repositorio. No subas la consulta original sin sanear.
 
 El script es idempotente: vuelve a generar la variable `SINEB` en `index.html` y los dos libros de Excel.
