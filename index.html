@@ -30,7 +30,7 @@
   --r:10px;--r-sm:7px;
   --sh1:0 1px 2px rgba(0,41,62,.06),0 1px 1px rgba(0,41,62,.04);
   --sh2:0 8px 28px rgba(0,41,62,.12);
-  --tb-h:80px;--sb-w:310px;
+  --tb-h:80px;--lk-h:40px;--top:calc(var(--tb-h) + var(--lk-h));--sb-w:310px;
   /* Series validadas (paleta de referencia, slots 1-2, CVD ΔE ≥ 9.2) */
   --s-flex:#0082B5;--s-clei:#F47B29; /* validadas: CVD ΔE 21.3, siempre con etiqueta */
   --font:'Metropolis','Poppins',Arial,Helvetica,sans-serif; /* tipografía institucional: Metropolis */
@@ -62,8 +62,21 @@ button.kpi[aria-pressed=true] .kpi-n,button.kpi[aria-pressed=true] .kpi-l{color:
 #btn-filters{display:none;align-items:center;gap:6px;height:38px;padding:0 12px;border-radius:8px;border:1px solid rgba(0,58,87,.35);background:rgba(255,255,255,.9);color:var(--am-prof);font-size:13.5px;font-weight:600;margin-left:auto;}
 #btn-filters .badge{background:var(--am-prof);color:#fff;border-radius:10px;font-size:10.5px;padding:1px 6px;font-family:var(--mono);}
 
+/* ── ENLACES ÚTILES (franja bajo la cabecera) ── */
+#lnk{position:fixed;top:var(--tb-h);left:0;right:0;height:var(--lk-h);z-index:1090;display:flex;align-items:center;gap:8px;padding:0 16px;background:var(--am-prof);overflow-x:auto;scrollbar-width:none;}
+#lnk::-webkit-scrollbar{display:none;}
+#lnk .lk-t{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9fdcf5;white-space:nowrap;margin-right:4px;}
+#lnk a{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:12.5px;font-weight:600;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:background .15s;}
+#lnk a:hover,#lnk a:focus-visible{background:rgba(255,255,255,.22);}
+#lnk a .ico{font-size:17px;color:var(--am-azul);}
+#lnk a .ico.ext{font-size:14px;color:#9fdcf5;}
+#lnk a.lk-hi{background:var(--am-amarillo);border-color:var(--am-amarillo);color:#0E1B24;}
+#lnk a.lk-hi .ico{color:#0E1B24;}
+@media (max-width:640px){#lnk{padding:0 8px;gap:5px;}#lnk a{flex:1 1 auto;justify-content:center;gap:4px;padding:0 8px;font-size:12px;}#lnk a .ico{font-size:15px;}#lnk .lk-t,#lnk .lk-long,#lnk .ico.ext{display:none;}}
+@media (min-width:641px){#lnk .lk-short{display:none;}}
+
 /* ── LAYOUT ── */
-#wrap{position:fixed;top:var(--tb-h);left:0;right:0;bottom:0;display:flex;}
+#wrap{position:fixed;top:var(--top);left:0;right:0;bottom:0;display:flex;}
 
 /* ── SIDEBAR ── */
 #sb{width:var(--sb-w);flex-shrink:0;background:var(--sur);border-right:1px solid var(--bdr);display:flex;flex-direction:column;overflow:hidden;transition:width .22s ease,transform .25s ease;}
@@ -524,11 +537,11 @@ button.gbar:hover{background:var(--sur2);}
 @media (max-width:960px){
   .kpis{display:none;}
   #btn-filters{display:flex;}
-  #sb{position:fixed;top:var(--tb-h);bottom:0;left:0;z-index:1050;width:min(var(--sb-w),88vw);transform:translateX(-100%);box-shadow:var(--sh2);}
+  #sb{position:fixed;top:var(--top);bottom:0;left:0;z-index:1050;width:min(var(--sb-w),88vw);transform:translateX(-100%);box-shadow:var(--sh2);}
   #sb-inner{width:100%;}
   #sb.closed{width:min(var(--sb-w),88vw);}
   body.sb-open #sb{transform:none;}
-  body.sb-open #scrim{display:block;position:fixed;inset:var(--tb-h) 0 0 0;z-index:1040;background:rgba(0,41,62,.4);}
+  body.sb-open #scrim{display:block;position:fixed;inset:var(--top) 0 0 0;z-index:1040;background:rgba(0,41,62,.4);}
   #btn-sb-close{display:inline-flex!important;}
   #btn-sb,#btn-exp{display:none!important;}
 }
@@ -577,6 +590,13 @@ button.gbar:hover{background:var(--sur2);}
   </div>
   <button id="btn-filters" aria-controls="sb" aria-expanded="false"><span class="ico" aria-hidden="true">tune</span>Filtros <span class="badge" id="fcount" hidden>0</span></button>
 </header>
+
+<nav id="lnk" aria-label="Enlaces útiles">
+  <span class="lk-t">Enlaces útiles</span>
+  <a class="lk-hi" href="https://www.medellin.edu.co/tucupo/" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">how_to_reg</span>Busca tu cupo<span class="ico ext" aria-hidden="true">open_in_new</span></a>
+  <a href="https://sineb.mineducacion.gov.co/bcol/app?service=page/BuscandoColegioBasico" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">travel_explore</span><span class="lk-long">Buscador de colegios a nivel nacional (MinEducación)</span><span class="lk-short">Colegios del país</span><span class="ico ext" aria-hidden="true">open_in_new</span></a>
+  <a href="https://app.powerbi.com/view?r=eyJrIjoiZThmMjY3ZjQtZGE3Ni00YmU4LThlMzUtMTk3MTEzNTlmZDhjIiwidCI6IjljNDhlMDg4LTVlNDQtNGIwZC05M2EwLWVlYjJjNjEyN2MzZCIsImMiOjR9&amp;embedImagePlaceholder=true" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">monitoring</span><span class="lk-long">Tableros Power BI</span><span class="lk-short">Power BI</span><span class="ico ext" aria-hidden="true">open_in_new</span></a>
+</nav>
 
 <div id="wrap">
 
@@ -926,6 +946,7 @@ function init(){
   });
   var runSearch=debounce(function(v){F.q=nq(v);update();},160);
   $('srch').addEventListener('input',function(){$('srch-clr').classList.toggle('show',!!this.value);$('q-txt').value=this.value;runSearch(this.value);});
+  if(window.matchMedia('(max-width:640px)').matches)$('q-txt').placeholder='Institución, sede, barrio o DANE';
   $('q-txt').addEventListener('input',function(){var x=$('srch');x.value=this.value;x.dispatchEvent(new Event('input'));});
   $('srch-clr').addEventListener('click',function(){$('srch').value='';this.classList.remove('show');F.q='';update();$('srch').focus();});
   document.querySelectorAll('.chip,.kpi[data-k]').forEach(function(b){b.addEventListener('click',function(){F[b.dataset.k]=!F[b.dataset.k];update();});});
@@ -1586,6 +1607,11 @@ function kbArticles(){
     +'<li>Cambia de vista según lo que necesites: <b>Tarjetas</b> (resumen por institución), <b>Tabla</b> (un grupo por fila, ordenable y descargable en CSV), <b>Gráficos</b> y <b>Mapa</b>.</li></ol>'
     +'<p>La <b>Ficha</b> de cada institución abre en la pestaña «Modelos flexibles», con los grupos de cada sede; las demás pestañas traen contacto, oferta, sedes y servicios.</p>',
     [],'La cifra de estudiantes es la matrícula por grupo que reporta el archivo de la Secretaría de Educación; puede cambiar durante el año.');
+  add('enlaces','Empezar','Enlaces útiles',
+    '<p>Están siempre a mano en la franja azul bajo la cabecera:</p><ul>'
+    +'<li><a href="https://www.medellin.edu.co/tucupo/" target="_blank" rel="noopener"><b>Busca tu cupo</b></a> (Secretaría de Educación de Medellín): para solicitar o consultar un cupo escolar en una institución oficial de Medellín.</li>'
+    +'<li><a href="https://sineb.mineducacion.gov.co/bcol/app?service=page/BuscandoColegioBasico" target="_blank" rel="noopener"><b>Buscador de colegios a nivel nacional</b></a> (Ministerio de Educación, SINEB): consulta cualquier institución del país, oficial o privada, con sus sedes, jornadas y grados. Es la fuente de la pestaña «Oferta educativa».</li>'
+    +'<li><a href="https://app.powerbi.com/view?r=eyJrIjoiZThmMjY3ZjQtZGE3Ni00YmU4LThlMzUtMTk3MTEzNTlmZDhjIiwidCI6IjljNDhlMDg4LTVlNDQtNGIwZC05M2EwLWVlYjJjNjEyN2MzZCIsImMiOjR9&amp;embedImagePlaceholder=true" target="_blank" rel="noopener"><b>Tableros Power BI</b></a>: tableros de datos para consulta y análisis.</li></ul>');
   add('mf-guia','Modelos flexibles','¿Qué son los modelos flexibles?',
     '<p>Son estrategias de la Secretaría de Educación para estudiantes en <b>extraedad</b>: niños y jóvenes con <b>dos o más años de desfase</b> entre su edad y el grado que cursan. Cada modelo condensa varios grados en un año escolar, con materiales y metodología propios, para que el estudiante se nivele y continúe en el aula regular.</p>'
     +'<table><tr><th>Modelo</th><th>Grados que cubre</th><th>Etapa</th></tr>'
