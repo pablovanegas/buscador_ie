@@ -19,7 +19,7 @@ Los tres enlaces también están en la parte superior del buscador.
 ## Guía rápida
 
 1. **Busca** en la caja grande por nombre de la institución, sede, barrio o código DANE. La tecla `/` lleva directo a ella.
-2. **Filtra** por modelo flexible (o «Con algún modelo flexible»), jornada y comuna en «Encuentra una institución». El panel lateral suma grado, tipo y especialidad, servicios y ubicación.
+2. **Filtra** debajo de la caja de búsqueda por comuna o corregimiento, núcleo educativo, modelo flexible (menú desplegable, con «Con algún modelo flexible») y jornada. El panel lateral suma grado, tipo y especialidad y servicios.
 3. **Elige la vista**:
    - **Tarjetas**: resumen de cada institución; las que tienen modelos flexibles muestran cuáles ofrecen y en qué jornadas.
    - **Mapa**: ubicación de la sede principal. 4 instituciones privadas no tienen coordenadas.

@@ -358,25 +358,27 @@ details.more-f .field:first-of-type{margin-top:12px;}
 .mleg-row .mleg-f div{display:flex;flex-direction:row;align-items:center;gap:6px;font-size:11.5px;}
 /* Resumen: sección destacada */
 /* ── Buscador guiado: jornada · grado · modelo ── */
-#finder{flex-shrink:0;background:var(--sur);border-bottom:1px solid var(--bdr);padding:12px 16px;}
+#finder{flex-shrink:0;background:linear-gradient(180deg,#E6F7FD 0%,var(--sur) 100%);border-bottom:1px solid var(--bdr);padding:18px 20px 14px;}
 .fd-head{display:flex;align-items:center;gap:10px;}
-.fd-head h2{font-size:13.5px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:7px;}
+.fd-head h2{font-size:21px;font-weight:700;color:var(--am-prof);letter-spacing:-.01em;}
 .fd-head h2 .ico{color:var(--acc);}
-.fd-head p{font-size:12px;color:var(--ink3);}
-#fd-toggle{display:none;margin-left:auto;}
-.fd-q{position:relative;margin-top:10px;}
-.fd-q .ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--am-prof);font-size:22px;pointer-events:none;}
-.fd-q input{width:100%;font-size:16px;padding:13px 44px 13px 46px;border:2px solid var(--am-azul);border-radius:12px;background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(0,58,87,.08);}
-.fd-q input:focus{outline:none;border-color:var(--am-prof);box-shadow:0 0 0 4px rgba(0,174,239,.2);}
-.fd-q kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);font:600 11px/1 'Roboto Mono',monospace;color:var(--ink3);border:1px solid var(--bdr2);border-radius:5px;padding:3px 6px;background:var(--sur2);}
+.fd-head p{font-size:13px;color:var(--ink2);}
+#fd-toggle{display:none;margin-left:auto;align-items:center;gap:5px;}
+.fd-q{position:relative;margin-top:12px;}
+.fd-q .ico{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--am-prof);font-size:30px;pointer-events:none;}
+.fd-q input{width:100%;height:64px;font-size:20px;font-weight:500;padding:0 56px 0 64px;border:3px solid var(--am-azul);border-radius:16px;background:#fff;color:var(--ink);box-shadow:0 6px 20px rgba(0,58,87,.14);}
+.fd-q input::placeholder{color:#7a8b96;font-weight:400;}
+.fd-q input:focus{outline:none;border-color:var(--am-prof);box-shadow:0 0 0 5px rgba(0,174,239,.25),0 6px 20px rgba(0,58,87,.14);}
+.fd-q kbd{position:absolute;right:18px;top:50%;transform:translateY(-50%);font:600 11px/1 'Roboto Mono',monospace;color:var(--ink3);border:1px solid var(--bdr2);border-radius:5px;padding:3px 6px;background:var(--sur2);}
 .fd-q input:focus~kbd,.fd-q input:not(:placeholder-shown)~kbd{display:none;}
-@media (max-width:700px){.fd-q kbd{display:none;}.fd-q input{font-size:16px;padding:11px 12px 11px 44px;}}
-.fd-body{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px;align-items:end;margin-top:10px;}
-.fd-body label{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;}
-.fd-body select{background-color:var(--bg);font-size:13.5px;padding:10px 30px 10px 12px;}
-.fd-body select.set{border-color:var(--acc);background-color:#fff;box-shadow:0 0 0 3px var(--acc-bg);font-weight:600;}
+@media (max-width:700px){.fd-q kbd{display:none;}.fd-q input{height:56px;font-size:17px;padding:0 12px 0 50px;border-radius:14px;}.fd-q .ico{left:14px;font-size:26px;}.fd-head h2{font-size:18px;}}
+.fd-body{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;gap:10px;align-items:end;margin-top:12px;}
+.fd-body label{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--am-prof);margin-bottom:4px;}
+.fd-body label .ico{font-size:15px;}
+.fd-body select{background-color:#fff;font-size:14px;padding:11px 30px 11px 12px;}
+.sbl-mf select.set,.fd-body select.set{border-color:var(--acc);background-color:#fff;box-shadow:0 0 0 3px var(--acc-bg);font-weight:600;}
 #fd-toggle .badge{background:var(--acc);color:#fff;border-radius:10px;font-size:10px;padding:1px 6px;font-family:var(--mono);}
-#fd-clear{height:42px;padding:0 14px;border-radius:var(--r);border:1px solid var(--bdr2);background:transparent;font-size:12.5px;font-weight:600;color:var(--ink2);white-space:nowrap;}
+#fd-clear{height:44px;padding:0 14px;border-radius:var(--r);border:1px solid var(--bdr2);background:transparent;font-size:12.5px;font-weight:600;color:var(--ink2);white-space:nowrap;}
 #fd-clear:hover{border-color:var(--acc);color:var(--acc);}
 #fd-clear:disabled{opacity:.4;cursor:default;}
 .fd-note{grid-column:1/-1;font-size:11.5px;color:var(--ink3);}
@@ -387,7 +389,7 @@ details.more-f .field:first-of-type{margin-top:12px;}
 .match span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .sede.hit{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc-bg);background:#fff;}
 .sede h5 .hit-pill,.hit-pill{font-family:var(--font);font-size:10px;font-weight:700;color:#fff;background:var(--acc);padding:2px 7px;border-radius:10px;white-space:nowrap;}
-@media (max-width:900px){.fd-body{grid-template-columns:1fr 1fr;}#fd-clear{grid-column:1/-1;height:38px;}}
+@media (max-width:1200px){.fd-body{grid-template-columns:1fr 1fr;}#fd-clear{grid-column:1/-1;height:38px;}}
 @media (max-width:640px){
   #finder{padding:10px 12px;}
   .fd-head p{display:none;}
@@ -582,7 +584,7 @@ button.gbar:hover{background:var(--sur2);}
   </div>
   <div id="sb-scroll">
 
-    <div class="sbl">
+    <div class="sbl" hidden>
       <label class="sbl-lbl" for="srch">Búsqueda</label>
       <div class="iw">
         <span class="ico" aria-hidden="true">search</span>
@@ -591,9 +593,15 @@ button.gbar:hover{background:var(--sur2);}
       </div>
     </div>
 
+    <div class="sbl">
+      <span class="sbl-lbl">Ubicación</span>
+      <div class="field"><label for="f-com">Comuna / corregimiento</label><select id="f-com"><option value="">Todas</option></select></div>
+      <div class="field"><label for="f-nuc">Núcleo educativo</label><select id="f-nuc"><option value="">Todos</option></select></div>
+    </div>
+
     <div class="sbl sbl-mf">
       <span class="sbl-lbl">Modelos flexibles 2026 <span class="src-tag">SE Medellín</span></span>
-      <div class="field"><label>Modelo</label><div class="mchips" id="mchips"></div></div>
+      <div class="field"><label for="f-mf">Modelo</label><select id="f-mf"><option value="">Todas las instituciones</option></select></div>
       <div class="field"><label>Jornada</label><div class="jchips" id="mjchips"></div></div>
       <p class="hint-txt">Al combinar modelo y jornada quedan las instituciones que tienen ese modelo en esa jornada. <button class="kb-link" data-kb="mf-guia">¿Qué es cada modelo?</button></p>
     </div>
@@ -617,12 +625,6 @@ button.gbar:hover{background:var(--sur2);}
         <button class="chip" data-k="jc" aria-pressed="false"><span class="ico" aria-hidden="true">palette</span>Jornada complementaria<span class="cnt" id="c-jc"></span></button>
         <button class="chip pae-c" data-k="pae" aria-pressed="false"><span class="ico" aria-hidden="true">restaurant</span>Alimentación (PAE)<span class="cnt" id="c-pae"></span></button>
       </div>
-    </div>
-
-    <div class="sbl">
-      <span class="sbl-lbl">Ubicación</span>
-      <div class="field"><label for="f-com">Comuna / corregimiento</label><select id="f-com"><option value="">Todas</option></select></div>
-      <div class="field"><label for="f-nuc">Núcleo educativo</label><select id="f-nuc"><option value="">Todos</option></select></div>
     </div>
 
     <div class="sbl">
@@ -665,15 +667,16 @@ button.gbar:hover{background:var(--sur2);}
 
   <section id="finder" aria-labelledby="fd-title">
     <div class="fd-head">
-      <h2 id="fd-title"><span class="ico" aria-hidden="true">search</span>Encuentra una institución</h2>
-      <p>Busca por nombre o filtra por modelo flexible, jornada y comuna.</p>
-      <button id="fd-toggle" aria-expanded="false" aria-controls="fd-body">Buscar <span class="badge" id="fd-n" hidden></span></button>
+      <h2 id="fd-title">¿Qué institución buscas?</h2>
+      <p>Escribe el nombre o filtra por ubicación y modelo.</p>
+      <button id="fd-toggle" aria-expanded="false" aria-controls="fd-body"><span class="ico" aria-hidden="true">tune</span>Filtrar <span class="badge" id="fd-n" hidden></span></button>
     </div>
-    <div class="fd-q"><span class="ico" aria-hidden="true">search</span><input type="search" id="q-txt" placeholder="Busca por institución, sede, barrio o código DANE" autocomplete="off" aria-label="Buscar institución, sede, barrio o código DANE"><kbd>/</kbd></div>
+    <div class="fd-q"><span class="ico" aria-hidden="true">search</span><input type="search" id="q-txt" placeholder="Nombre de la institución, sede, barrio o código DANE" autocomplete="off" aria-label="Buscar institución, sede, barrio o código DANE"><kbd>/</kbd></div>
     <div class="fd-body" id="fd-body">
-      <div><label for="q-mf">Modelo flexible</label><select id="q-mf"><option value="">Todas las instituciones</option></select></div>
-      <div><label for="q-jor">Jornada del modelo</label><select id="q-jor"><option value="">Cualquier jornada</option></select></div>
-      <div><label for="q-com">Comuna / corregimiento</label><select id="q-com"><option value="">Todas</option></select></div>
+      <div><label for="q-com"><span class="ico" aria-hidden="true">location_on</span>Comuna / corregimiento</label><select id="q-com"><option value="">Todas</option></select></div>
+      <div><label for="q-nuc"><span class="ico" aria-hidden="true">hub</span>Núcleo educativo</label><select id="q-nuc"><option value="">Todos</option></select></div>
+      <div><label for="q-mf"><span class="ico" aria-hidden="true">school</span>Modelo flexible</label><select id="q-mf"><option value="">Todas las instituciones</option></select></div>
+      <div><label for="q-jor"><span class="ico" aria-hidden="true">schedule</span>Jornada del modelo</label><select id="q-jor"><option value="">Cualquier jornada</option></select></div>
       <button id="fd-clear" disabled>Limpiar búsqueda</button>
       <p class="fd-note" id="fd-note"></p>
     </div>
@@ -872,20 +875,22 @@ function init(){
   if(typeof SINEB_META!=='undefined')$('sineb-date').textContent=SINEB_META.fecha;
   /* Modelos flexibles: chips (solo los modelos que existen) */
   var cntM=function(v){var ies=0;DATA.forEach(function(ie){if(ie._g.some(function(g){return modMatch(g.m,v);}))ies++;});return [ies];};
-  $('mchips').innerHTML=MF_SEL.map(function(x){var c=cntM(x[0]);var sub=/^P\d/.test(x[0]);
-    return c[0]?'<button class="mchip'+(sub?' sub':'')+'" data-m="'+x[0]+'" aria-pressed="false"><span>'+x[1]+(sub?'':'<small>'+({'*':'Brújula, Aceleración o Pensar',BRU:'1° a 3° de primaria',ACE:'4° y 5° de primaria',PEN:'6° a 11°'}[x[0]])+'</small>')+'</span></button>':'';}).join('');
-  document.querySelectorAll('.mchip').forEach(function(b){b.addEventListener('click',function(){F.mf=F.mf===b.dataset.m?'':b.dataset.m;update();});});
+  var mfOpts=MF_SEL.map(function(x){var c=cntM(x[0]);var sub=/^P\d/.test(x[0]);
+    return c[0]?'<option value="'+x[0]+'">'+(sub?'\u00a0\u00a0\u00a0':'')+x[1]+({BRU:' · 1° a 3°',ACE:' · 4° y 5°',PEN:' · 6° a 11°',P1:' · 6° y 7°',P2:' · 8° y 9°',P3:' · 10° y 11°'}[x[0]]||'')+'</option>':'';}).join('');
+  $('f-mf').insertAdjacentHTML('beforeend',mfOpts);
+  $('f-mf').addEventListener('change',function(){F.mf=this.value;update();});
   $('mjchips').innerHTML=MF_JORS.map(function(j){var n=DATA.some(function(ie){return ie._g.some(function(g){return g.j===j;});});
     return n?'<button class="jchip" data-j="'+j+'" aria-pressed="false">'+j+'</button>':'';}).join('');
   document.querySelectorAll('#mjchips .jchip').forEach(function(b){b.addEventListener('click',function(){F.jor=F.jor===b.dataset.j?'':b.dataset.j;update();});});
   /* Buscador: modelo, jornada y comuna */
-  $('q-mf').insertAdjacentHTML('beforeend',MF_SEL.map(function(x){var c=cntM(x[0]);return c[0]?'<option value="'+x[0]+'">'+x[1]+'</option>':'';}).join(''));
+  $('q-mf').insertAdjacentHTML('beforeend',mfOpts);
   $('q-jor').insertAdjacentHTML('beforeend',MF_JORS.map(function(j){return '<option value="'+j+'">'+j+'</option>';}).join(''));
-  $('q-com').innerHTML=$('f-com').innerHTML;
+  $('q-com').innerHTML=$('f-com').innerHTML;$('q-nuc').innerHTML=$('f-nuc').innerHTML;
   $('q-mf').addEventListener('change',function(){F.mf=this.value;update();});
   $('q-jor').addEventListener('change',function(){F.jor=this.value;update();});
   $('q-com').addEventListener('change',function(){F.com=this.value;update();});
-  $('fd-clear').addEventListener('click',function(){F.jor='';F.mf='';F.com='';update();});
+  $('q-nuc').addEventListener('change',function(){F.nuc=this.value;update();});
+  $('fd-clear').addEventListener('click',function(){F.jor='';F.mf='';F.com='';F.nuc='';update();});
   $('fd-toggle').addEventListener('click',function(){var o=$('finder').classList.toggle('open');this.setAttribute('aria-expanded',o);});
   var grOpt=function(v,l){var n=cnt(function(ie){return hasGr(ie,v);});return n?'<option value="'+v+'">'+l+' ('+n+')</option>':'';};
   var grp=function(t,items){var h=items.join('');return h?'<optgroup label="'+t+'">'+h+'</optgroup>':'';};
@@ -938,7 +943,7 @@ function init(){
   $('ov').addEventListener('click',function(e){if(e.target===this)closeM();});
   document.addEventListener('keydown',function(e){
     if(e.key==='Escape'){if($('ov').classList.contains('open'))closeM();else if(document.body.classList.contains('map-full'))togFull(false);else if(document.body.classList.contains('sb-open'))togSB(false);}
-    if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&!$('ov').classList.contains('open')){e.preventDefault();($('finder').hidden?$('srch'):$('q-txt')).focus();}
+    if(e.key==='/'&&document.activeElement.tagName!=='INPUT'&&!$('ov').classList.contains('open')){e.preventDefault();if($('finder').hidden)setView('cards');$('q-txt').focus();}
     if(e.key==='Tab'&&$('ov').classList.contains('open'))trapFocus(e);
   });
   window.addEventListener('hashchange',fromHash);
@@ -959,10 +964,11 @@ function syncControls(){
   if($('q-txt').value!==$('srch').value)$('q-txt').value=$('srch').value;
   document.querySelectorAll('.chip').forEach(function(b){b.setAttribute('aria-pressed',F[b.dataset.k]?'true':'false');});
   $('f-com').value=F.com;$('f-nuc').value=F.nuc;$('f-pmt').value=F.pmt;$('f-pjc').value=F.pjc;
-  $('q-jor').value=F.jor;$('q-mf').value=F.mf;$('q-com').value=F.com;$('f-gr').value=F.gr;
-  [['q-jor',F.jor],['q-mf',F.mf],['q-com',F.com]].forEach(function(x){$(x[0]).classList.toggle('set',!!x[1]);});
-  document.querySelectorAll('.mchip').forEach(function(b){b.setAttribute('aria-pressed',F.mf===b.dataset.m?'true':'false');});
-  var nq_=(F.jor?1:0)+(F.mf?1:0)+(F.com?1:0);$('fd-clear').disabled=!nq_;$('fd-n').textContent=nq_;$('fd-n').hidden=!nq_;$('f-tipo').value=F.tipo;$('f-esp').value=F.esp;$('f-gen').value=F.gen;
+  /* Núcleos de la comuna elegida */
+  ['q-nuc','f-nuc'].forEach(function(id){Array.prototype.forEach.call($(id).options,function(o){o.hidden=!!(o.value&&F.com&&!DATA.some(function(ie){return ie.comuna===F.com&&ie.nucleo===o.value;}));});});
+  $('q-jor').value=F.jor;$('q-mf').value=F.mf;$('q-com').value=F.com;$('q-nuc').value=F.nuc;$('f-mf').value=F.mf;$('f-gr').value=F.gr;
+  [['q-jor',F.jor],['q-mf',F.mf],['q-com',F.com],['q-nuc',F.nuc],['f-mf',F.mf]].forEach(function(x){$(x[0]).classList.toggle('set',!!x[1]);});
+  var nq_=(F.jor?1:0)+(F.mf?1:0)+(F.com?1:0)+(F.nuc?1:0);$('fd-clear').disabled=!nq_;$('fd-n').textContent=nq_;$('fd-n').hidden=!nq_;$('f-tipo').value=F.tipo;$('f-esp').value=F.esp;$('f-gen').value=F.gen;
   document.querySelectorAll('#mjchips .jchip').forEach(function(b){b.setAttribute('aria-pressed',F.jor===b.dataset.j?'true':'false');});
   if(F.tipo||F.esp||F.gen)document.querySelector('details.more-f').open=true;
   var n=activeCount();$('fcount').textContent=n;$('fcount').hidden=!n;
@@ -1543,7 +1549,7 @@ function kbArticles(){
   add('como-buscar','Empezar','Cómo encontrar una institución',
     '<p>El buscador reúne todas las instituciones educativas e indica cuáles ofrecen <b>modelos flexibles</b> en 2026 (Brújula, Aceleración del Aprendizaje y Pensar 1, 2 y 3).</p><ol>'
     +'<li>Escribe en la <b>caja de búsqueda</b> el nombre de la institución, de la sede, el barrio o el código DANE.</li>'
-    +'<li>Usa <b>Encuentra una institución</b> para filtrar por modelo flexible, jornada y comuna. En el panel de filtros hay más: grado, tipo y especialidad, servicios y ubicación.</li>'
+    +'<li>Debajo de la caja de búsqueda filtra por <b>comuna o corregimiento</b>, <b>núcleo educativo</b>, <b>modelo flexible</b> y <b>jornada</b>. En el panel de filtros hay más: grado, tipo y especialidad y servicios.</li>'
     +'<li>Cambia de vista: <b>Tarjetas</b>, <b>Mapa</b> o esta <b>Guía</b>.</li></ol>'
     +'<p>La <b>Ficha</b> de cada institución trae su información de contacto y su <b>oferta educativa</b>: los modelos flexibles (con sus jornadas y sedes), las jornadas y los grados regulares. Desde cada institución está el botón <b>Busca tu cupo</b>.</p>');
   add('enlaces','Empezar','Enlaces útiles',
