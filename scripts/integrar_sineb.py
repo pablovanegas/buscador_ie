@@ -34,6 +34,9 @@ ROOT = Path(__file__).resolve().parent.parent
 HTML = ROOT / "index.html"
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 SRC = Path(ARGS[0]) if ARGS else ROOT / "datos/fuente/colegios_medellin_sineb.xlsx"
+# Grupos de modelos flexibles 2026 (Secretaría de Educación): define qué instituciones muestra la página
+SRC_MF = ROOT / "datos/fuente/IE_con_Modelos_Flexibles_2026_V2.xlsx"
+MF_COD = {"BRUJULA": "BRU", "ACELERACIÓN": "ACE", "AA./BRUJ": "MIX", "PENSAR 1": "P1", "PENSAR 2": "P2", "PENSAR 3": "P3"}
 OUT = ROOT / "datos"
 
 # ── utilidades de texto ──────────────────────────────────────────────
@@ -168,6 +171,26 @@ def load_html_data():
     return html, json.loads(line[len("var DATA="):].rstrip(";"))
 
 
+def cargar_modelos_flexibles(cons):
+    """Lee el archivo de grupos 2026 (hojas Brújula/Aceleración y Pensar) y cruza cada institución
+    con SINEB por nombre para obtener su código DANE. Devuelve {dane12: [[sede, comuna, jornada, modelo, estudiantes], ...]}."""
+    xl = pd.ExcelFile(SRC_MF)
+    hojas = [h for h in xl.sheet_names if "BRUJULA" in h.upper() or "PENSAR" in h.upper()]
+    df = pd.concat([xl.parse(h) for h in hojas], ignore_index=True)
+    df = df[df["SEDE"].notna() & df["GRUPO"].notna()]           # quita la fila "Total general"
+    df["COD"] = df["GRUPO"].astype(str).str.strip().str.upper().map(MF_COD)
+    assert df["COD"].notna().all(), f"Grupos sin código: {sorted(df[df['COD'].isna()]['GRUPO'].unique())}"
+    por_nombre = {norm(n): str(k) for n, k in zip(cons["Nombre"], cons["Código DANE"])}
+    df["_k"] = df["INSTITUCION"].map(lambda n: por_nombre.get(norm(n)))
+    sin = sorted(df[df["_k"].isna()]["INSTITUCION"].unique())
+    assert not sin, f"Instituciones del archivo sin código DANE en SINEB: {sin}"
+    mf = {}
+    for _, r in df.iterrows():
+        mf.setdefault(r["_k"], []).append([tc(r["SEDE"]), int(r["COMUNA"]), tc(r["JORNADA"]), r["COD"], int(r["Total"])])
+    print(f"Modelos flexibles 2026: {len(mf)} instituciones · {df['SEDE'].nunique()} sedes · {len(df)} grupos · {int(df['Total'].sum())} estudiantes")
+    return mf
+
+
 def main():
     xl = pd.ExcelFile(SRC)
     cons = xl.parse("Consolidado")
@@ -191,9 +214,28 @@ def main():
     missing_html = [k for k in html_by_key if k not in cons_k.index]
     print(f"HTML: {len(data)} | SINEB: {len(cons)} | cruzan: {len(matched)} | HTML sin SINEB: {len(missing_html)}")
 
+    # Modelos flexibles 2026: instituciones del archivo que no están en el buscador (privadas) se agregan
+    # con los datos de SINEB, sin coordenadas.
+    mf12 = cargar_modelos_flexibles(cons) if SRC_MF.exists() else {}
+    comuna_lbl = {r["comuna"].split(" - ")[0]: r["comuna"] for r in data if r.get("comuna")}
+    extras, dkey = [], {k: html_by_key[k]["dane"] for k in matched}
+    for k in sorted(set(mf12) - set(html_by_key)):
+        c = cons_k.loc[k]
+        num = str(mf12[k][0][1])
+        dkey[k] = k + "01"
+        extras.append({
+            "nombre": str(c["Nombre"]), "dane": k + "01", "nit": "", "nucleo": "",
+            "tel": " - ".join(fijos(c["Teléfono"])), "correo": " ".join(correos_inst(c["Correo electrónico"])),
+            "dir": c["Dirección"] if isinstance(c["Dirección"], str) else "", "barrio": "",
+            "comuna": comuna_lbl.get(num, num), "rector": None,
+            "trans": False, "trans_t": "", "mt": False, "jc": False, "pae": False, "prg_mt": [], "prg_jc": [],
+            "lat": None, "lon": None, "privada": c["Sector"] == "NO OFICIAL",
+        })
+        extras[-1].pop("rector")
+
     # ── registro compacto por institución ───────────────────────────
     sineb = {}
-    for k in matched:
+    for k in matched + [e["dane"][:12] for e in extras]:
         c, f = cons_k.loc[k], filt_k.loc[k]
         s_rows = sedes[sedes["_k"] == k].sort_values("Código sede")
         sed = []
@@ -233,7 +275,7 @@ def main():
             "act": str(c["Actualizado"])[:10],
         }
         # Elimina listas vacías para aligerar el HTML
-        sineb[html_by_key[k]["dane"]] = {a: b for a, b in rec.items() if b not in ([], "", None)}
+        sineb[dkey[k]] = {a: b for a, b in rec.items() if b not in ([], "", None)}
 
     # ── inserta / reemplaza la línea SINEB en el HTML ───────────────
     leeme = " ".join(str(v) for v in xl.parse("Leeme").iloc[:, 0])
@@ -242,10 +284,17 @@ def main():
     line = "var SINEB=" + json.dumps(sineb, ensure_ascii=False, separators=(",", ":")) + ";"
     meta_line = "var SINEB_META=" + json.dumps(meta, ensure_ascii=False) + ";"
     lines = html.split("\n")
-    lines = [l for l in lines if not l.startswith("var SINEB=") and not l.startswith("var SINEB_META=")]
+    lines = [l for l in lines if not l.startswith(("var SINEB=", "var SINEB_META=", "var MF=", "var MF_EXTRA=", "var MF_META="))]
     i = next(n for n, l in enumerate(lines) if l.startswith("var DATA="))
     lines[i] = "var DATA=" + json.dumps(data, ensure_ascii=False) + ";"
-    lines[i + 1:i + 1] = [line, meta_line]
+    mf = {dkey[k]: v for k, v in mf12.items()}
+    est = sum(r[4] for v in mf.values() for r in v)
+    mf_meta = {"fuente": "Secretaría de Educación de Medellín – IE con modelos flexibles 2026 (V2)",
+               "instituciones": len(mf), "grupos": sum(len(v) for v in mf.values()), "estudiantes": est}
+    lines[i + 1:i + 1] = [line, meta_line,
+                          "var MF=" + json.dumps(mf, ensure_ascii=False, separators=(",", ":")) + ";",
+                          "var MF_EXTRA=" + json.dumps(extras, ensure_ascii=False, separators=(",", ":")) + ";",
+                          "var MF_META=" + json.dumps(mf_meta, ensure_ascii=False) + ";"]
     HTML.write_text("\n".join(lines), encoding="utf-8")
     print(f"index.html actualizado: SINEB con {len(sineb)} instituciones ({len(line)/1024:.0f} KB)")
 
