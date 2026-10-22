@@ -3,7 +3,7 @@
 | Archivo | Contenido |
 |---|---|
 | `fuente/colegios_medellin_sineb.xlsx` | Base de SINEB – MinEducación («Buscando Colegio»), Medellín, consulta del 2026-10-16. 568 instituciones y 759 sedes. **Copia saneada:** sin rectores, correos personales, celulares ni jornada nocturna (ver «Privacidad» y «Jornada nocturna»). |
-| `fuente/IE_con_Modelos_Flexibles_2026_V2.xlsx` | Secretaría de Educación de Medellín: grupos de **modelos flexibles 2026** (Brújula, Aceleración del Aprendizaje, Pensar 1, 2 y 3), con institución, sede, comuna, jornada y estudiantes por grupo. **Define qué instituciones publica la página.** |
+| `fuente/IE_con_Modelos_Flexibles_2026_V2.xlsx` | Secretaría de Educación de Medellín: grupos de **modelos flexibles 2026** (Brújula, Aceleración del Aprendizaje, Pensar 1, 2 y 3), con institución, sede, comuna, jornada y estudiantes por grupo. Se usa para el filtro y los datos de modelos flexibles de la página. |
 | `instituciones_no_incluidas.xlsx` | Las 338 instituciones de la base que **no** están en el buscador: 335 no oficiales (privadas) y 3 oficiales. Incluye sus sedes, modelos, grados y tarifas publicadas. |
 | `instituciones_clei.xlsx` | Oferta para jóvenes y adultos, del buscador y de la base SINEB: **IES CLEI** (116) e **IES Modelos flexibles** (212, con una columna por modelo), más las hojas de CLEI en/fuera del buscador, un resumen por tema y un resumen por modelo. Distingue **fin de semana** (filas en amarillo), si CLEI y el fin de semana coinciden en la misma sede, y la **atención e inclusión** (adultos, discapacidad, talentos excepcionales, zona rural). |
 | `reporte_cruce_html_sineb.xlsx` | Calidad del cruce entre el buscador y SINEB, con las diferencias de nombre, teléfono y correo institucionales de cada institución. |
@@ -26,7 +26,7 @@
 
 ## Modelos flexibles 2026 (página)
 
-La página muestra **solo** las 104 instituciones del archivo de modelos flexibles 2026 y sus 472 grupos (11.557 estudiantes). El script lo lee así:
+La página muestra todas las instituciones (230 del buscador más 4 privadas que solo están en este archivo) y permite filtrar las 104 que tienen grupos de modelos flexibles 2026 (472 grupos, 11.557 estudiantes). El script lee el archivo así:
 
 1. Toma las hojas de Brújula/Aceleración y de Pensar, quita las filas de «Total general» y normaliza el modelo (`BRUJULA ` con espacio final, `AA./BRUJ` = grupo mixto Aceleración + Brújula).
 2. Cruza cada institución por nombre con el Consolidado de SINEB para obtener su DANE. Las 104 cruzan: 100 ya estaban en el buscador y 4 privadas no (se agregan en `MF_EXTRA` con datos de SINEB y sin coordenadas).

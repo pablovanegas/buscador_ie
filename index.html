@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Modelos Flexibles 2026 · Instituciones Educativas · Alcaldía de Medellín</title>
+<title>Buscador de Instituciones Educativas · Alcaldía de Medellín</title>
 <meta name="description" content="Directorio interactivo de las instituciones educativas oficiales de Medellín: contacto, servicios (transporte, media técnica, jornada complementaria, PAE) y mapa.">
 <meta name="theme-color" content="#00AEEF">
 <link rel="icon" href="assets/logo-alcaldia-medellin.png">
@@ -600,14 +600,14 @@ button.gbar:hover{background:var(--sur2);}
 <header id="tb">
   <img class="tb-logo" src="assets/logo-alcaldia-medellin.png" alt="Alcaldía de Medellín · Distrito de Ciencia, Tecnología e Innovación" width="83" height="60">
   <div class="brand">
-    <h1 class="logo">Instituciones con Modelos Flexibles 2026</h1>
-    <div class="tb-sub">Secretaría de Educación &middot; Brújula, Aceleración y Pensar</div>
+    <h1 class="logo">Buscador de Instituciones Educativas</h1>
+    <div class="tb-sub">Secretaría de Educación &middot; Instituciones y modelos flexibles 2026</div>
   </div>
   <div class="kpis" aria-label="Resumen de la selección">
     <div class="kpi"><span class="kpi-n" id="k-total">0</span><span class="kpi-l">Instituciones</span></div>
-    <div class="kpi"><span class="kpi-n" id="k-sedes">0</span><span class="kpi-l">Sedes</span></div>
-    <div class="kpi"><span class="kpi-n" id="k-grp">0</span><span class="kpi-l">Grupos</span></div>
-    <div class="kpi kpi-hi"><span class="kpi-n" id="k-est">0</span><span class="kpi-l">Estudiantes</span></div>
+    <div class="kpi"><span class="kpi-n" id="k-sedes">0</span><span class="kpi-l">Con modelos flex.</span></div>
+    <div class="kpi"><span class="kpi-n" id="k-grp">0</span><span class="kpi-l">Grupos 2026</span></div>
+    <div class="kpi kpi-hi"><span class="kpi-n" id="k-est">0</span><span class="kpi-l">Estudiantes 2026</span></div>
   </div>
   <button id="btn-filters" aria-controls="sb" aria-expanded="false"><span class="ico" aria-hidden="true">tune</span>Filtros <span class="badge" id="fcount" hidden>0</span></button>
 </header>
@@ -643,6 +643,11 @@ button.gbar:hover{background:var(--sur2);}
       <div class="field"><label>Modelo</label><div class="mchips" id="mchips"></div></div>
       <div class="field"><label>Jornada del grupo</label><div class="jchips" id="mjchips"></div></div>
       <p class="hint-txt">Al combinar modelo y jornada se muestran los grupos que cumplen ambos. <button class="kb-link" data-kb="mf-guia">Cómo leer estos datos</button></p>
+    </div>
+
+    <div class="sbl">
+      <span class="sbl-lbl">Oferta educativa <span class="src-tag">SINEB</span></span>
+      <div class="field"><label for="f-gr">Grado o programa</label><select id="f-gr"><option value="">Todos los grados</option></select></div>
     </div>
 
     <div class="sbl">
@@ -721,13 +726,13 @@ button.gbar:hover{background:var(--sur2);}
 
   <section id="finder" aria-labelledby="fd-title">
     <div class="fd-head">
-      <h2 id="fd-title"><span class="ico" aria-hidden="true">search</span>Encuentra un grupo de modelo flexible</h2>
-      <p>Elige el modelo, la jornada y la comuna.</p>
+      <h2 id="fd-title"><span class="ico" aria-hidden="true">search</span>Encuentra una institución</h2>
+      <p>Busca por nombre o filtra por modelo flexible, jornada del grupo y comuna.</p>
       <button id="fd-toggle" aria-expanded="false" aria-controls="fd-body">Buscar <span class="badge" id="fd-n" hidden></span></button>
     </div>
     <div class="fd-q"><span class="ico" aria-hidden="true">search</span><input type="search" id="q-txt" placeholder="Busca por institución, sede, barrio o código DANE" autocomplete="off" aria-label="Buscar institución, sede, barrio o código DANE"><kbd>/</kbd></div>
     <div class="fd-body" id="fd-body">
-      <div><label for="q-mf">Modelo flexible</label><select id="q-mf"><option value="">Cualquier modelo</option></select></div>
+      <div><label for="q-mf">Modelo flexible</label><select id="q-mf"><option value="">Todas las instituciones</option></select></div>
       <div><label for="q-jor">Jornada del grupo</label><select id="q-jor"><option value="">Cualquier jornada</option></select></div>
       <div><label for="q-com">Comuna / corregimiento</label><select id="q-com"><option value="">Todas</option></select></div>
       <button id="fd-clear" disabled>Limpiar búsqueda</button>
@@ -882,7 +887,7 @@ function svBadges(ie,compact){
 
 /* ── Modelos flexibles 2026 (Secretaría de Educación) ──
    MF[dane] = [[sede, comuna, jornada, modelo, estudiantes], …]; una fila = un grupo.
-   La página muestra solo las instituciones que tienen grupos en estos modelos. */
+   El filtro de modelo deja solo las instituciones que tienen grupos en estos modelos. */
 var MODS=[
   {k:'BRU',l:'Brújula',full:'Horizontes con Brújula para el Aprendizaje',niv:'1° a 3°',kb:'mf-brujula'},
   {k:'ACE',l:'Aceleración',full:'Aceleración del Aprendizaje',niv:'4° y 5°',kb:'mf-aceleracion'},
@@ -891,13 +896,12 @@ var MODS=[
   {k:'P3',l:'Pensar 3',full:'Pensar · nivel 3',niv:'10° y 11°',kb:'mf-pensar'}];
 var MIX={k:'MIX',l:'Aceleración + Brújula',full:'Grupo mixto de Aceleración y Brújula',niv:'Primaria (1° a 5°)',kb:'mf-datos'};
 var MODK={};MODS.concat([MIX]).forEach(function(m){MODK[m.k]=m;});
-var MF_SEL=[['BRU','Brújula'],['ACE','Aceleración'],['PEN','Pensar (los 3 niveles)'],['P1','Pensar 1'],['P2','Pensar 2'],['P3','Pensar 3']];
+var MF_SEL=[['*','Con algún modelo flexible'],['BRU','Brújula'],['ACE','Aceleración'],['PEN','Pensar (los 3 niveles)'],['P1','Pensar 1'],['P2','Pensar 2'],['P3','Pensar 3']];
 var MF_JORS=['Mañana','Tarde','Única','Completa'];
 if(typeof MF_EXTRA!=='undefined')DATA=DATA.concat(MF_EXTRA);
-if(typeof MF!=='undefined')DATA=DATA.filter(function(d){return MF[d.dane];});
-function mfLbl(v){if(v==='PEN')return 'Pensar (los 3 niveles)';return MODK[v]?MODK[v].l:v;}
+function mfLbl(v){if(v==='*')return 'con modelos flexibles 2026';if(v==='PEN')return 'Pensar (los 3 niveles)';return MODK[v]?MODK[v].l:v;}
 /* ¿El grupo de modelo `code` cumple el filtro de modelo `v`? El grupo mixto cuenta para Brújula y para Aceleración. */
-function modMatch(code,v){if(!v)return true;if(v==='PEN')return code.charAt(0)==='P';if(v==='BRU'||v==='ACE')return code===v||code==='MIX';return code===v;}
+function modMatch(code,v){if(!v||v==='*')return true;if(v==='PEN')return code.charAt(0)==='P';if(v==='BRU'||v==='ACE')return code===v||code==='MIX';return code===v;}
 function grpMatch(g){return modMatch(g.m,F.mf)&&(!F.jor||g.j===F.jor);}
 function mfCrit(){return !!(F.mf||F.jor);}
 function rowsOf(ie){return ie._m||ie._g;}
@@ -943,7 +947,7 @@ function init(){
   /* Modelos flexibles: chips con n.º de instituciones y estudiantes */
   var cntM=function(v){var ies=0,est=0;DATA.forEach(function(ie){var r=ie._g.filter(function(g){return modMatch(g.m,v);});if(r.length){ies++;est+=sumE(r);}});return [ies,est];};
   $('mchips').innerHTML=MF_SEL.map(function(x){var c=cntM(x[0]);var sub=/^P\d/.test(x[0]);
-    return c[0]?'<button class="mchip'+(sub?' sub':'')+'" data-m="'+x[0]+'" aria-pressed="false"><span>'+x[1]+(sub?'':'<small>'+({BRU:'1° a 3° de primaria',ACE:'4° y 5° de primaria',PEN:'6° a 11°'}[x[0]])+'</small>')+'</span><span class="cnt">'+c[0]+' IE<br>'+fmtN(c[1])+' est.</span></button>':'';}).join('');
+    return c[0]?'<button class="mchip'+(sub?' sub':'')+'" data-m="'+x[0]+'" aria-pressed="false"><span>'+x[1]+(sub?'':'<small>'+({'*':'Brújula, Aceleración o Pensar',BRU:'1° a 3° de primaria',ACE:'4° y 5° de primaria',PEN:'6° a 11°'}[x[0]])+'</small>')+'</span><span class="cnt">'+c[0]+' IE<br>'+fmtN(c[1])+' est.</span></button>':'';}).join('');
   document.querySelectorAll('.mchip').forEach(function(b){b.addEventListener('click',function(){F.mf=F.mf===b.dataset.m?'':b.dataset.m;update();});});
   $('mjchips').innerHTML=MF_JORS.map(function(j){var n=0;DATA.forEach(function(ie){n+=ie._g.filter(function(g){return g.j===j;}).length;});
     return n?'<button class="jchip" data-j="'+j+'" aria-pressed="false">'+j+' <span style="opacity:.6">'+n+'</span></button>':'';}).join('');
@@ -957,12 +961,22 @@ function init(){
   $('q-com').addEventListener('change',function(){F.com=this.value;update();});
   $('fd-clear').addEventListener('click',function(){F.jor='';F.mf='';F.com='';update();});
   $('fd-toggle').addEventListener('click',function(){var o=$('finder').classList.toggle('open');this.setAttribute('aria-expanded',o);});
+  var grOpt=function(v,l){var n=cnt(function(ie){return hasGr(ie,v);});return n?'<option value="'+v+'">'+l+' ('+n+')</option>':'';};
+  var grp=function(t,items){var h=items.join('');return h?'<optgroup label="'+t+'">'+h+'</optgroup>':'';};
+  var range=function(a,b){var r=[];for(var i=a;i<=b;i++)r.push(grOpt(String(i),grLbl(i)));return r;};
+  $('f-gr').insertAdjacentHTML('beforeend',
+    grp('Preescolar',[grOpt('pre','Cualquier grado de preescolar')].concat(range(-2,0)))
+    +grp('Básica primaria',[grOpt('pri','Cualquier grado de primaria')].concat(range(1,5)))
+    +grp('Básica secundaria',[grOpt('sec','Cualquier grado de secundaria')].concat(range(6,9)))
+    +grp('Media',[grOpt('med','Cualquier grado de media')].concat(range(10,11)))
+    +grp('Jóvenes y adultos',[grOpt('clei','Cualquier ciclo CLEI')].concat(range(21,26)))
+    +grp('Otros programas',[grOpt('99','Aceleración del aprendizaje'),grOpt('pfc','Normal superior (formación complementaria)')]));
   fillSelect('f-esp',countBy(function(ie){return ie.s.esp;}),alpha);
   fillSelect('f-gen',countBy(function(ie){return ie.s.gen;}),alpha);
   $('mleg').innerHTML='';
   $('map-color').addEventListener('change',function(){MAPCOLOR=this.value;if(MAP)renderMap(filtrar(),true);});
 
-  [['f-com','com'],['f-nuc','nuc'],['f-pmt','pmt'],['f-pjc','pjc'],['f-trt','trt'],['f-tipo','tipo'],['f-esp','esp'],['f-gen','gen']].forEach(function(p){
+  [['f-com','com'],['f-gr','gr'],['f-nuc','nuc'],['f-pmt','pmt'],['f-pjc','pjc'],['f-trt','trt'],['f-tipo','tipo'],['f-esp','esp'],['f-gen','gen']].forEach(function(p){
     $(p[0]).addEventListener('change',function(){F[p[1]]=this.value;update();});
   });
   var runSearch=debounce(function(v){F.q=nq(v);update();},160);
@@ -1019,7 +1033,7 @@ function syncControls(){
   if($('q-txt').value!==$('srch').value)$('q-txt').value=$('srch').value;
   document.querySelectorAll('.chip,.kpi[data-k]').forEach(function(b){b.setAttribute('aria-pressed',F[b.dataset.k]?'true':'false');});
   $('f-com').value=F.com;$('f-nuc').value=F.nuc;$('f-pmt').value=F.pmt;$('f-pjc').value=F.pjc;$('f-trt').value=F.trt;
-  $('q-jor').value=F.jor;$('q-mf').value=F.mf;$('q-com').value=F.com;
+  $('q-jor').value=F.jor;$('q-mf').value=F.mf;$('q-com').value=F.com;$('f-gr').value=F.gr;
   [['q-jor',F.jor],['q-mf',F.mf],['q-com',F.com]].forEach(function(x){$(x[0]).classList.toggle('set',!!x[1]);});
   document.querySelectorAll('.mchip').forEach(function(b){b.setAttribute('aria-pressed',F.mf===b.dataset.m?'true':'false');});
   var nq_=(F.jor?1:0)+(F.mf?1:0)+(F.com?1:0);$('fd-clear').disabled=!nq_;$('fd-n').textContent=nq_;$('fd-n').hidden=!nq_;$('f-tipo').value=F.tipo;$('f-esp').value=F.esp;$('f-gen').value=F.gen;
@@ -1072,11 +1086,11 @@ function render(){
   var lista=ordenar(filtrar());
   $('cnt').textContent=lista.length;
   var rows=[];lista.forEach(function(ie){rowsOf(ie).forEach(function(g){rows.push(g);});});
-  var est=sumE(rows),sedes=lista.reduce(function(a,ie){return a+nSedes(rowsOf(ie));},0);
-  $('k-total').textContent=fmtN(lista.length);$('k-sedes').textContent=fmtN(sedes);$('k-grp').textContent=fmtN(rows.length);$('k-est').textContent=fmtN(est);
+  var est=sumE(rows),conMf=lista.filter(function(ie){return rowsOf(ie).length;}).length;
+  $('k-total').textContent=fmtN(lista.length);$('k-sedes').textContent=fmtN(conMf);$('k-grp').textContent=fmtN(rows.length);$('k-est').textContent=fmtN(est);
   var note=$('fd-note');
   if(mfCrit())note.innerHTML='<b>'+fmtN(rows.length)+' grupo'+(rows.length!==1?'s':'')+' · '+fmtN(est)+' estudiantes</b> en '+lista.length+(lista.length!==1?' instituciones':' institución')+' que cumplen lo elegido. Cada tarjeta muestra solo esos grupos.';
-  else note.textContent='Una fila de la tabla = un grupo (sede · jornada · modelo). Fuente: Secretaría de Educación, modelos flexibles 2026.';
+  else note.innerHTML='Todas las instituciones; '+fmtN(conMf)+' tienen grupos de modelos flexibles 2026. Elige un modelo para ver solo esas.';
   if(VIEW==='cards')renderCards(lista);else if(VIEW==='kb')renderKB();else if(VIEW==='tab')renderTabla(lista);else if(VIEW==='graf')renderGraf(lista);else renderMap(lista);
 }
 
@@ -1231,7 +1245,7 @@ function popHtml(ie){
     +'<div class="svc-row">'+svBadges(ie,true)+'</div>'
     +'<p>'+H(ie.dir||'')+'<br>'+H(phones(ie.tel)[0]||'Tel. N/D')+'</p>'
     +(ie.s.jor?'<p><b>Jornadas:</b> '+H(ie.s.jor.join(', '))+'<br><b>Grados:</b> '+H(grSummary(ie.s.gr))+'</p>':'')
-    +'<button class="mpop-btn" data-open="'+H(ie.dane)+'" data-tab="mf">Ver grupos y ficha '+ico('arrow',13)+'</button>'+cupoA('mpop-cupo')+'</div>';
+    +'<button class="mpop-btn" data-open="'+H(ie.dane)+'" data-tab="mf">'+(ie._g.length?'Ver grupos y ficha':'Ver ficha')+' '+ico('arrow',13)+'</button>'+cupoA('mpop-cupo')+'</div>';
 }
 function mapBtn(title,icon,fn){
   var C=L.Control.extend({options:{position:'topleft'},onAdd:function(){
@@ -1313,7 +1327,8 @@ function locateMe(){
 /* ── MODAL ── */
 function openM(ie,tab,fromH){
   if(!SEL)LASTFOCUS=document.activeElement;
-  SEL=ie;ATAB=tab||'mf';
+  SEL=ie;ATAB=tab||'mf';if(ATAB==='mf'&&!ie._g.length)ATAB='info';
+  var tmf=document.querySelector('.m-tab[data-t=mf]');if(tmf)tmf.hidden=!ie._g.length;
   $('m-nombre').textContent=tc(ie.nombre);
   $('m-meta').textContent='DANE '+ie.dane+(ie.nit?' · NIT '+ie.nit:'')+(ie.nucleo?' · Núcleo '+ie.nucleo:'');
   var tel=phones(ie.tel)[0],a='';
@@ -1445,7 +1460,7 @@ function buildOferta(ie){
   var gr=s.gr||[];
   /* Modelos flexibles 2026 (Secretaría de Educación): lo primero de la oferta */
   var s0=mkSec('Modelos flexibles 2026','mf-guia'),all=ie._g;
-  s0.insertAdjacentHTML('beforeend','<div class="omf">'+mfResumen(all).map(function(x){
+  s0.insertAdjacentHTML('beforeend',(all.length?'':'<div class="nabanner">Esta institución no tiene grupos de modelos flexibles en 2026.</div>')+'<div class="omf">'+mfResumen(all).map(function(x){
     var sd={};all.forEach(function(g){if(g.m===x.m.k)sd[g.s]=1;});
     var fk=x.m.k==='MIX'?'':x.m.k;
     return '<div class="omf-r"><div class="omf-h"><b>'+H(x.m.l)+'</b><span class="omf-niv">'+H(x.m.niv)+'</span>'+kbq(x.m.kb,'¿Qué es '+x.m.l+'?')+'</div>'
@@ -1601,7 +1616,7 @@ function makeTags(){
   if(F.trt)ft('trt',F.trt);
   if(F.pmt)ft('pmt',F.pmt);
   if(F.pjc)ft('pjc',F.pjc);
-  if(F.mf)ft('mf','Modelo: '+mfLbl(F.mf));
+  if(F.mf)ft('mf',F.mf==='*'?'Con modelos flexibles 2026':'Modelo: '+mfLbl(F.mf));
   if(F.jor)ft('jor','Jornada '+F.jor.toLowerCase());
   if(F.gr)ft('gr','Grado: '+({pre:'preescolar',pri:'primaria',sec:'secundaria',med:'media',clei:'ciclos CLEI',pfc:'Normal (PFC)'}[F.gr]||grLbl(+F.gr)));
   if(F.flex)ft('flex','Modelos flexibles');
@@ -1639,9 +1654,9 @@ function kbArticles(){
   var porJor=function(v){return MF_JORS.map(function(j){var p={mf:v,jor:j},n=kbCount(p);return n?[j,p]:null;}).filter(Boolean);};
   /* Empezar */
   add('como-buscar','Empezar','Cómo encontrar una institución',
-    '<p>Este buscador reúne <b>solo las instituciones con grupos de modelos flexibles en 2026</b> (Brújula, Aceleración del Aprendizaje y Pensar 1, 2 y 3). Para ubicar rápido una institución:</p><ol>'
+    '<p>El buscador reúne <b>todas las instituciones</b> y marca las que tienen grupos de <b>modelos flexibles 2026</b> (Brújula, Aceleración del Aprendizaje y Pensar 1, 2 y 3). Para ubicar rápido una institución:</p><ol>'
     +'<li>Escribe en el <b>buscador</b> el nombre de la institución, de la sede, el barrio o el código DANE.</li>'
-    +'<li>O usa <b>Encuentra una institución</b>: elige el modelo, la jornada y la comuna. Solo quedan las instituciones que tienen un grupo de ese modelo <b>en esa jornada</b>.</li>'
+    +'<li>O usa <b>Encuentra una institución</b>: elige un modelo flexible (o «Con algún modelo flexible»), la jornada del grupo y la comuna. Solo quedan las instituciones que tienen un grupo de ese modelo <b>en esa jornada</b>. En el panel de filtros hay más: grado, servicios, inclusión y ubicación.</li>'
     +'<li>Cambia de vista según lo que necesites: <b>Tarjetas</b> (resumen por institución), <b>Tabla</b> (un grupo por fila, ordenable y descargable en CSV), <b>Gráficos</b> y <b>Mapa</b>.</li></ol>'
     +'<p>La <b>Ficha</b> de cada institución abre en la pestaña «Modelos flexibles», con los grupos de cada sede. La pestaña <b>Oferta educativa</b> empieza por sus modelos flexibles 2026 (grados, jornadas y sedes) y sigue con la oferta registrada en SINEB.</p>'
     +'<p>Desde cada institución (tarjeta, ficha y mapa) está el botón amarillo <b>Busca tu cupo</b>, que lleva a la página de la Secretaría de Educación para solicitar o consultar un cupo.</p>',
@@ -1749,7 +1764,7 @@ function kbArticles(){
     [['Atiende discapacidad',{disc:true}],['Talentos excepcionales',{cap:true}],['Zona rural',{rural:true}]]);
   /* Datos */
   add('fuentes','Sobre los datos','Fuentes y actualización',
-    '<ul><li><b>Modelos flexibles 2026</b> (Secretaría de Educación de Medellín): define qué instituciones aparecen y trae los grupos, jornadas y estudiantes. Ver <a href="#kb-mf-datos" data-kb="mf-datos">Sobre el archivo de modelos flexibles</a>.</li>'
+    '<ul><li><b>Modelos flexibles 2026</b> (Secretaría de Educación de Medellín): grupos, jornadas y estudiantes de cada institución con modelos flexibles. Ver <a href="#kb-mf-datos" data-kb="mf-datos">Sobre el archivo de modelos flexibles</a>.</li>'
     +'<li><b>Datos del buscador</b>: contacto, ubicación en el mapa y servicios (transporte, media técnica, jornada complementaria y PAE) de las instituciones oficiales.</li>'
     +'<li><b>SINEB – Ministerio de Educación</b> («Buscando Colegio»), consulta del '+(typeof SINEB_META!=='undefined'?SINEB_META.fecha:'')+': jornadas, grados, modelos, inclusión, perfil y sedes. Cada institución se cruza por su código DANE.</li></ul>');
   add('privacidad','Sobre los datos','Privacidad y datos de contacto',
@@ -1815,7 +1830,7 @@ function tablaRows(lista){
 }
 function renderTabla(lista){
   var r=tablaRows(lista),v=$('vtab');
-  v.innerHTML='<div class="tbl-wrap"><div class="tbl-head"><div><h2>Grupos de modelos flexibles</h2><p>'+fmtN(r.length)+' grupos · '+fmtN(sumE(r))+' estudiantes · '+lista.length+' instituciones. Clic en un encabezado para ordenar; clic en una fila para abrir la ficha.</p></div>'
+  v.innerHTML='<div class="tbl-wrap"><div class="tbl-head"><div><h2>Grupos de modelos flexibles</h2><p>'+fmtN(r.length)+' grupos · '+fmtN(sumE(r))+' estudiantes · '+lista.filter(function(ie){return rowsOf(ie).length;}).length+' instituciones. Clic en un encabezado para ordenar; clic en una fila para abrir la ficha.</p></div>'
     +'<button class="btn-csv" id="btn-csv">'+ico('download',16)+'Descargar CSV</button></div>'
     +'<div class="tbl"><table><thead><tr>'+TCOLS.map(function(c){var on=TSORT.k===c[0];
       return '<th class="'+(c[0]==='e'?'n':'')+'" aria-sort="'+(on?(TSORT.d>0?'ascending':'descending'):'none')+'"><button data-ts="'+c[0]+'">'+c[1]+ico(on?(TSORT.d>0?'arrow_upward':'arrow_downward'):'unfold_more')+'</button></th>';}).join('')+'</tr></thead><tbody>'
@@ -1861,7 +1876,7 @@ function renderGraf(lista){
       return '<tr data-f="com" data-v="'+H(c)+'" class="'+(F.com===c?'on':'')+'" title="Clic para filtrar por '+H(comName(c)||c)+'"><td>'+H(comName(c)||c)+'</td>'+cols.map(function(m){return '<td class="hide-m">'+(t.m[m.k]?fmtN(t.m[m.k]):'–')+'</td>';}).join('')
         +'<td>'+t.g+'</td><td class="tot"><span class="tb" style="width:'+Math.round(t.tot*60/cmx)+'px"></span>'+fmtN(t.tot)+'</td></tr>';}).join('')+'</tbody></table>';
   v.innerHTML='<div class="gwrap">'
-    +'<div class="gkpis"><div><b>'+fmtN(lista.length)+'</b><span>instituciones</span></div><div><b>'+fmtN(lista.reduce(function(a,ie){return a+nSedes(rowsOf(ie));},0))+'</b><span>sedes</span></div><div><b>'+fmtN(rows.length)+'</b><span>grupos</span></div><div><b>'+fmtN(est)+'</b><span>estudiantes</span></div><div><b>'+(est/rows.length).toFixed(1).replace('.',',')+'</b><span>estudiantes por grupo (promedio)</span></div></div>'
+    +'<div class="gkpis"><div><b>'+fmtN(lista.filter(function(ie){return rowsOf(ie).length;}).length)+'</b><span>instituciones con grupos</span></div><div><b>'+fmtN(lista.reduce(function(a,ie){return a+nSedes(rowsOf(ie));},0))+'</b><span>sedes</span></div><div><b>'+fmtN(rows.length)+'</b><span>grupos</span></div><div><b>'+fmtN(est)+'</b><span>estudiantes</span></div><div><b>'+(est/rows.length).toFixed(1).replace('.',',')+'</b><span>estudiantes por grupo (promedio)</span></div></div>'
     +'<div class="ggrid">'
       +'<section class="gcard"><h3>Estudiantes por modelo</h3><p class="sub">Clic en un modelo para filtrar.</p>'+bars(mods,mxE(mods),['mf'])+'</section>'
       +'<section class="gcard"><h3>Estudiantes por jornada</h3><p class="sub">Jornada en la que funciona cada grupo. Clic para filtrar.</p>'+bars(jors,mxE(jors),['jor'])+'</section>'
