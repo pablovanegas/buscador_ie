@@ -14,16 +14,14 @@ Buscador de instituciones educativas de la Secretaría de Educación de Medellí
 | [Buscador de colegios a nivel nacional](https://sineb.mineducacion.gov.co/bcol/app?service=page/BuscandoColegioBasico) | Consultar cualquier institución del país (MinEducación, SINEB): sedes, jornadas y grados. |
 | [Tableros Power BI](https://app.powerbi.com/view?r=eyJrIjoiZThmMjY3ZjQtZGE3Ni00YmU4LThlMzUtMTk3MTEzNTlmZDhjIiwidCI6IjljNDhlMDg4LTVlNDQtNGIwZC05M2EwLWVlYjJjNjEyN2MzZCIsImMiOjR9&embedImagePlaceholder=true) | Tableros de datos para consulta y análisis. |
 
-Los tres enlaces también están en la franja azul de la parte superior del buscador.
+Los tres enlaces también están en la parte superior del buscador.
 
 ## Guía rápida
 
 1. **Busca** en la caja grande por nombre de la institución, sede, barrio o código DANE. La tecla `/` lleva directo a ella.
-2. **Filtra** por modelo flexible (o «Con algún modelo flexible»), jornada del grupo y comuna en «Encuentra una institución». El panel lateral suma grado, servicios, inclusión y ubicación.
+2. **Filtra** por modelo flexible (o «Con algún modelo flexible»), jornada del grupo y comuna en «Encuentra una institución». El panel lateral suma grado, tipo y especialidad, servicios y ubicación.
 3. **Elige la vista**:
    - **Tarjetas**: resumen de cada institución; las que tienen modelos flexibles muestran sus grupos y estudiantes.
-   - **Tabla**: un grupo de modelo flexible por fila, ordenable. **Descargar CSV** baja lo que estás viendo (abre en Excel).
-   - **Gráficos**: estudiantes por modelo, jornada y comuna. Un clic en una barra filtra.
    - **Mapa**: ubicación de la sede principal. 4 instituciones privadas no tienen coordenadas.
    - **Guía**: qué es cada modelo y cómo leer los datos.
 4. **Ficha**: abre el detalle de la institución con los grupos de modelos flexibles por sede (si tiene), contacto, oferta educativa (empieza por sus modelos flexibles 2026), sedes y servicios.
