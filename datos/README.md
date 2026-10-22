@@ -22,17 +22,17 @@
 3. **Privacidad:** no se publica ningún dato personal, ni en la página ni en los Excel. Se eliminan los nombres de rectores, los correos que no son de un dominio institucional (`.gov.co` o `.edu.co`), los correos institucionales con el nombre de una persona (lista `CORREOS_PERSONALES` del script) y los números de celular. Solo quedan teléfonos fijos y correos institucionales.
 4. **Datos de contacto:** se conservan los datos de contacto del buscador. Cuando SINEB tiene otros, la ficha los muestra aparte, marcados como «según SINEB».
 5. **Jornada nocturna:** por decisión del proyecto, no se publica en ningún lado: ni en la página ni en los Excel. El script la quita de las listas de jornadas y elimina las columnas que la marcan, también en la fuente saneada.
-6. **Lo que no se usó:** las columnas de tarifas, ICFES, computadores, internet y estrato vienen vacías o casi vacías para las instituciones oficiales, así que no se incluyeron.
+6. **Jornada completa:** tampoco se publica, porque no hay una definición oficial que la distinga de la jornada única. El script la quita de las jornadas de SINEB (página y libro de CLEI) y de los modelos flexibles.
+7. **Lo que no se usó:** las columnas de tarifas, ICFES, computadores, internet y estrato vienen vacías o casi vacías para las instituciones oficiales, así que no se incluyeron.
 
 ## Modelos flexibles 2026 (página)
 
-La página muestra todas las instituciones (230 del buscador más 4 privadas que solo están en este archivo) y permite filtrar las 104 que tienen grupos de modelos flexibles 2026 (472 grupos, 11.557 estudiantes). El script lee el archivo así:
+La página muestra todas las instituciones (230 del buscador más 4 privadas que solo están en este archivo) y permite filtrar las 104 que ofrecen modelos flexibles 2026. La página no publica cifras de grupos ni de estudiantes. El script lee el archivo así:
 
 1. Toma las hojas de Brújula/Aceleración y de Pensar, quita las filas de «Total general» y normaliza el modelo (`BRUJULA ` con espacio final, `AA./BRUJ` = grupo mixto Aceleración + Brújula).
 2. Cruza cada institución por nombre con el Consolidado de SINEB para obtener su DANE. Las 104 cruzan: 100 ya estaban en el buscador y 4 privadas no (se agregan en `MF_EXTRA` con datos de SINEB y sin coordenadas).
-3. Escribe en `index.html` las variables `MF` (grupos por institución: sede, comuna, jornada, modelo, estudiantes), `MF_EXTRA` y `MF_META`.
+3. Escribe en `index.html` las variables `MF` (por institución: sede, comuna, jornada y modelo, sin repetir y sin cifras), `MF_EXTRA` y `MF_META`. La jornada `COMPLETA` se deja vacía.
 
-La hoja «Cantidad de estudiantes» del archivo (11.548 estudiantes, 416 grupos) no cuadra con el detalle por grupo; se usa el detalle.
 
 ## Actualizar
 
