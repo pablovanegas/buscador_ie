@@ -160,8 +160,8 @@ def grades(v):
 
 # Orden fijo de jornadas (igual en filtros, tarjetas y estadísticas)
 # La jornada NOCTURNA se excluye a propósito: el proyecto no publica esa información (ni en la página ni en los Excel).
-JORNADAS = [("MAÑANA", "Mañana"), ("TARDE", "Tarde"), ("ÚNICA", "Única"),
-            ("COMPLETA", "Completa"), ("FIN DE SEMANA", "Fin de semana")]
+# La jornada COMPLETA tampoco se publica: no hay una definición oficial que la distinga de la Única.
+JORNADAS = [("MAÑANA", "Mañana"), ("TARDE", "Tarde"), ("ÚNICA", "Única"), ("FIN DE SEMANA", "Fin de semana")]
 JOR_MAP = dict(JORNADAS)
 
 
@@ -183,7 +183,9 @@ def load_html_data():
 
 def cargar_modelos_flexibles(cons):
     """Lee el archivo de grupos 2026 (hojas Brújula/Aceleración y Pensar) y cruza cada institución
-    con SINEB por nombre para obtener su código DANE. Devuelve {dane12: [[sede, comuna, jornada, modelo, estudiantes], ...]}."""
+    con SINEB por nombre para obtener su código DANE. Devuelve {dane12: [[sede, comuna, jornada, modelo], ...]}
+    sin repetir. La página solo dice qué modelos hay en cada sede y jornada: no publica grupos ni estudiantes,
+    y omite la jornada COMPLETA (queda vacía)."""
     xl = pd.ExcelFile(SRC_MF)
     hojas = [h for h in xl.sheet_names if "BRUJULA" in h.upper() or "PENSAR" in h.upper()]
     df = pd.concat([xl.parse(h) for h in hojas], ignore_index=True)
@@ -196,8 +198,11 @@ def cargar_modelos_flexibles(cons):
     assert not sin, f"Instituciones del archivo sin código DANE en SINEB: {sin}"
     mf = {}
     for _, r in df.iterrows():
-        mf.setdefault(r["_k"], []).append([tc(r["SEDE"]), int(r["COMUNA"]), tc(r["JORNADA"]), r["COD"], int(r["Total"])])
-    print(f"Modelos flexibles 2026: {len(mf)} instituciones · {df['SEDE'].nunique()} sedes · {len(df)} grupos · {int(df['Total'].sum())} estudiantes")
+        jor = str(r["JORNADA"]).strip().upper()
+        fila = [tc(r["SEDE"]), int(r["COMUNA"]), "" if jor == "COMPLETA" else tc(jor), r["COD"]]
+        if fila not in mf.setdefault(r["_k"], []):
+            mf[r["_k"]].append(fila)
+    print(f"Modelos flexibles 2026: {len(mf)} instituciones · {df['SEDE'].nunique()} sedes")
     return mf
 
 
@@ -298,9 +303,7 @@ def main():
     i = next(n for n, l in enumerate(lines) if l.startswith("var DATA="))
     lines[i] = "var DATA=" + json.dumps(data, ensure_ascii=False) + ";"
     mf = {dkey[k]: v for k, v in mf12.items()}
-    est = sum(r[4] for v in mf.values() for r in v)
-    mf_meta = {"fuente": "Secretaría de Educación de Medellín – IE con modelos flexibles 2026 (V2)",
-               "instituciones": len(mf), "grupos": sum(len(v) for v in mf.values()), "estudiantes": est}
+    mf_meta = {"fuente": "Secretaría de Educación de Medellín – IE con modelos flexibles 2026 (V2)", "instituciones": len(mf)}
     lines[i + 1:i + 1] = [line, meta_line,
                           "var MF=" + json.dumps(mf, ensure_ascii=False, separators=(",", ":")) + ";",
                           "var MF_EXTRA=" + json.dumps(extras, ensure_ascii=False, separators=(",", ":")) + ";",
