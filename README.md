@@ -1,10 +1,10 @@
 # Instituciones con Modelos Flexibles 2026 · Medellín
 
-Buscador de la Secretaría de Educación de Medellín con las instituciones educativas que tienen grupos de **modelos flexibles** en 2026: **Brújula**, **Aceleración del Aprendizaje** y **Pensar 1, 2 y 3**.
+Buscador de instituciones educativas de la Secretaría de Educación de Medellín. Incluye todas las instituciones del buscador y permite filtrar las que tienen grupos de **modelos flexibles** en 2026: **Brújula**, **Aceleración del Aprendizaje** y **Pensar 1, 2 y 3**.
 
 ### 👉 [Abrir el buscador](https://pablovanegas.github.io/buscador_ie/)
 
-**104 instituciones · 142 sedes · 472 grupos · 11.557 estudiantes**
+**234 instituciones** · de ellas, **104 con modelos flexibles 2026**: 472 grupos y 11.557 estudiantes
 
 ## Enlaces útiles
 
@@ -19,14 +19,15 @@ Los tres enlaces también están en la franja azul de la parte superior del busc
 ## Guía rápida
 
 1. **Busca** en la caja grande por nombre de la institución, sede, barrio o código DANE. La tecla `/` lleva directo a ella.
-2. **Filtra** por modelo, jornada del grupo y comuna en «Encuentra un grupo de modelo flexible», o con los botones de modelo del panel lateral.
+2. **Filtra** por modelo flexible (o «Con algún modelo flexible»), jornada del grupo y comuna en «Encuentra una institución». El panel lateral suma grado, servicios, inclusión y ubicación.
 3. **Elige la vista**:
-   - **Tarjetas**: resumen de cada institución con sus grupos y estudiantes.
-   - **Tabla**: un grupo por fila, ordenable. **Descargar CSV** baja lo que estás viendo (abre en Excel).
+   - **Tarjetas**: resumen de cada institución; las que tienen modelos flexibles muestran sus grupos y estudiantes.
+   - **Tabla**: un grupo de modelo flexible por fila, ordenable. **Descargar CSV** baja lo que estás viendo (abre en Excel).
    - **Gráficos**: estudiantes por modelo, jornada y comuna. Un clic en una barra filtra.
    - **Mapa**: ubicación de la sede principal. 4 instituciones privadas no tienen coordenadas.
    - **Guía**: qué es cada modelo y cómo leer los datos.
-4. **Ficha**: abre el detalle de la institución con los grupos por sede, contacto, oferta, sedes y servicios.
+4. **Ficha**: abre el detalle de la institución con los grupos de modelos flexibles por sede (si tiene), contacto, oferta educativa (empieza por sus modelos flexibles 2026), sedes y servicios.
+5. **Busca tu cupo**: el botón amarillo está en cada tarjeta, ficha y punto del mapa.
 
 ### Los modelos
 
@@ -42,7 +43,8 @@ Son para estudiantes en **extraedad** (dos o más años por encima de la edad de
 
 ## Datos
 
-- **Modelos flexibles 2026**, Secretaría de Educación de Medellín: define qué instituciones aparecen y aporta los grupos, las jornadas y los estudiantes.
+- **Datos del buscador**: contacto, ubicación y servicios de las instituciones.
+- **Modelos flexibles 2026**, Secretaría de Educación de Medellín: grupos, jornadas y estudiantes de las 104 instituciones con estos modelos.
 - **SINEB – MinEducación**: jornadas, grados, sedes e inclusión de cada institución.
 - Solo se publican **contactos institucionales**: no hay nombres de rectores, correos personales ni celulares.
 - No se publica la **jornada nocturna**, ni en la página ni en los Excel.
