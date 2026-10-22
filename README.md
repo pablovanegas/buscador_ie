@@ -45,6 +45,7 @@ Son para estudiantes en **extraedad** (dos o más años por encima de la edad de
 - **Modelos flexibles 2026**, Secretaría de Educación de Medellín: define qué instituciones aparecen y aporta los grupos, las jornadas y los estudiantes.
 - **SINEB – MinEducación**: jornadas, grados, sedes e inclusión de cada institución.
 - Solo se publican **contactos institucionales**: no hay nombres de rectores, correos personales ni celulares.
+- No se publica la **jornada nocturna**, ni en la página ni en los Excel.
 
 El detalle de las fuentes, el cruce y cómo actualizar está en [`datos/README.md`](datos/README.md). Para regenerar los datos de la página:
 
