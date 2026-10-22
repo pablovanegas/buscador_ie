@@ -30,7 +30,7 @@
   --r:10px;--r-sm:7px;
   --sh1:0 1px 2px rgba(0,41,62,.06),0 1px 1px rgba(0,41,62,.04);
   --sh2:0 8px 28px rgba(0,41,62,.12);
-  --tb-h:80px;--lk-h:40px;--top:calc(var(--tb-h) + var(--lk-h));--sb-w:310px;
+  --tb-h:80px;--lk-h:0px;--top:calc(var(--tb-h) + var(--lk-h));--sb-w:310px;
   /* Series validadas (paleta de referencia, slots 1-2, CVD ΔE ≥ 9.2) */
   --s-flex:#0082B5;--s-clei:#F47B29; /* validadas: CVD ΔE 21.3, siempre con etiqueta */
   --font:'Metropolis','Poppins',Arial,Helvetica,sans-serif; /* tipografía institucional: Metropolis */
@@ -52,28 +52,32 @@ button{cursor:pointer;}
 .brand{display:flex;flex-direction:column;justify-content:center;gap:2px;line-height:1.15;min-width:0;padding-left:16px;border-left:1.5px solid rgba(0,41,62,.35);}
 .logo{font-size:19px;font-weight:700;letter-spacing:-.01em;color:#0E1B24;white-space:nowrap;margin:0;}
 .tb-sub{font-size:12.5px;font-weight:500;color:var(--am-prof);white-space:nowrap;}
-.kpis{margin-left:auto;display:flex;gap:6px;}
-.kpi{display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:88px;height:48px;padding:0 12px;border-radius:8px;border:1px solid rgba(0,58,87,.18);background:rgba(255,255,255,.92);text-align:left;transition:background .15s,border-color .15s;}
-button.kpi:hover{background:#fff;border-color:var(--am-prof);}
-button.kpi[aria-pressed=true]{border-color:var(--am-prof);background:var(--am-prof);}
-button.kpi[aria-pressed=true] .kpi-n,button.kpi[aria-pressed=true] .kpi-l{color:#fff;}
-.kpi-n{font-family:var(--mono);font-size:17px;font-weight:500;color:var(--am-prof);line-height:1;}
-.kpi-l{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);}
 #btn-filters{display:none;align-items:center;gap:6px;height:38px;padding:0 12px;border-radius:8px;border:1px solid rgba(0,58,87,.35);background:rgba(255,255,255,.9);color:var(--am-prof);font-size:13.5px;font-weight:600;margin-left:auto;}
 #btn-filters .badge{background:var(--am-prof);color:#fff;border-radius:10px;font-size:10.5px;padding:1px 6px;font-family:var(--mono);}
 
-/* ── ENLACES ÚTILES (franja bajo la cabecera) ── */
-#lnk{position:fixed;top:var(--tb-h);left:0;right:0;height:var(--lk-h);z-index:1090;display:flex;align-items:center;gap:8px;padding:0 16px;background:var(--am-prof);overflow-x:auto;scrollbar-width:none;}
-#lnk::-webkit-scrollbar{display:none;}
-#lnk .lk-t{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9fdcf5;white-space:nowrap;margin-right:4px;}
-#lnk a{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:#fff;font-size:12.5px;font-weight:600;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:background .15s;}
-#lnk a:hover,#lnk a:focus-visible{background:rgba(255,255,255,.22);}
-#lnk a .ico{font-size:17px;color:var(--am-azul);}
-#lnk a .ico.ext{font-size:14px;color:#9fdcf5;}
-#lnk a.lk-hi{background:var(--am-amarillo);border-color:var(--am-amarillo);color:#0E1B24;}
+/* ── ENLACES ÚTILES: en la cabecera; en pantallas angostas, franja bajo la cabecera ── */
+#lnk{margin-left:auto;display:flex;align-items:center;gap:8px;}
+#lnk .lk-t{display:none;}
+#lnk a{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border-radius:19px;background:rgba(255,255,255,.94);border:1px solid rgba(0,58,87,.2);color:var(--am-prof);font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:background .15s,border-color .15s;}
+#lnk a:hover,#lnk a:focus-visible{background:#fff;border-color:var(--am-prof);}
+#lnk a .ico{font-size:18px;color:var(--am-prof);}
+#lnk a .ico.ext{font-size:14px;opacity:.6;}
+#lnk a.lk-hi{background:var(--am-amarillo);border-color:#e6c200;color:#0E1B24;}
 #lnk a.lk-hi .ico{color:#0E1B24;}
-@media (max-width:640px){#lnk{padding:0 8px;gap:5px;}#lnk a{flex:1 1 auto;justify-content:center;gap:4px;padding:0 8px;font-size:12px;}#lnk a .ico{font-size:15px;}#lnk .lk-t,#lnk .lk-long,#lnk .ico.ext{display:none;}}
-@media (min-width:641px){#lnk .lk-short{display:none;}}
+#lnk .lk-short{display:none;}
+@media (max-width:1240px){#lnk a .ico.ext{display:none;}#lnk a{padding:0 11px;font-size:12.5px;}}
+@media (max-width:1100px){
+  :root{--lk-h:40px;}
+  #lnk{position:fixed;top:var(--tb-h);left:0;right:0;height:var(--lk-h);margin:0;z-index:1090;gap:8px;padding:0 16px;background:var(--am-prof);overflow-x:auto;scrollbar-width:none;}
+  #lnk::-webkit-scrollbar{display:none;}
+  #lnk .lk-t{display:inline;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9fdcf5;white-space:nowrap;margin-right:4px;}
+  #lnk a{height:28px;padding:0 12px;border-radius:14px;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22);color:#fff;font-size:12.5px;}
+  #lnk a:hover,#lnk a:focus-visible{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.22);}
+  #lnk a .ico{font-size:17px;color:var(--am-azul);}
+  #lnk a.lk-hi{background:var(--am-amarillo);border-color:var(--am-amarillo);color:#0E1B24;}
+  #lnk a.lk-hi .ico{color:#0E1B24;}
+}
+@media (max-width:640px){#lnk{padding:0 8px;gap:5px;}#lnk .lk-t,#lnk .lk-long{display:none;}#lnk .lk-short{display:inline;}#lnk a{flex:1 1 auto;justify-content:center;gap:4px;padding:0 8px;font-size:12px;}#lnk a .ico{font-size:15px;}}
 
 /* ── LAYOUT ── */
 #wrap{position:fixed;top:var(--top);left:0;right:0;bottom:0;display:flex;}
@@ -463,7 +467,6 @@ details.help p{margin-top:6px;line-height:1.55;}
   .kb-grp{display:none;}
 }
 /* ── Modelos flexibles 2026 ── */
-.kpi.kpi-hi{background:#fff;border-color:var(--am-prof);}
 .sbl-mf{background:var(--sur2);margin:0 -16px;padding:14px 16px;border-bottom:1px solid var(--bdr);}
 .mchips{display:flex;flex-direction:column;gap:6px;}
 .mchip{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:var(--r);border:1px solid var(--bdr2);background:var(--sur);font-size:13.5px;font-weight:500;color:var(--ink);text-align:left;transition:all .15s;}
@@ -497,37 +500,6 @@ details.help p{margin-top:6px;line-height:1.55;}
 .mf-sede th{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);background:#fff;}
 .mf-sede td.n,.mf-sede th.n{text-align:right;font-family:var(--mono);}
 .mf-sede tr.hit td{background:rgba(0,174,239,.10);}
-/* Tabla para operarios */
-#vtab,#vg{flex:1;overflow-y:auto;display:none;}
-.tbl-wrap{padding:16px;max-width:1400px;margin:0 auto;}
-.tbl-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:12px;}
-.tbl-head h2{font-size:18px;font-weight:700;color:var(--ink);}
-.tbl-head p{font-size:13px;color:var(--ink3);}
-.btn-csv{margin-left:auto;display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:var(--r);border:1px solid var(--am-prof);background:var(--am-prof);color:#fff;font-size:13px;font-weight:600;}
-.btn-csv:hover{background:#00293E;}
-.tbl{border:1px solid var(--bdr);border-radius:var(--r);background:var(--sur);overflow:auto;max-height:calc(100vh - 290px);}
-.tbl th{position:sticky;top:0;z-index:1;background:var(--am-prof);color:#fff;font-size:11.5px;font-weight:600;letter-spacing:.03em;text-align:left;padding:0;white-space:nowrap;}
-.tbl th button{all:unset;cursor:pointer;display:flex;align-items:center;gap:4px;padding:10px 12px;width:100%;box-sizing:border-box;}
-.tbl th button:focus-visible{outline:2px solid var(--am-azul);outline-offset:-2px;}
-.tbl th .ico{font-size:15px;opacity:.7;}
-.tbl td{padding:8px 12px;border-top:1px solid var(--bdr);color:var(--ink);vertical-align:top;}
-.tbl tbody tr{cursor:pointer;}
-.tbl tbody tr:nth-child(even) td{background:#F8FBFD;}
-.tbl tbody tr:hover td{background:rgba(0,174,239,.10);}
-.tbl td.n,.tbl th.n button{text-align:right;justify-content:flex-end;font-family:var(--mono);}
-.tbl tfoot td{position:sticky;bottom:0;background:var(--sur2);font-weight:700;border-top:2px solid var(--am-prof);}
-.tbl .mtag{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:10px;background:var(--sur2);border:1px solid var(--bdr2);white-space:nowrap;}
-/* Gráficos */
-.gwrap{padding:16px;max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:14px;}
-.gkpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;}
-.gkpis div{background:var(--sur);border:1px solid var(--bdr);border-radius:12px;padding:14px 16px;box-shadow:var(--sh1);}
-.gkpis b{display:block;font-family:var(--mono);font-size:28px;font-weight:500;color:var(--am-prof);line-height:1.1;}
-.gkpis span{font-size:12.5px;color:var(--ink3);}
-.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(440px,100%),1fr));gap:14px;}
-.gcard{background:var(--sur);border:1px solid var(--bdr);border-radius:12px;padding:16px;box-shadow:var(--sh1);min-width:0;}
-.gcard.wide{grid-column:1/-1;}
-.gcard h3{font-size:15px;font-weight:600;color:var(--ink);}
-.gcard p.sub{font-size:12px;color:var(--ink3);margin:2px 0 12px;}
 .gbar{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:3px 10px;width:100%;padding:6px 8px;border:none;background:transparent;border-radius:7px;text-align:left;}
 button.gbar:hover{background:var(--sur2);}
 .gbar[aria-pressed=true]{background:rgba(0,174,239,.12);}
@@ -537,26 +509,14 @@ button.gbar:hover{background:var(--sur2);}
 .gbar .gv em{font-style:normal;color:var(--ink3);}
 .gbar .gt{grid-column:1/-1;height:10px;border-radius:5px;background:var(--sur2);overflow:hidden;}
 .gbar .gt i{display:block;height:100%;border-radius:0 5px 5px 0;background:#0082B5;min-width:2px;}
-.gtab{width:100%;border-collapse:collapse;font-size:12.5px;}
-.gtab th{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);text-align:right;padding:6px 8px;border-bottom:1px solid var(--bdr2);white-space:nowrap;}
-.gtab th:first-child{text-align:left;}
-.gtab td{padding:6px 8px;border-bottom:1px solid var(--bdr);text-align:right;font-family:var(--mono);color:var(--ink2);}
-.gtab td:first-child{text-align:left;font-family:var(--font);color:var(--ink);font-weight:500;}
-.gtab tbody tr{cursor:pointer;}
-.gtab tbody tr:hover td{background:var(--sur2);}
-.gtab tbody tr.on td{background:rgba(0,174,239,.12);}
-.gtab td.tot{font-weight:600;color:var(--am-prof);}
-.gtab .tb{display:inline-block;height:8px;border-radius:4px;background:#0082B5;vertical-align:middle;margin-right:6px;}
-.gnote{font-size:12px;color:var(--ink3);line-height:1.5;}
-@media (max-width:640px){.tbl-wrap,.gwrap{padding:12px;}.mf-kpis b{font-size:18px;}.gtab .hide-m{display:none;}}
+@media (max-width:640px){.mf-kpis b{font-size:18px;}}
 #toast{position:fixed;bottom:20px;left:50%;z-index:99999;background:var(--ink);color:#fff;padding:10px 16px;border-radius:9px;font-size:13px;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.3);opacity:0;transform:translate(-50%,8px);transition:all .22s;pointer-events:none;border-left:3px solid var(--acc);max-width:calc(100vw - 32px);}
 #toast.show{opacity:1;transform:translate(-50%,0);}
 #scrim{display:none;}
 
 /* ── RESPONSIVE ── */
-@media (max-width:1180px){.kpi{min-width:70px;padding:0 9px;}.tb-sub{display:none;}.logo{font-size:17px;}}
+@media (max-width:1180px){.tb-sub{display:none;}.logo{font-size:17px;}}
 @media (max-width:960px){
-  .kpis{display:none;}
   #btn-filters{display:flex;}
   #sb{position:fixed;top:var(--top);bottom:0;left:0;z-index:1050;width:min(var(--sb-w),88vw);transform:translateX(-100%);box-shadow:var(--sh2);}
   #sb-inner{width:100%;}
@@ -603,21 +563,14 @@ button.gbar:hover{background:var(--sur2);}
     <h1 class="logo">Buscador de Instituciones Educativas</h1>
     <div class="tb-sub">Secretaría de Educación &middot; Instituciones y modelos flexibles 2026</div>
   </div>
-  <div class="kpis" aria-label="Resumen de la selección">
-    <div class="kpi"><span class="kpi-n" id="k-total">0</span><span class="kpi-l">Instituciones</span></div>
-    <div class="kpi"><span class="kpi-n" id="k-sedes">0</span><span class="kpi-l">Con modelos flex.</span></div>
-    <div class="kpi"><span class="kpi-n" id="k-grp">0</span><span class="kpi-l">Grupos 2026</span></div>
-    <div class="kpi kpi-hi"><span class="kpi-n" id="k-est">0</span><span class="kpi-l">Estudiantes 2026</span></div>
-  </div>
+  <nav id="lnk" aria-label="Enlaces útiles">
+    <span class="lk-t">Enlaces útiles</span>
+    <a class="lk-hi" href="https://www.medellin.edu.co/tucupo/" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">how_to_reg</span>Busca tu cupo<span class="ico ext" aria-hidden="true">open_in_new</span></a>
+    <a title="Buscador de colegios a nivel nacional (Ministerio de Educación)" href="https://sineb.mineducacion.gov.co/bcol/app?service=page/BuscandoColegioBasico" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">travel_explore</span><span class="lk-long">Buscador nacional de colegios</span><span class="lk-short">Colegios del país</span><span class="ico ext" aria-hidden="true">open_in_new</span></a>
+    <a href="https://app.powerbi.com/view?r=eyJrIjoiZThmMjY3ZjQtZGE3Ni00YmU4LThlMzUtMTk3MTEzNTlmZDhjIiwidCI6IjljNDhlMDg4LTVlNDQtNGIwZC05M2EwLWVlYjJjNjEyN2MzZCIsImMiOjR9&amp;embedImagePlaceholder=true" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">monitoring</span><span class="lk-long">Tableros Power BI</span><span class="lk-short">Power BI</span><span class="ico ext" aria-hidden="true">open_in_new</span></a>
+  </nav>
   <button id="btn-filters" aria-controls="sb" aria-expanded="false"><span class="ico" aria-hidden="true">tune</span>Filtros <span class="badge" id="fcount" hidden>0</span></button>
 </header>
-
-<nav id="lnk" aria-label="Enlaces útiles">
-  <span class="lk-t">Enlaces útiles</span>
-  <a class="lk-hi" href="https://www.medellin.edu.co/tucupo/" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">how_to_reg</span>Busca tu cupo<span class="ico ext" aria-hidden="true">open_in_new</span></a>
-  <a href="https://sineb.mineducacion.gov.co/bcol/app?service=page/BuscandoColegioBasico" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">travel_explore</span><span class="lk-long">Buscador de colegios a nivel nacional (MinEducación)</span><span class="lk-short">Colegios del país</span><span class="ico ext" aria-hidden="true">open_in_new</span></a>
-  <a href="https://app.powerbi.com/view?r=eyJrIjoiZThmMjY3ZjQtZGE3Ni00YmU4LThlMzUtMTk3MTEzNTlmZDhjIiwidCI6IjljNDhlMDg4LTVlNDQtNGIwZC05M2EwLWVlYjJjNjEyN2MzZCIsImMiOjR9&amp;embedImagePlaceholder=true" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">monitoring</span><span class="lk-long">Tableros Power BI</span><span class="lk-short">Power BI</span><span class="ico ext" aria-hidden="true">open_in_new</span></a>
-</nav>
 
 <div id="wrap">
 
@@ -648,6 +601,12 @@ button.gbar:hover{background:var(--sur2);}
     <div class="sbl">
       <span class="sbl-lbl">Oferta educativa <span class="src-tag">SINEB</span></span>
       <div class="field"><label for="f-gr">Grado o programa</label><select id="f-gr"><option value="">Todos los grados</option></select></div>
+      <details class="more-f">
+        <summary>Más filtros (tipo, especialidad, género)</summary>
+        <div class="field"><label for="f-tipo">Tipo</label><select id="f-tipo"><option value="">Todos</option><option value="IE">Institución educativa</option><option value="CE">Centro educativo</option></select></div>
+        <div class="field"><label for="f-esp">Especialidad de la media</label><select id="f-esp"><option value="">Todas</option></select></div>
+        <div class="field"><label for="f-gen">Población por género</label><select id="f-gen"><option value="">Todas</option></select></div>
+      </details>
     </div>
 
     <div class="sbl">
@@ -661,22 +620,6 @@ button.gbar:hover{background:var(--sur2);}
     </div>
 
     <div class="sbl">
-      <span class="sbl-lbl">Atención e inclusión <span class="src-tag">SINEB</span></span>
-      <div class="chips">
-        <button class="chip" data-k="adu" aria-pressed="false" title="Instituciones con un modelo educativo dirigido a adultos (p. ej. Programa para Jóvenes en Extraedad y Adultos). Para saber qué grados puede cursar un adulto, usa Ciclos CLEI."><span class="ico" aria-hidden="true">groups</span>Educación para adultos<span class="cnt" id="c-adu"></span></button>
-        <button class="chip" data-k="disc" aria-pressed="false"><span class="ico" aria-hidden="true">accessibility_new</span>Atiende discapacidad<span class="cnt" id="c-disc"></span></button>
-        <button class="chip" data-k="cap" aria-pressed="false"><span class="ico" aria-hidden="true">star</span>Talentos excepcionales<span class="cnt" id="c-cap"></span></button>
-        <button class="chip" data-k="rural" aria-pressed="false"><span class="ico" aria-hidden="true">forest</span>Sede en zona rural<span class="cnt" id="c-rural"></span></button>
-      </div>
-      <details class="more-f">
-        <summary>Más filtros (tipo, especialidad, género)</summary>
-        <div class="field"><label for="f-tipo">Tipo</label><select id="f-tipo"><option value="">Todos</option><option value="IE">Institución educativa</option><option value="CE">Centro educativo</option></select></div>
-        <div class="field"><label for="f-esp">Especialidad de la media</label><select id="f-esp"><option value="">Todas</option></select></div>
-        <div class="field"><label for="f-gen">Población por género</label><select id="f-gen"><option value="">Todas</option></select></div>
-      </details>
-    </div>
-
-    <div class="sbl">
       <span class="sbl-lbl">Ubicación</span>
       <div class="field"><label for="f-com">Comuna / corregimiento</label><select id="f-com"><option value="">Todas</option></select></div>
       <div class="field"><label for="f-nuc">Núcleo educativo</label><select id="f-nuc"><option value="">Todos</option></select></div>
@@ -684,7 +627,6 @@ button.gbar:hover{background:var(--sur2);}
 
     <div class="sbl">
       <span class="sbl-lbl">Detalle de servicios</span>
-      <div class="field"><label for="f-trt">Tipo de transporte</label><select id="f-trt"><option value="">Todos</option><option value="Metro">Metro</option><option value="Bus">Bus</option></select></div>
       <div class="field"><label for="f-pmt">Programa de media técnica</label><select id="f-pmt"><option value="">Todos los programas</option></select></div>
       <div class="field"><label for="f-pjc">Actividad de jornada complementaria</label><select id="f-pjc"><option value="">Todas las actividades</option></select></div>
     </div>
@@ -716,8 +658,6 @@ button.gbar:hover{background:var(--sur2);}
       </select>
       <div class="vtg" role="group" aria-label="Vista">
         <button class="vt" id="vt-c" data-v="cards" aria-pressed="true"><span class="ico" aria-hidden="true">grid_view</span><span class="lbl">Tarjetas</span></button>
-        <button class="vt" id="vt-t" data-v="tab" aria-pressed="false"><span class="ico" aria-hidden="true">table_rows</span><span class="lbl">Tabla</span></button>
-        <button class="vt" id="vt-g" data-v="graf" aria-pressed="false"><span class="ico" aria-hidden="true">bar_chart</span><span class="lbl">Gráficos</span></button>
         <button class="vt" id="vt-m" data-v="map" aria-pressed="false"><span class="ico" aria-hidden="true">map</span><span class="lbl">Mapa</span></button>
         <button class="vt" id="vt-k" data-v="kb" aria-pressed="false"><span class="ico" aria-hidden="true">menu_book</span><span class="lbl">Guía</span></button>
       </div>
@@ -743,10 +683,6 @@ button.gbar:hover{background:var(--sur2);}
   <div id="vc"><div class="cgrid" id="cgrid"></div></div>
 
   <div id="vk"></div>
-
-  <div id="vtab"></div>
-
-  <div id="vg"></div>
 
   <div id="vm">
     <div id="map" aria-label="Mapa de instituciones educativas"></div>
@@ -939,10 +875,6 @@ function init(){
   fillSelect('f-pjc',countBy(function(ie){return ie.prg_jc;}),alpha);
   SVC.forEach(function(s){$('c-'+s.k).textContent=DATA.filter(function(ie){return ie[s.k];}).length;});
   var cnt=function(fn){return DATA.filter(fn).length;};
-  $('c-adu').textContent=cnt(function(ie){return ie.s.adu;});
-  $('c-disc').textContent=cnt(function(ie){return (ie.s.disc||[]).length;});
-  $('c-cap').textContent=cnt(function(ie){return (ie.s.cap||[]).length;});
-  $('c-rural').textContent=cnt(function(ie){return ie._rural;});
   if(typeof SINEB_META!=='undefined')$('sineb-date').textContent=SINEB_META.fecha;
   /* Modelos flexibles: chips con n.º de instituciones y estudiantes */
   var cntM=function(v){var ies=0,est=0;DATA.forEach(function(ie){var r=ie._g.filter(function(g){return modMatch(g.m,v);});if(r.length){ies++;est+=sumE(r);}});return [ies,est];};
@@ -976,7 +908,7 @@ function init(){
   $('mleg').innerHTML='';
   $('map-color').addEventListener('change',function(){MAPCOLOR=this.value;if(MAP)renderMap(filtrar(),true);});
 
-  [['f-com','com'],['f-gr','gr'],['f-nuc','nuc'],['f-pmt','pmt'],['f-pjc','pjc'],['f-trt','trt'],['f-tipo','tipo'],['f-esp','esp'],['f-gen','gen']].forEach(function(p){
+  [['f-com','com'],['f-gr','gr'],['f-nuc','nuc'],['f-pmt','pmt'],['f-pjc','pjc'],['f-tipo','tipo'],['f-esp','esp'],['f-gen','gen']].forEach(function(p){
     $(p[0]).addEventListener('change',function(){F[p[1]]=this.value;update();});
   });
   var runSearch=debounce(function(v){F.q=nq(v);update();},160);
@@ -984,7 +916,7 @@ function init(){
   if(window.matchMedia('(max-width:640px)').matches)$('q-txt').placeholder='Institución, sede, barrio o DANE';
   $('q-txt').addEventListener('input',function(){var x=$('srch');x.value=this.value;x.dispatchEvent(new Event('input'));});
   $('srch-clr').addEventListener('click',function(){$('srch').value='';this.classList.remove('show');F.q='';update();$('srch').focus();});
-  document.querySelectorAll('.chip,.kpi[data-k]').forEach(function(b){b.addEventListener('click',function(){F[b.dataset.k]=!F[b.dataset.k];update();});});
+  document.querySelectorAll('.chip').forEach(function(b){b.addEventListener('click',function(){F[b.dataset.k]=!F[b.dataset.k];update();});});
   $('btn-reset').addEventListener('click',resetAll);
   $('sort').addEventListener('change',function(){SORT=this.value;SHOWN=PAGE;render();});
   document.querySelectorAll('.vt').forEach(function(b){b.addEventListener('click',function(){setView(b.dataset.v);});});
@@ -1031,8 +963,8 @@ function activeCount(){var n=0;for(var k in EMPTY_F)if(F[k]!==EMPTY_F[k])n++;ret
 function update(){SHOWN=PAGE;syncControls();render();makeTags();}
 function syncControls(){
   if($('q-txt').value!==$('srch').value)$('q-txt').value=$('srch').value;
-  document.querySelectorAll('.chip,.kpi[data-k]').forEach(function(b){b.setAttribute('aria-pressed',F[b.dataset.k]?'true':'false');});
-  $('f-com').value=F.com;$('f-nuc').value=F.nuc;$('f-pmt').value=F.pmt;$('f-pjc').value=F.pjc;$('f-trt').value=F.trt;
+  document.querySelectorAll('.chip').forEach(function(b){b.setAttribute('aria-pressed',F[b.dataset.k]?'true':'false');});
+  $('f-com').value=F.com;$('f-nuc').value=F.nuc;$('f-pmt').value=F.pmt;$('f-pjc').value=F.pjc;
   $('q-jor').value=F.jor;$('q-mf').value=F.mf;$('q-com').value=F.com;$('f-gr').value=F.gr;
   [['q-jor',F.jor],['q-mf',F.mf],['q-com',F.com]].forEach(function(x){$(x[0]).classList.toggle('set',!!x[1]);});
   document.querySelectorAll('.mchip').forEach(function(b){b.setAttribute('aria-pressed',F.mf===b.dataset.m?'true':'false');});
@@ -1055,7 +987,6 @@ function filtrar(){
     if(F.pae&&!ie.pae)return false;
     if(F.pmt&&ie.prg_mt.indexOf(F.pmt)===-1)return false;
     if(F.pjc&&ie.prg_jc.indexOf(F.pjc)===-1)return false;
-    if(F.trt&&(ie.trans_t||'').indexOf(F.trt)===-1)return false;
     var s=ie.s;
     ie._m=null;
     if(mfCrit()){var m=ie._g.filter(grpMatch);if(!m.length)return false;ie._m=m;}
@@ -1087,11 +1018,10 @@ function render(){
   $('cnt').textContent=lista.length;
   var rows=[];lista.forEach(function(ie){rowsOf(ie).forEach(function(g){rows.push(g);});});
   var est=sumE(rows),conMf=lista.filter(function(ie){return rowsOf(ie).length;}).length;
-  $('k-total').textContent=fmtN(lista.length);$('k-sedes').textContent=fmtN(conMf);$('k-grp').textContent=fmtN(rows.length);$('k-est').textContent=fmtN(est);
   var note=$('fd-note');
   if(mfCrit())note.innerHTML='<b>'+fmtN(rows.length)+' grupo'+(rows.length!==1?'s':'')+' · '+fmtN(est)+' estudiantes</b> en '+lista.length+(lista.length!==1?' instituciones':' institución')+' que cumplen lo elegido. Cada tarjeta muestra solo esos grupos.';
   else note.innerHTML='Todas las instituciones; '+fmtN(conMf)+' tienen grupos de modelos flexibles 2026. Elige un modelo para ver solo esas.';
-  if(VIEW==='cards')renderCards(lista);else if(VIEW==='kb')renderKB();else if(VIEW==='tab')renderTabla(lista);else if(VIEW==='graf')renderGraf(lista);else renderMap(lista);
+  if(VIEW==='cards')renderCards(lista);else if(VIEW==='kb')renderKB();else renderMap(lista);
 }
 
 /* Resumen de grupos por modelo (los que cumplen el filtro, si hay) */
@@ -1613,7 +1543,6 @@ function makeTags(){
   if(F.com)ft('com',comName(F.com)||F.com);
   if(F.nuc)ft('nuc','Núcleo '+F.nuc);
   SVC.forEach(function(s){if(F[s.k])ft(s.k,s.l);});
-  if(F.trt)ft('trt',F.trt);
   if(F.pmt)ft('pmt',F.pmt);
   if(F.pjc)ft('pjc',F.pjc);
   if(F.mf)ft('mf',F.mf==='*'?'Con modelos flexibles 2026':'Modelo: '+mfLbl(F.mf));
@@ -1656,13 +1585,13 @@ function kbArticles(){
   add('como-buscar','Empezar','Cómo encontrar una institución',
     '<p>El buscador reúne <b>todas las instituciones</b> y marca las que tienen grupos de <b>modelos flexibles 2026</b> (Brújula, Aceleración del Aprendizaje y Pensar 1, 2 y 3). Para ubicar rápido una institución:</p><ol>'
     +'<li>Escribe en el <b>buscador</b> el nombre de la institución, de la sede, el barrio o el código DANE.</li>'
-    +'<li>O usa <b>Encuentra una institución</b>: elige un modelo flexible (o «Con algún modelo flexible»), la jornada del grupo y la comuna. Solo quedan las instituciones que tienen un grupo de ese modelo <b>en esa jornada</b>. En el panel de filtros hay más: grado, servicios, inclusión y ubicación.</li>'
-    +'<li>Cambia de vista según lo que necesites: <b>Tarjetas</b> (resumen por institución), <b>Tabla</b> (un grupo por fila, ordenable y descargable en CSV), <b>Gráficos</b> y <b>Mapa</b>.</li></ol>'
+    +'<li>O usa <b>Encuentra una institución</b>: elige un modelo flexible (o «Con algún modelo flexible»), la jornada del grupo y la comuna. Solo quedan las instituciones que tienen un grupo de ese modelo <b>en esa jornada</b>. En el panel de filtros hay más: grado, tipo y especialidad, servicios y ubicación.</li>'
+    +'<li>Cambia de vista según lo que necesites: <b>Tarjetas</b> (resumen por institución), <b>Mapa</b> y <b>Guía</b>.</li></ol>'
     +'<p>La <b>Ficha</b> de cada institución abre en la pestaña «Modelos flexibles», con los grupos de cada sede. La pestaña <b>Oferta educativa</b> empieza por sus modelos flexibles 2026 (grados, jornadas y sedes) y sigue con la oferta registrada en SINEB.</p>'
     +'<p>Desde cada institución (tarjeta, ficha y mapa) está el botón amarillo <b>Busca tu cupo</b>, que lleva a la página de la Secretaría de Educación para solicitar o consultar un cupo.</p>',
     [],'La cifra de estudiantes es la matrícula por grupo que reporta el archivo de la Secretaría de Educación; puede cambiar durante el año.');
   add('enlaces','Empezar','Enlaces útiles',
-    '<p>Están siempre a mano en la franja azul bajo la cabecera:</p><ul>'
+    '<p>Están siempre a mano en la parte superior de la página:</p><ul>'
     +'<li><a href="https://www.medellin.edu.co/tucupo/" target="_blank" rel="noopener"><b>Busca tu cupo</b></a> (Secretaría de Educación de Medellín): para solicitar o consultar un cupo escolar en una institución oficial de Medellín.</li>'
     +'<li><a href="https://sineb.mineducacion.gov.co/bcol/app?service=page/BuscandoColegioBasico" target="_blank" rel="noopener"><b>Buscador de colegios a nivel nacional</b></a> (Ministerio de Educación, SINEB): consulta cualquier institución del país, oficial o privada, con sus sedes, jornadas y grados. Es la fuente de la pestaña «Oferta educativa».</li>'
     +'<li><a href="https://app.powerbi.com/view?r=eyJrIjoiZThmMjY3ZjQtZGE3Ni00YmU4LThlMzUtMTk3MTEzNTlmZDhjIiwidCI6IjljNDhlMDg4LTVlNDQtNGIwZC05M2EwLWVlYjJjNjEyN2MzZCIsImMiOjR9&amp;embedImagePlaceholder=true" target="_blank" rel="noopener"><b>Tableros Power BI</b></a>: tableros de datos para consulta y análisis.</li></ul>');
@@ -1731,7 +1660,7 @@ function kbArticles(){
     +'<tr><td><b>Responde a</b></td><td>¿Con qué metodología se enseña?</td><td>¿Qué grados puede cursar un adulto?</td></tr>'
     +'<tr><td><b>Ejemplo</b></td><td>Programa para Jóvenes en Extraedad y Adultos</td><td>CLEI 3 a 6 (6° a 11°)</td></tr></table>'
     +'<p>Normalmente van juntos. <b>Para saber si un adulto puede terminar un grado en una institución, fíjate en los ciclos CLEI.</b> En la ficha, la sección «Educación de jóvenes y adultos» une los dos datos y avisa cuando falta uno.</p>',
-    [['Con ciclos CLEI',{gr:'clei'}],['Con modelo para adultos',{adu:true}]],
+    [['Con ciclos CLEI',{gr:'clei'}]],
     'En unas pocas instituciones los dos datos no coinciden: registran ciclos CLEI sin modelo para adultos, o al revés. Probablemente son vacíos del registro; conviene confirmarlo con la institución.');
   add('normal','Referencia','Normal superior (formación complementaria)',
     '<p>Las escuelas normales superiores ofrecen, después del grado 11°, el <b>Programa de Formación Complementaria</b> (grados 12° y 13°, por semestres), que forma docentes para preescolar y básica primaria.</p>',
@@ -1761,7 +1690,7 @@ function kbArticles(){
     '<ul><li><b>Atiende discapacidad</b>: la institución registra estudiantes con algún tipo de discapacidad (física, intelectual, visual, auditiva, autismo, entre otras). La ficha muestra los tipos registrados.</li>'
     +'<li><b>Capacidades y talentos excepcionales</b>: registra atención a estudiantes con talentos en áreas como artes, ciencias o deporte.</li>'
     +'<li><b>Sede en zona rural</b>: al menos una sede está en zona rural.</li></ul>',
-    [['Atiende discapacidad',{disc:true}],['Talentos excepcionales',{cap:true}],['Zona rural',{rural:true}]]);
+    []);
   /* Datos */
   add('fuentes','Sobre los datos','Fuentes y actualización',
     '<ul><li><b>Modelos flexibles 2026</b> (Secretaría de Educación de Medellín): grupos, jornadas y estudiantes de cada institución con modelos flexibles. Ver <a href="#kb-mf-datos" data-kb="mf-datos">Sobre el archivo de modelos flexibles</a>.</li>'
@@ -1817,75 +1746,6 @@ function openKB(id,fromH){
   if(!fromH)history.replaceState(null,'','#kb-'+id);
 }
 
-/* ── TABLA para operarios: un grupo por fila, ordenable y descargable ── */
-var TSORT={k:'ie',d:1};
-var TCOLS=[['ie','Institución'],['s','Sede'],['com','Comuna'],['j','Jornada'],['m','Modelo'],['niv','Nivel'],['e','Estudiantes']];
-function tablaRows(lista){
-  var r=[];
-  lista.forEach(function(ie){rowsOf(ie).forEach(function(g){r.push({ie:tc(ie.nombre),dane:ie.dane,s:g.s,com:comName(ie.comuna)||ie.comuna,j:g.j,m:MODK[g.m].l,mk:g.m,niv:MODK[g.m].niv,e:g.e});});});
-  var k=TSORT.k,d=TSORT.d,ord=Object.keys(MODK);
-  return r.sort(function(a,b){
-    var x=k==='e'?a.e-b.e:k==='m'?ord.indexOf(a.mk)-ord.indexOf(b.mk):k==='j'?MF_JORS.indexOf(a.j)-MF_JORS.indexOf(b.j):String(a[k]).localeCompare(String(b[k]),'es');
-    return x*d||a.ie.localeCompare(b.ie,'es')||a.s.localeCompare(b.s,'es');});
-}
-function renderTabla(lista){
-  var r=tablaRows(lista),v=$('vtab');
-  v.innerHTML='<div class="tbl-wrap"><div class="tbl-head"><div><h2>Grupos de modelos flexibles</h2><p>'+fmtN(r.length)+' grupos · '+fmtN(sumE(r))+' estudiantes · '+lista.filter(function(ie){return rowsOf(ie).length;}).length+' instituciones. Clic en un encabezado para ordenar; clic en una fila para abrir la ficha.</p></div>'
-    +'<button class="btn-csv" id="btn-csv">'+ico('download',16)+'Descargar CSV</button></div>'
-    +'<div class="tbl"><table><thead><tr>'+TCOLS.map(function(c){var on=TSORT.k===c[0];
-      return '<th class="'+(c[0]==='e'?'n':'')+'" aria-sort="'+(on?(TSORT.d>0?'ascending':'descending'):'none')+'"><button data-ts="'+c[0]+'">'+c[1]+ico(on?(TSORT.d>0?'arrow_upward':'arrow_downward'):'unfold_more')+'</button></th>';}).join('')+'</tr></thead><tbody>'
-    +r.map(function(x){return '<tr data-open="'+H(x.dane)+'" data-tab="mf"><td>'+H(x.ie)+'</td><td>'+H(x.s)+'</td><td>'+H(x.com)+'</td><td>'+H(x.j)+'</td><td><span class="mtag">'+H(x.m)+'</span></td><td>'+H(x.niv)+'</td><td class="n">'+x.e+'</td></tr>';}).join('')
-    +'</tbody><tfoot><tr><td colspan="6">Total · '+fmtN(r.length)+' grupos</td><td class="n">'+fmtN(sumE(r))+'</td></tr></tfoot></table></div></div>';
-  v.querySelectorAll('[data-ts]').forEach(function(b){b.addEventListener('click',function(e){e.stopPropagation();var k=b.dataset.ts;TSORT=TSORT.k===k?{k:k,d:-TSORT.d}:{k:k,d:k==='e'?-1:1};renderTabla(filtrar());});});
-  $('btn-csv').addEventListener('click',function(){descargarCSV(r);});
-}
-function descargarCSV(r){
-  var q=function(x){x=String(x==null?'':x);return /[;"\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x;};
-  var lines=[['Institución','Código DANE','Sede','Comuna','Jornada','Modelo','Nivel','Estudiantes'].join(';')]
-    .concat(r.map(function(x){return [x.ie,x.dane,x.s,x.com,x.j,x.m,x.niv,x.e].map(q).join(';');}));
-  var blob=new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='modelos_flexibles_2026'+(activeCount()?'_filtrado':'')+'.csv';
-  document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500);
-  toast('Descargado: '+r.length+' grupos');
-}
-
-/* ── GRÁFICOS: barras de un solo tono con valor visible; clic = filtrar ── */
-function renderGraf(lista){
-  var rows=[];lista.forEach(function(ie){rowsOf(ie).forEach(function(g){rows.push({g:g,ie:ie});});});
-  var est=rows.reduce(function(a,x){return a+x.g.e;},0),v=$('vg');
-  if(!rows.length){v.innerHTML='<div class="gwrap"><div class="empty">'+ico('bar_chart')+'<h3>Sin datos</h3><p>Ningún grupo coincide con los filtros actuales.</p><button onclick="resetAll()">Limpiar filtros</button></div></div>';return;}
-  var by=function(f){var o={};rows.forEach(function(x){var k=f(x);var t=o[k]||(o[k]={g:0,e:0,ies:{}});t.g++;t.e+=x.g.e;t.ies[x.ie.dane]=1;});return o;};
-  var bars=function(items,mx,attr){return items.map(function(it){var on=attr&&F[attr[0]]===it.v;
-    var tag=attr?'button':'div';
-    return '<'+tag+' class="gbar"'+(attr?' data-f="'+attr[0]+'" data-v="'+H(it.v)+'" aria-pressed="'+on+'"':'')+' title="'+H(it.l)+': '+fmtN(it.e)+' estudiantes en '+it.g+' grupos">'
-      +'<span class="gl">'+H(it.l)+(it.sub?'<small>'+H(it.sub)+'</small>':'')+'</span><span class="gv"><b>'+fmtN(it.e)+'</b> <em>est. · '+it.g+' grupo'+(it.g!==1?'s':'')+'</em></span>'
-      +'<span class="gt"><i style="width:'+(it.e*100/mx).toFixed(1)+'%"></i></span></'+tag+'>';}).join('');};
-  var bm=by(function(x){return x.g.m;});
-  var mods=MODS.concat([MIX]).filter(function(m){return bm[m.k];}).map(function(m){return {v:m.k==='MIX'?'':m.k,l:m.l,sub:m.niv,e:bm[m.k].e,g:bm[m.k].g};});
-  var bj=by(function(x){return x.g.j;});
-  var jors=MF_JORS.filter(function(j){return bj[j];}).map(function(j){return {v:j,l:j,e:bj[j].e,g:bj[j].g};});
-  var bi=by(function(x){return x.ie.dane;});
-  var top=Object.keys(bi).sort(function(a,b){return bi[b].e-bi[a].e;}).slice(0,15).map(function(d){return {d:d,l:tc(byDane(d).nombre),e:bi[d].e,g:bi[d].g};});
-  var mxE=function(a){return Math.max.apply(null,a.map(function(x){return x.e;}).concat([1]));};
-  /* Por comuna: estudiantes por modelo */
-  var com={};rows.forEach(function(x){var c=x.ie.comuna,t=com[c]||(com[c]={tot:0,g:0,m:{}});t.tot+=x.g.e;t.g++;t.m[x.g.m]=(t.m[x.g.m]||0)+x.g.e;});
-  var cmx=Math.max.apply(null,Object.keys(com).map(function(c){return com[c].tot;}));
-  var cols=MODS.concat([MIX]).filter(function(m){return bm[m.k];});
-  var tabla='<table class="gtab"><thead><tr><th>Comuna / corregimiento</th>'+cols.map(function(m){return '<th class="hide-m">'+H(m.l)+'</th>';}).join('')+'<th>Grupos</th><th>Estudiantes</th></tr></thead><tbody>'
-    +Object.keys(com).sort(function(a,b){return com[b].tot-com[a].tot;}).map(function(c){var t=com[c];
-      return '<tr data-f="com" data-v="'+H(c)+'" class="'+(F.com===c?'on':'')+'" title="Clic para filtrar por '+H(comName(c)||c)+'"><td>'+H(comName(c)||c)+'</td>'+cols.map(function(m){return '<td class="hide-m">'+(t.m[m.k]?fmtN(t.m[m.k]):'–')+'</td>';}).join('')
-        +'<td>'+t.g+'</td><td class="tot"><span class="tb" style="width:'+Math.round(t.tot*60/cmx)+'px"></span>'+fmtN(t.tot)+'</td></tr>';}).join('')+'</tbody></table>';
-  v.innerHTML='<div class="gwrap">'
-    +'<div class="gkpis"><div><b>'+fmtN(lista.filter(function(ie){return rowsOf(ie).length;}).length)+'</b><span>instituciones con grupos</span></div><div><b>'+fmtN(lista.reduce(function(a,ie){return a+nSedes(rowsOf(ie));},0))+'</b><span>sedes</span></div><div><b>'+fmtN(rows.length)+'</b><span>grupos</span></div><div><b>'+fmtN(est)+'</b><span>estudiantes</span></div><div><b>'+(est/rows.length).toFixed(1).replace('.',',')+'</b><span>estudiantes por grupo (promedio)</span></div></div>'
-    +'<div class="ggrid">'
-      +'<section class="gcard"><h3>Estudiantes por modelo</h3><p class="sub">Clic en un modelo para filtrar.</p>'+bars(mods,mxE(mods),['mf'])+'</section>'
-      +'<section class="gcard"><h3>Estudiantes por jornada</h3><p class="sub">Jornada en la que funciona cada grupo. Clic para filtrar.</p>'+bars(jors,mxE(jors),['jor'])+'</section>'
-      +'<section class="gcard wide"><h3>Por comuna y corregimiento</h3><p class="sub">Estudiantes por modelo en cada comuna de la institución. Clic en una fila para filtrar.</p>'+tabla+'</section>'
-      +'<section class="gcard wide"><h3>Instituciones con más estudiantes en modelos flexibles</h3><p class="sub">Las 15 primeras de la selección. Clic para abrir la ficha.</p>'
-        +top.map(function(t){return '<button class="gbar" data-open="'+H(t.d)+'" data-tab="mf" title="'+H(t.l)+'"><span class="gl">'+H(t.l)+'</span><span class="gv"><b>'+fmtN(t.e)+'</b> <em>est. · '+t.g+' grupo'+(t.g!==1?'s':'')+'</em></span><span class="gt"><i style="width:'+(t.e*100/top[0].e).toFixed(1)+'%"></i></span></button>';}).join('')+'</section>'
-    +'</div><p class="gnote">Fuente: Secretaría de Educación de Medellín, IE con modelos flexibles 2026. Un grupo es una fila del archivo (sede · jornada · modelo). El grupo mixto Aceleración + Brújula se muestra aparte. <button class="kb-link" data-kb="mf-datos">Ver aclaraciones de los datos</button></p></div>';
-}
-
 function setView(v,keep){
   VIEW=v;
   if(v!=='kb'&&/^#kb-/.test(location.hash))history.replaceState(null,'',location.pathname+location.search);
@@ -1893,11 +1753,7 @@ function setView(v,keep){
   $('vc').style.display=v==='cards'?'block':'none';
   $('vm').style.display=v==='map'?'block':'none';
   $('vk').style.display=v==='kb'?'block':'none';
-  $('vtab').style.display=v==='tab'?'block':'none';
-  $('vg').style.display=v==='graf'?'block':'none';
   $('finder').hidden=v==='kb';
-  $('vt-t').setAttribute('aria-pressed',v==='tab');
-  $('vt-g').setAttribute('aria-pressed',v==='graf');
   $('vt-c').setAttribute('aria-pressed',v==='cards');
   $('vt-m').setAttribute('aria-pressed',v==='map');
   $('vt-k').setAttribute('aria-pressed',v==='kb');
