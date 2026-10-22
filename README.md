@@ -26,7 +26,8 @@ Los tres enlaces también están en la franja azul de la parte superior del busc
    - **Gráficos**: estudiantes por modelo, jornada y comuna. Un clic en una barra filtra.
    - **Mapa**: ubicación de la sede principal. 4 instituciones privadas no tienen coordenadas.
    - **Guía**: qué es cada modelo y cómo leer los datos.
-4. **Ficha**: abre el detalle de la institución con los grupos por sede, contacto, oferta, sedes y servicios.
+4. **Ficha**: abre el detalle de la institución con los grupos por sede, contacto, oferta educativa (empieza por sus modelos flexibles 2026), sedes y servicios.
+5. **Busca tu cupo**: el botón amarillo está en cada tarjeta, ficha y punto del mapa.
 
 ### Los modelos
 

@@ -233,6 +233,27 @@ body.map-full #tb,body.map-full #sb{visibility:hidden;}
 .m-actions{display:flex;flex-wrap:wrap;gap:8px;padding:0 22px 16px;background:var(--sur2);border-bottom:1px solid var(--bdr);}
 .m-act{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:8px;border:1px solid var(--bdr2);background:var(--sur);color:var(--ink2);font-size:12.5px;font-weight:600;text-decoration:none;transition:all .15s;}
 .m-act:hover{border-color:var(--acc);color:var(--acc);}
+.m-act.cupo,.cupo-btn{background:var(--am-amarillo);border-color:#e6c200;color:#0E1B24;}
+.m-act.cupo:hover,.cupo-btn:hover{background:#ffe55c;border-color:#0E1B24;color:#0E1B24;}
+.cfoot a.cupo{color:#0E1B24;background:#fff6c4;}
+.cfoot a.cupo:hover{background:var(--am-amarillo);color:#0E1B24;}
+.mpop-cupo{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:6px;padding:7px;border-radius:8px;background:var(--am-amarillo);color:#0E1B24!important;font-weight:600;font-size:12.5px;text-decoration:none;}
+.mpop-cupo .ico{font-size:15px;}
+.omf{display:grid;gap:8px;}
+.omf-r{border:1px solid var(--bdr);border-left:4px solid var(--am-azul);border-radius:10px;padding:10px 12px;background:var(--sur);}
+.omf-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.omf-h b{font-size:14.5px;color:var(--am-prof);}
+.omf-niv{font-size:11.5px;font-weight:600;color:var(--am-prof);background:#e6f7fd;border-radius:10px;padding:2px 8px;}
+.omf-d{display:flex;gap:6px;align-items:flex-start;font-size:12.5px;color:var(--ink2);margin-top:5px;}
+.omf-d .ico{font-size:15px;color:var(--ink3);margin-top:1px;}
+.omf-f{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.omf-n{font-family:var(--mono);font-size:12px;color:var(--ink2);}
+.omf-b{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--acc);background:none;border:1px solid var(--bdr2);border-radius:8px;padding:5px 10px;}
+.omf-b:hover{border-color:var(--acc);}
+.cupo-cta{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:12px;padding:12px 14px;border-radius:10px;background:#fff9d9;border:1px solid #f0dc7a;}
+.cupo-cta>div{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:#3d3300;line-height:1.45;flex:1 1 260px;}
+.cupo-cta>div .ico{color:#8a6d00;}
+.cupo-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:1px solid #e6c200;font-size:13px;font-weight:700;text-decoration:none;}
 .m-act.primary{background:var(--acc);border-color:var(--acc);color:#fff;}
 .m-act.primary:hover{background:var(--accl);color:#fff;}
 .m-act .ico{font-size:14px;}
@@ -1060,6 +1081,9 @@ function render(){
 }
 
 /* Resumen de grupos por modelo (los que cumplen el filtro, si hay) */
+/* Busca tu cupo (Secretaría de Educación de Medellín): accesible desde toda institución */
+var TUCUPO='https://www.medellin.edu.co/tucupo/';
+function cupoA(cls,txt){return '<a class="'+cls+'" href="'+TUCUPO+'" target="_blank" rel="noopener" title="Solicitar o consultar un cupo escolar (abre medellin.edu.co)">'+ico('how_to_reg')+(txt||'Busca tu cupo')+'</a>';}
 function mfResumen(rows){
   var o={};rows.forEach(function(g){var x=o[g.m]||(o[g.m]={g:0,e:0,j:{}});x.g++;x.e+=g.e;x.j[g.j]=1;});
   return MODS.concat([MIX]).filter(function(m){return o[m.k];}).map(function(m){return {m:m,g:o[m.k].g,e:o[m.k].e,j:MF_JORS.filter(function(j){return o[m.k].j[j];})};});
@@ -1112,8 +1136,9 @@ function renderCards(lista){
       +'</div>'+cardOferta(ie)+'</div>'
       +'<div class="cfoot">'
       +(tel?'<a href="tel:'+H(tel.replace(/\D/g,''))+'">'+ico('phone')+'Llamar</a>':'')
-      +(ie.lat?'<button data-locate="'+H(ie.dane)+'">'+ico('map')+'Ver en mapa</button>':'')
+      +(ie.lat?'<button data-locate="'+H(ie.dane)+'" title="Ver en el mapa">'+ico('map')+'Mapa</button>':'')
       +'<button data-open="'+H(ie.dane)+'">'+ico('arrow')+'Ficha</button>'
+      +cupoA('cupo','Cupo')
       +'</div></article>';
   }).join('');
   if(lista.length>SHOWN)h+='<div class="more"><button onclick="SHOWN+='+PAGE+';render();">Mostrar más ('+(lista.length-SHOWN)+' restantes)</button></div>';
@@ -1206,7 +1231,7 @@ function popHtml(ie){
     +'<div class="svc-row">'+svBadges(ie,true)+'</div>'
     +'<p>'+H(ie.dir||'')+'<br>'+H(phones(ie.tel)[0]||'Tel. N/D')+'</p>'
     +(ie.s.jor?'<p><b>Jornadas:</b> '+H(ie.s.jor.join(', '))+'<br><b>Grados:</b> '+H(grSummary(ie.s.gr))+'</p>':'')
-    +'<button class="mpop-btn" data-open="'+H(ie.dane)+'" data-tab="mf">Ver grupos y ficha '+ico('arrow',13)+'</button></div>';
+    +'<button class="mpop-btn" data-open="'+H(ie.dane)+'" data-tab="mf">Ver grupos y ficha '+ico('arrow',13)+'</button>'+cupoA('mpop-cupo')+'</div>';
 }
 function mapBtn(title,icon,fn){
   var C=L.Control.extend({options:{position:'topleft'},onAdd:function(){
@@ -1293,6 +1318,7 @@ function openM(ie,tab,fromH){
   $('m-meta').textContent='DANE '+ie.dane+(ie.nit?' · NIT '+ie.nit:'')+(ie.nucleo?' · Núcleo '+ie.nucleo:'');
   var tel=phones(ie.tel)[0],a='';
   if(ie.lat&&ie.lon)a+='<a class="m-act primary" href="'+dirUrl(ie)+'" target="_blank" rel="noopener">'+ico('nav')+'Cómo llegar</a>';
+  a+=cupoA('m-act cupo');
   if(tel)a+='<a class="m-act" href="tel:'+H(tel.replace(/\D/g,''))+'">'+ico('phone')+'Llamar</a>';
   if(ie.correo)a+='<a class="m-act" href="mailto:'+H(ie.correo)+'">'+ico('mail')+'Correo</a>';
   if(ie.lat&&ie.lon)a+='<button class="m-act" data-locate="'+H(ie.dane)+'">'+ico('map')+'Ver en mapa</button>';
@@ -1417,6 +1443,19 @@ function buildInfo(ie){
 function buildOferta(ie){
   var b=$('tp-ofe'),s=ie.s;b.innerHTML='';
   var gr=s.gr||[];
+  /* Modelos flexibles 2026 (Secretaría de Educación): lo primero de la oferta */
+  var s0=mkSec('Modelos flexibles 2026','mf-guia'),all=ie._g;
+  s0.insertAdjacentHTML('beforeend','<div class="omf">'+mfResumen(all).map(function(x){
+    var sd={};all.forEach(function(g){if(g.m===x.m.k)sd[g.s]=1;});
+    var fk=x.m.k==='MIX'?'':x.m.k;
+    return '<div class="omf-r"><div class="omf-h"><b>'+H(x.m.l)+'</b><span class="omf-niv">'+H(x.m.niv)+'</span>'+kbq(x.m.kb,'¿Qué es '+x.m.l+'?')+'</div>'
+      +'<div class="omf-d">'+ico('clock')+'<span>'+H(x.j.join(' · '))+'</span></div>'
+      +'<div class="omf-d">'+ico('domain')+'<span>'+H(Object.keys(sd).sort(alpha).join(' · '))+'</span></div>'
+      +'<div class="omf-f"><span class="omf-n">'+x.g+' grupo'+(x.g!==1?'s':'')+' · <b>'+fmtN(x.e)+'</b> est.</span>'
+      +(fk?'<button class="omf-b" data-of="'+fk+'">'+ico('search',13)+'Otras instituciones con '+H(x.m.l)+'</button>':'')+'</div></div>';}).join('')+'</div>'
+    +'<div class="cupo-cta"><div>'+ico('how_to_reg',22)+'<span><b>¿Necesitas un cupo en esta institución?</b><br>Solicítalo o consulta su estado en Busca tu cupo, de la Secretaría de Educación.</span></div>'+cupoA('cupo-btn')+'</div>');
+  s0.querySelectorAll('[data-of]').forEach(function(t){t.addEventListener('click',function(){var k=t.dataset.of;closeM();applyF('mf',k,true);});});
+  b.appendChild(s0);
   /* Jornadas: todas en orden fijo, marcadas las que ofrece */
   var s1=mkSec('Jornadas escolares','jornadas');
   s1.insertAdjacentHTML('beforeend','<div class="pills">'+JORS.map(function(j){var on=(s.jor||[]).indexOf(j)>-1;return '<span class="pill '+(on?'on':'off')+'">'+j+'</span>';}).join('')+'</div>');
@@ -1434,16 +1473,15 @@ function buildOferta(ie){
   b.appendChild(s2);
   b.appendChild(buildAdultos(ie));
   /* Modelos flexibles: la información operativa está en la pestaña «Modelos flexibles» */
-  var s3=mkSec('Modelos flexibles según SINEB','mf-datos');
-  s3.insertAdjacentHTML('beforeend','<p class="mini-note" style="margin-bottom:8px">Los grupos y estudiantes 2026 están en la pestaña <b>Modelos flexibles</b>. Abajo, lo que registra la base del Ministerio.</p>');
+  var s3=mkSec('Otros modelos registrados en SINEB','mf-datos');
+  s3.insertAdjacentHTML('beforeend','<p class="mini-note" style="margin-bottom:8px">Lo que registra la base del Ministerio de Educación; puede incluir modelos distintos de los de 2026.</p>');
   if((s.mf||[]).length){
     var ad=s.mfad||[];
     [['Para niños y jóvenes',s.mf.filter(function(m){return ad.indexOf(m)===-1;})],['Para jóvenes y adultos',s.mf.filter(function(m){return ad.indexOf(m)>-1;})]].forEach(function(gp){
       if(!gp[1].length)return;
       s3.insertAdjacentHTML('beforeend','<p class="mf-grp">'+gp[0]+'</p>');
       var tg=document.createElement('div');tg.className='tags';
-      gp[1].forEach(function(m){var t=document.createElement('button');t.className='tag';t.textContent=m;t.title='Ver instituciones con este modelo';
-        t.addEventListener('click',function(){closeM();applyF('mf',m,true);});tg.appendChild(t);});
+      gp[1].forEach(function(m){var t=document.createElement('span');t.className='tag';t.textContent=m;tg.appendChild(t);});
       s3.appendChild(tg);
     });
     s3.insertAdjacentHTML('beforeend','<p class="mini-note" style="margin-top:8px">Alternativas a la educación tradicional para estudiantes en extraedad, con rezago escolar o adultos.</p>');
@@ -1605,7 +1643,8 @@ function kbArticles(){
     +'<li>Escribe en el <b>buscador</b> el nombre de la institución, de la sede, el barrio o el código DANE.</li>'
     +'<li>O usa <b>Encuentra una institución</b>: elige el modelo, la jornada y la comuna. Solo quedan las instituciones que tienen un grupo de ese modelo <b>en esa jornada</b>.</li>'
     +'<li>Cambia de vista según lo que necesites: <b>Tarjetas</b> (resumen por institución), <b>Tabla</b> (un grupo por fila, ordenable y descargable en CSV), <b>Gráficos</b> y <b>Mapa</b>.</li></ol>'
-    +'<p>La <b>Ficha</b> de cada institución abre en la pestaña «Modelos flexibles», con los grupos de cada sede; las demás pestañas traen contacto, oferta, sedes y servicios.</p>',
+    +'<p>La <b>Ficha</b> de cada institución abre en la pestaña «Modelos flexibles», con los grupos de cada sede. La pestaña <b>Oferta educativa</b> empieza por sus modelos flexibles 2026 (grados, jornadas y sedes) y sigue con la oferta registrada en SINEB.</p>'
+    +'<p>Desde cada institución (tarjeta, ficha y mapa) está el botón amarillo <b>Busca tu cupo</b>, que lleva a la página de la Secretaría de Educación para solicitar o consultar un cupo.</p>',
     [],'La cifra de estudiantes es la matrícula por grupo que reporta el archivo de la Secretaría de Educación; puede cambiar durante el año.');
   add('enlaces','Empezar','Enlaces útiles',
     '<p>Están siempre a mano en la franja azul bajo la cabecera:</p><ul>'
