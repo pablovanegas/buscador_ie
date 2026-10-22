@@ -34,6 +34,9 @@ ROOT = Path(__file__).resolve().parent.parent
 HTML = ROOT / "index.html"
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 SRC = Path(ARGS[0]) if ARGS else ROOT / "datos/fuente/colegios_medellin_sineb.xlsx"
+# Grupos de modelos flexibles 2026 (Secretaría de Educación): define qué instituciones muestra la página
+SRC_MF = ROOT / "datos/fuente/IE_con_Modelos_Flexibles_2026_V2.xlsx"
+MF_COD = {"BRUJULA": "BRU", "ACELERACIÓN": "ACE", "AA./BRUJ": "MIX", "PENSAR 1": "P1", "PENSAR 2": "P2", "PENSAR 3": "P3"}
 OUT = ROOT / "datos"
 
 # ── utilidades de texto ──────────────────────────────────────────────
@@ -121,11 +124,21 @@ def fijos(v):
     return [t for t in phones(v) if es_fijo(t)]
 
 
+def sin_nocturna(v):
+    """Quita NOCTURNA de una lista de jornadas, conservando el separador original."""
+    if not isinstance(v, str):
+        return v
+    sep = ", " if ", " in v else ","
+    return sep.join(p for p in split_list(v) if p.upper() != "NOCTURNA") or None
+
+
 def sanear_df(df):
-    """Quita rectores, correos personales y celulares de cualquier hoja de la base."""
-    df = df.drop(columns=[c for c in df.columns if "rector" in c.lower()])
+    """Quita rectores, correos personales, celulares y la jornada nocturna de cualquier hoja de la base."""
+    df = df.drop(columns=[c for c in df.columns if "rector" in c.lower() or "nocturn" in c.lower()])
     for c in df.columns:
-        if c.lower().startswith("correo"):
+        if c.lower().startswith("jornada"):
+            df[c] = df[c].map(sin_nocturna)
+        elif c.lower().startswith("correo"):
             df[c] = df[c].map(lambda v: " ".join(correos_inst(v)) or None)
         elif c.lower().startswith("teléfono"):
             df[c] = df[c].map(lambda v: " - ".join(fijos(v)) or None)
@@ -146,7 +159,7 @@ def grades(v):
 
 
 # Orden fijo de jornadas (igual en filtros, tarjetas y estadísticas)
-# La jornada NOCTURNA se excluye a propósito: el buscador no publica esa información.
+# La jornada NOCTURNA se excluye a propósito: el proyecto no publica esa información (ni en la página ni en los Excel).
 JORNADAS = [("MAÑANA", "Mañana"), ("TARDE", "Tarde"), ("ÚNICA", "Única"),
             ("COMPLETA", "Completa"), ("FIN DE SEMANA", "Fin de semana")]
 JOR_MAP = dict(JORNADAS)
@@ -166,6 +179,26 @@ def load_html_data():
     html = HTML.read_text(encoding="utf-8")
     line = next(l for l in html.split("\n") if l.startswith("var DATA="))
     return html, json.loads(line[len("var DATA="):].rstrip(";"))
+
+
+def cargar_modelos_flexibles(cons):
+    """Lee el archivo de grupos 2026 (hojas Brújula/Aceleración y Pensar) y cruza cada institución
+    con SINEB por nombre para obtener su código DANE. Devuelve {dane12: [[sede, comuna, jornada, modelo, estudiantes], ...]}."""
+    xl = pd.ExcelFile(SRC_MF)
+    hojas = [h for h in xl.sheet_names if "BRUJULA" in h.upper() or "PENSAR" in h.upper()]
+    df = pd.concat([xl.parse(h) for h in hojas], ignore_index=True)
+    df = df[df["SEDE"].notna() & df["GRUPO"].notna()]           # quita la fila "Total general"
+    df["COD"] = df["GRUPO"].astype(str).str.strip().str.upper().map(MF_COD)
+    assert df["COD"].notna().all(), f"Grupos sin código: {sorted(df[df['COD'].isna()]['GRUPO'].unique())}"
+    por_nombre = {norm(n): str(k) for n, k in zip(cons["Nombre"], cons["Código DANE"])}
+    df["_k"] = df["INSTITUCION"].map(lambda n: por_nombre.get(norm(n)))
+    sin = sorted(df[df["_k"].isna()]["INSTITUCION"].unique())
+    assert not sin, f"Instituciones del archivo sin código DANE en SINEB: {sin}"
+    mf = {}
+    for _, r in df.iterrows():
+        mf.setdefault(r["_k"], []).append([tc(r["SEDE"]), int(r["COMUNA"]), tc(r["JORNADA"]), r["COD"], int(r["Total"])])
+    print(f"Modelos flexibles 2026: {len(mf)} instituciones · {df['SEDE'].nunique()} sedes · {len(df)} grupos · {int(df['Total'].sum())} estudiantes")
+    return mf
 
 
 def main():
@@ -191,9 +224,28 @@ def main():
     missing_html = [k for k in html_by_key if k not in cons_k.index]
     print(f"HTML: {len(data)} | SINEB: {len(cons)} | cruzan: {len(matched)} | HTML sin SINEB: {len(missing_html)}")
 
+    # Modelos flexibles 2026: instituciones del archivo que no están en el buscador (privadas) se agregan
+    # con los datos de SINEB, sin coordenadas.
+    mf12 = cargar_modelos_flexibles(cons) if SRC_MF.exists() else {}
+    comuna_lbl = {r["comuna"].split(" - ")[0]: r["comuna"] for r in data if r.get("comuna")}
+    extras, dkey = [], {k: html_by_key[k]["dane"] for k in matched}
+    for k in sorted(set(mf12) - set(html_by_key)):
+        c = cons_k.loc[k]
+        num = str(mf12[k][0][1])
+        dkey[k] = k + "01"
+        extras.append({
+            "nombre": str(c["Nombre"]), "dane": k + "01", "nit": "", "nucleo": "",
+            "tel": " - ".join(fijos(c["Teléfono"])), "correo": " ".join(correos_inst(c["Correo electrónico"])),
+            "dir": c["Dirección"] if isinstance(c["Dirección"], str) else "", "barrio": "",
+            "comuna": comuna_lbl.get(num, num), "rector": None,
+            "trans": False, "trans_t": "", "mt": False, "jc": False, "pae": False, "prg_mt": [], "prg_jc": [],
+            "lat": None, "lon": None, "privada": c["Sector"] == "NO OFICIAL",
+        })
+        extras[-1].pop("rector")
+
     # ── registro compacto por institución ───────────────────────────
     sineb = {}
-    for k in matched:
+    for k in matched + [e["dane"][:12] for e in extras]:
         c, f = cons_k.loc[k], filt_k.loc[k]
         s_rows = sedes[sedes["_k"] == k].sort_values("Código sede")
         sed = []
@@ -233,7 +285,7 @@ def main():
             "act": str(c["Actualizado"])[:10],
         }
         # Elimina listas vacías para aligerar el HTML
-        sineb[html_by_key[k]["dane"]] = {a: b for a, b in rec.items() if b not in ([], "", None)}
+        sineb[dkey[k]] = {a: b for a, b in rec.items() if b not in ([], "", None)}
 
     # ── inserta / reemplaza la línea SINEB en el HTML ───────────────
     leeme = " ".join(str(v) for v in xl.parse("Leeme").iloc[:, 0])
@@ -242,10 +294,17 @@ def main():
     line = "var SINEB=" + json.dumps(sineb, ensure_ascii=False, separators=(",", ":")) + ";"
     meta_line = "var SINEB_META=" + json.dumps(meta, ensure_ascii=False) + ";"
     lines = html.split("\n")
-    lines = [l for l in lines if not l.startswith("var SINEB=") and not l.startswith("var SINEB_META=")]
+    lines = [l for l in lines if not l.startswith(("var SINEB=", "var SINEB_META=", "var MF=", "var MF_EXTRA=", "var MF_META="))]
     i = next(n for n, l in enumerate(lines) if l.startswith("var DATA="))
     lines[i] = "var DATA=" + json.dumps(data, ensure_ascii=False) + ";"
-    lines[i + 1:i + 1] = [line, meta_line]
+    mf = {dkey[k]: v for k, v in mf12.items()}
+    est = sum(r[4] for v in mf.values() for r in v)
+    mf_meta = {"fuente": "Secretaría de Educación de Medellín – IE con modelos flexibles 2026 (V2)",
+               "instituciones": len(mf), "grupos": sum(len(v) for v in mf.values()), "estudiantes": est}
+    lines[i + 1:i + 1] = [line, meta_line,
+                          "var MF=" + json.dumps(mf, ensure_ascii=False, separators=(",", ":")) + ";",
+                          "var MF_EXTRA=" + json.dumps(extras, ensure_ascii=False, separators=(",", ":")) + ";",
+                          "var MF_META=" + json.dumps(mf_meta, ensure_ascii=False) + ";"]
     HTML.write_text("\n".join(lines), encoding="utf-8")
     print(f"index.html actualizado: SINEB con {len(sineb)} instituciones ({len(line)/1024:.0f} KB)")
 
@@ -310,10 +369,10 @@ def main():
     print("datos/reporte_cruce_html_sineb.xlsx")
     print(stats.to_string(index=False))
 
-    exportar_clei(cons, sedes, html_by_key, mod_adultos)
+    exportar_oferta(cons, sedes, html_by_key, mods)
 
 
-# ── Excel 3: instituciones con CLEI activo ───────────────────────────
+# ── Excel 3: oferta para jóvenes y adultos (CLEI y modelos flexibles) ──
 def cleis(gr):
     return [g for g in gr if 20 <= g <= 26]
 
@@ -330,119 +389,140 @@ def clei_txt(gr):
     return "CLEI " + ", ".join(map(str, n[:-1])) + f" y {n[-1]}"
 
 
-def exportar_clei(cons, sedes, html_by_key, mod_adultos):
-    """Una fila por institución con CLEI, con columnas que distinguen fin de semana e inclusión.
-    La jornada nocturna se omite (decisión del proyecto) y los contactos son solo institucionales."""
+def exportar_oferta(cons, sedes, html_by_key, mods):
+    """Libro instituciones_clei.xlsx: una fila por institución (buscador y base SINEB) con CLEI,
+    fin de semana, modelos flexibles e inclusión. Solo contactos institucionales."""
     si_no = lambda b: "Sí" if b else "No"
-    filas, filas_sede = [], []
+    # Modelos flexibles por institución y su población
+    pobl = {tc(m): ("Adultos" if p == "ADULTOS" else "Niños y jóvenes") for m, p in zip(mods["Modelo"], mods["Población"])}
+    mod_inst = {str(k): sorted({tc(m) for m in g["Modelo"]}) for k, g in mods.groupby("Código DANE")}
+    modelos = sorted(pobl, key=lambda m: (pobl[m] != "Niños y jóvenes", m))
+
+    filas = []
     for _, c in cons.iterrows():
-        gr = grades(c["Grados (códigos)"])
-        if not cleis(gr):
-            continue
         k = c["_k"]
         h = html_by_key.get(k)
-        sd = sedes[sedes["_k"] == k]
+        gr = grades(c["Grados (códigos)"])
         jor = jornadas(c["Jornadas (ficha)"])
-        # sedes donde se ofrece CLEI y fin de semana a la vez
-        sedes_fs = []
+        sd = sedes[sedes["_k"] == k]
+        s_fs = []
         for _, x in sd.iterrows():
             xgr, xjor = grades(x["Grados (códigos)"]), jornadas(x["Jornadas"])
-            filas_sede.append({
-                "DANE institución": k, "Institución": tc(c["Nombre"]), "En el buscador": si_no(h),
-                "Código sede": str(x["Código sede"]), "Sede": tc(x["Nombre sede"]),
-                "Dirección": x["Dirección"] if isinstance(x["Dirección"], str) else "",
-                "Teléfono fijo": " - ".join(fijos(x["Teléfono"])), "Zona": tc(x["Zona"]),
-                "Jornadas": ", ".join(xjor), "Ciclos CLEI": clei_txt(xgr),
-                "Fin de semana": si_no("Fin de semana" in xjor),
-                "CLEI y fin de semana en la sede": si_no(cleis(xgr) and "Fin de semana" in xjor),
-            })
             if cleis(xgr) and "Fin de semana" in xjor:
-                sedes_fs.append(tc(x["Nombre sede"]))
-        rural = "RURAL" in str(c["Zona"]).upper() or sd["Zona"].astype(str).str.upper().eq("RURAL").any()
+                s_fs.append(tc(x["Nombre sede"]))
+        mf = mod_inst.get(k, [])
         disc = [tc(d) for d in split_list(c["Discapacidades"])]
-        fila = {
+        rural = "RURAL" in str(c["Zona"]).upper() or sd["Zona"].astype(str).str.upper().eq("RURAL").any()
+        f = {
             "DANE institución": k, "Institución": tc(c["Nombre"]), "Sector": tc(c["Sector"]),
-            "En el buscador": si_no(h),
-            "Comuna": h["comuna"] if h else "", "Núcleo": h["nucleo"] if h else "",
+            "En el buscador": si_no(h), "Comuna": h["comuna"] if h else "", "Núcleo": h["nucleo"] if h else "",
             "Dirección": (h or {}).get("dir") or (c["Dirección"] if isinstance(c["Dirección"], str) else ""),
             "Teléfono fijo": (h or {}).get("tel") or " - ".join(fijos(c["Teléfono"])),
             "Correo institucional": (h or {}).get("correo") or " ".join(correos_inst(c["Correo electrónico"])),
+            "Jornadas": ", ".join(jor),
+            "Fin de semana": si_no("Fin de semana" in jor),
             "Ciclos CLEI": clei_txt(gr),
         }
         for g in range(21, 27):
-            fila[f"CLEI {g - 20}"] = si_no(g in gr)
-        fila.update({
-            "Modelo para adultos": ", ".join(mod_adultos.get(k, [])),
-            "Jornadas": ", ".join(jor),
-            "Fin de semana": si_no("Fin de semana" in jor),
-            "Sedes con CLEI y fin de semana": len(sedes_fs),
-            "Cuáles sedes (CLEI y fin de semana)": ", ".join(sedes_fs),
+            f[f"CLEI {g - 20}"] = si_no(g in gr)
+        f.update({
+            "Sedes con CLEI y fin de semana": len(s_fs), "Cuáles sedes (CLEI y fin de semana)": ", ".join(s_fs),
+            "N.º modelos flexibles": len(mf),
+            "Modelos para niños y jóvenes": ", ".join(m for m in mf if pobl.get(m) == "Niños y jóvenes"),
+            "Modelos para adultos": ", ".join(m for m in mf if pobl.get(m) == "Adultos"),
             "Educación para adultos": si_no(c["Atiende adultos"] == "Sí"),
-            "Atiende discapacidad": si_no(disc),
-            "Tipos de discapacidad": ", ".join(disc),
+            "Atiende discapacidad": si_no(disc), "Tipos de discapacidad": ", ".join(disc),
             "Talentos excepcionales": si_no(split_list(c["Capacidades excepcionales"])),
-            "Sede en zona rural": si_no(rural),
-            "Sedes activas": int(c["Sedes activas"]),
+            "Sede en zona rural": si_no(rural), "Sedes activas": int(c["Sedes activas"]),
         })
-        filas.append(fila)
-    df = pd.DataFrame(filas).sort_values(["Fin de semana", "Institución"], ascending=[False, True])
-    en = df[df["En el buscador"] == "Sí"].drop(columns=["En el buscador"])
-    fuera = df[df["En el buscador"] == "No"].drop(columns=["En el buscador", "Comuna", "Núcleo"])
-    df_sedes = pd.DataFrame(filas_sede)
-    df_sedes = df_sedes[df_sedes["DANE institución"].isin(df["DANE institución"])]
+        for m in modelos:
+            f[m] = si_no(m in mf)
+        f["_clei"], f["_mf"] = bool(cleis(gr)), bool(mf)
+        filas.append(f)
 
-    def resumen(d, nombre):
-        n = len(d)
-        pct = lambda x: f"{x * 100 / n:.0f}%" if n else ""
-        r = [{"Grupo": nombre, "Indicador": "Instituciones con CLEI", "Instituciones": n, "%": "100%"}]
-        for col in ("Fin de semana", "Educación para adultos", "Atiende discapacidad", "Talentos excepcionales", "Sede en zona rural"):
-            k = int((d[col] == "Sí").sum())
-            r.append({"Grupo": nombre, "Indicador": col, "Instituciones": k, "%": pct(k)})
-        k = int((d["Sedes con CLEI y fin de semana"] > 0).sum())
-        r.append({"Grupo": nombre, "Indicador": "CLEI y fin de semana en la misma sede", "Instituciones": k, "%": pct(k)})
+    todo = pd.DataFrame(filas).sort_values(["En el buscador", "Institución"], ascending=[False, True])
+    base = [c for c in todo.columns if c not in modelos and not c.startswith("_")]
+    sin = lambda d, cols: d.drop(columns=[c for c in cols if c in d.columns])
+    clei = todo[todo["_clei"]]
+    flex = todo[todo["_mf"]]
+
+    # Hojas de CLEI
+    cols_clei = base
+    clei_en = sin(clei[clei["En el buscador"] == "Sí"][cols_clei], ["En el buscador"])
+    clei_fu = sin(clei[clei["En el buscador"] == "No"][cols_clei], ["En el buscador", "Comuna", "Núcleo"])
+    # Modelos: todas las instituciones (buscador y base SINEB) en una sola hoja
+    ies_clei = clei[cols_clei]
+    ies_flex = flex[[c for c in base if not c.startswith("Sedes con") and not c.startswith("Cuáles")] + modelos]
+
+    # Resumen
+    def bloque(d, tema):
+        r = []
+        for grupo, dd in (("En el buscador", d[d["En el buscador"] == "Sí"]), ("Fuera del buscador (base SINEB)", d[d["En el buscador"] == "No"])):
+            n = len(dd)
+            pct = lambda x: f"{x * 100 / n:.0f}%" if n else ""
+            r.append({"Tema": tema, "Grupo": grupo, "Indicador": "Instituciones", "Instituciones": n, "%": "100%" if n else ""})
+            for col in ("Fin de semana", "Educación para adultos", "Atiende discapacidad", "Talentos excepcionales", "Sede en zona rural"):
+                v = int((dd[col] == "Sí").sum())
+                r.append({"Tema": tema, "Grupo": grupo, "Indicador": col, "Instituciones": v, "%": pct(v)})
+            v = int((dd["N.º modelos flexibles"] > 0).sum())
+            r.append({"Tema": tema, "Grupo": grupo, "Indicador": "Con algún modelo flexible", "Instituciones": v, "%": pct(v)})
+            v = int(dd["_clei"].sum())
+            r.append({"Tema": tema, "Grupo": grupo, "Indicador": "Con CLEI", "Instituciones": v, "%": pct(v)})
         return r
-    res = pd.DataFrame(resumen(en, "En el buscador") + resumen(fuera, "Fuera del buscador (base SINEB)"))
-    cruce = (en.assign(**{"Total": 1})
+    res = pd.DataFrame(bloque(clei, "CLEI") + bloque(flex, "Modelos flexibles"))
+    res = res[~((res["Tema"] == "CLEI") & (res["Indicador"] == "Con CLEI"))
+              & ~((res["Tema"] == "Modelos flexibles") & (res["Indicador"] == "Con algún modelo flexible"))]
+    mod_res = pd.DataFrame([{
+        "Modelo flexible": m, "Población": pobl[m],
+        "Instituciones en el buscador": int(((todo[m] == "Sí") & (todo["En el buscador"] == "Sí")).sum()),
+        "Instituciones fuera del buscador": int(((todo[m] == "Sí") & (todo["En el buscador"] == "No")).sum()),
+        "Con CLEI": int(((todo[m] == "Sí") & todo["_clei"]).sum()),
+    } for m in modelos])
+    en = clei_en
+    cruce = (en.assign(Total=1)
              .pivot_table(index="Fin de semana", values=["Total", "Educación para adultos", "Atiende discapacidad", "Talentos excepcionales", "Sede en zona rural"],
                           aggfunc=lambda v: int(((v == "Sí") | (v == 1)).sum()))
              .reindex(columns=["Total", "Educación para adultos", "Atiende discapacidad", "Talentos excepcionales", "Sede en zona rural"])
              .reset_index().rename(columns={"Fin de semana": "¿Tiene fin de semana?"}))
     notas = pd.DataFrame({"Notas": [
-        "Instituciones con CLEI activo (Ciclos Lectivos Especiales Integrados: educación formal de jóvenes y adultos).",
+        "Oferta para jóvenes y adultos: instituciones con CLEI y con modelos educativos flexibles.",
         "Fuente: SINEB – MinEducación (Buscando Colegio), consulta 2026-10-16; comuna, núcleo y contacto del buscador.",
+        "Hojas 'IES …': todas las instituciones del tema, del buscador y de la base SINEB (columna 'En el buscador').",
         "CLEI 1 = 1° a 3°, CLEI 2 = 4° y 5°, CLEI 3 = 6° y 7°, CLEI 4 = 8° y 9°, CLEI 5 = 10°, CLEI 6 = 11°.",
-        "Las filas en amarillo tienen jornada de FIN DE SEMANA. 'CLEI y fin de semana en la misma sede' confirma que ambas se ofrecen en la misma sede.",
-        "Atención e inclusión: Educación para adultos, Atiende discapacidad, Talentos excepcionales y Sede en zona rural (columnas Sí/No).",
-        "La jornada nocturna no se incluye, por decisión del proyecto.",
+        "Filas en amarillo: jornada de FIN DE SEMANA.",
+        "'Sedes con CLEI y fin de semana' confirma que ambos se ofrecen en la misma sede.",
+        "En 'IES Modelos flexibles' cada modelo tiene su columna (Sí/No); 'Modelos flexibles' resume cada modelo.",
         "Privacidad: solo teléfonos fijos y correos institucionales; sin nombres de rectores.",
         "La base no indica qué grado se dicta en qué jornada: confirme con la institución.",
     ]})
     path = OUT / "instituciones_clei.xlsx"
-    write_xlsx(path, {"Leeme": notas, "Resumen": res, "Fin de semana x inclusión": cruce,
-                      "CLEI en el buscador": en, "CLEI fuera del buscador": fuera, "Sedes": df_sedes})
-    resaltar_fin_de_semana(path, ["CLEI en el buscador", "CLEI fuera del buscador", "Sedes"])
-    print(f"datos/instituciones_clei.xlsx: {len(en)} en el buscador + {len(fuera)} fuera; "
-          f"fin de semana {int((en['Fin de semana'] == 'Sí').sum())}/{len(en)}")
+    hojas = {"Leeme": notas, "Resumen": res, "Fin de semana x inclusión": cruce,
+             "IES CLEI": ies_clei, "CLEI en el buscador": clei_en, "CLEI fuera del buscador": clei_fu,
+             "IES Modelos flexibles": ies_flex, "Modelos flexibles": mod_res}
+    write_xlsx(path, hojas)
+    resaltar(path, ["IES CLEI", "CLEI en el buscador", "CLEI fuera del buscador", "IES Modelos flexibles"])
+    print(f"datos/instituciones_clei.xlsx: CLEI {len(clei)} · modelos flexibles {len(flex)} "
+          f"({len(modelos)} modelos)")
 
 
-def resaltar_fin_de_semana(path, hojas):
-    """Pinta en amarillo institucional las filas con jornada de fin de semana."""
+def resaltar(path, hojas):
+    """Filas con fin de semana en amarillo institucional."""
     from openpyxl import load_workbook
     wb = load_workbook(path)
     amarillo = PatternFill("solid", fgColor="FFF4B8")
     for h in hojas:
         ws = wb[h]
         cab = [c.value for c in ws[1]]
-        col = cab.index("Fin de semana") + 1
+        fs = cab.index("Fin de semana")
         for fila in ws.iter_rows(min_row=2):
-            if fila[col - 1].value == "Sí":
+            if fila[fs].value == "Sí":
                 for c in fila:
                     c.fill = amarillo
     wb.save(path)
 
 
 def sanear_fuente():
-    """Reescribe la fuente sin datos personales (todas las hojas), conservando la estructura."""
+    """Reescribe la fuente sin datos personales ni jornada nocturna (todas las hojas), conservando la estructura."""
     xl = pd.ExcelFile(SRC)
     hojas = {n: (xl.parse(n) if n == "Leeme" else sanear_df(xl.parse(n))) for n in xl.sheet_names}
     write_xlsx(SRC, hojas)
