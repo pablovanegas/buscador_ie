@@ -830,7 +830,7 @@ var MODS=[
   {k:'P1',l:'Pensar 1',full:'Pensar · nivel 1',niv:'6° y 7°',kb:'mf-pensar'},
   {k:'P2',l:'Pensar 2',full:'Pensar · nivel 2',niv:'8° y 9°',kb:'mf-pensar'},
   {k:'P3',l:'Pensar 3',full:'Pensar · nivel 3',niv:'10° y 11°',kb:'mf-pensar'}];
-var MIX={k:'MIX',l:'Aceleración + Brújula',full:'Grupo mixto de Aceleración y Brújula',niv:'Primaria (1° a 5°)',kb:'mf-datos'};
+var MIX={k:'MIX',l:'Aceleración + Brújula',full:'Grupo mixto de Aceleración y Brújula',niv:'Primaria (1° a 5°)',kb:'mf-guia'};
 var MODK={};MODS.concat([MIX]).forEach(function(m){MODK[m.k]=m;});
 var MF_SEL=[['*','Con algún modelo flexible'],['BRU','Brújula'],['ACE','Aceleración'],['PEN','Pensar (los 3 niveles)'],['P1','Pensar 1'],['P2','Pensar 2'],['P3','Pensar 3']];
 var MF_JORS=['Mañana','Tarde','Única','Completa'];
@@ -1418,7 +1418,7 @@ function buildOferta(ie){
   b.appendChild(s2);
   b.appendChild(buildAdultos(ie));
   /* Modelos flexibles: la información operativa está en la pestaña «Modelos flexibles» */
-  var s3=mkSec('Otros modelos registrados en SINEB','mf-datos');
+  var s3=mkSec('Otros modelos registrados en SINEB');
   s3.insertAdjacentHTML('beforeend','<p class="mini-note" style="margin-bottom:8px">Lo que registra la base del Ministerio de Educación; puede incluir modelos distintos de los de 2026.</p>');
   if((s.mf||[]).length){
     var ad=s.mfad||[];
@@ -1445,7 +1445,6 @@ function buildOferta(ie){
 }
 
 /* Une los dos datos de SINEB: modelo para adultos (cómo se enseña) y ciclos CLEI (qué grados) */
-var CLEI_HELP='<button class="kb-link" data-kb="adultos-clei">¿Qué diferencia hay entre educación para adultos y CLEI? Ver en la guía</button>';
 function buildAdultos(ie){
   var s=ie.s,sec=mkSec('Educación de jóvenes y adultos','clei');
   var cl=(s.gr||[]).filter(isCLEI),md=s.mfad||[];
@@ -1463,7 +1462,7 @@ function buildAdultos(ie){
       +'<div class="ead-box"><h5>Ciclos CLEI</h5><p class="q">¿Qué grados puede cursar un adulto?</p><div class="clei-row">'+cells+'</div></div>'
       +'<div class="ead-box"><h5>Modelo para adultos</h5><p class="q">¿Con qué metodología se enseña?</p><div class="tags">'
         +(md.length?md.map(function(m){return '<span class="tag">'+H(m)+'</span>';}).join(''):'<span class="mini-note">Ninguno registrado</span>')+'</div></div>'
-    +'</div>'+CLEI_HELP+'</div>');
+    +'</div></div>');
   return sec;
 }
 
@@ -1624,20 +1623,11 @@ function kbArticles(){
     +'<p>Quien termina <b>Pensar 3</b> se gradúa de bachiller. En el filtro de modelo puedes elegir un nivel o «Pensar (los 3 niveles)».</p>'+cifra('PEN'),
     [['Pensar (cualquier nivel)',{mf:'PEN'}],['Pensar 1',{mf:'P1'}],['Pensar 2',{mf:'P2'}],['Pensar 3',{mf:'P3'}]]);
   add('mf-jornadas','Modelos flexibles','Modelos flexibles por jornada',
-    '<p>Cada grupo funciona en una jornada: <b>Mañana</b>, <b>Tarde</b>, <b>Única</b> (jornada extendida de un solo turno) o <b>Completa</b>. Al filtrar por jornada se muestran las instituciones con <b>al menos un grupo del modelo elegido en esa jornada</b>.</p>'
+    '<p>Cada grupo funciona en una jornada: <b>Mañana</b>, <b>Tarde</b>, <b>Única</b> o <b>Completa</b>, tal como la registra el archivo. Al filtrar por jornada se muestran las instituciones con <b>al menos un grupo del modelo elegido en esa jornada</b>.</p>'
     +'<table><tr><th>Jornada</th>'+MODS.map(function(m){return '<th>'+m.l+'</th>';}).join('')+'</tr>'
     +MF_JORS.map(function(j){return '<tr><td>'+j+'</td>'+MODS.map(function(m){var e=0;DATA.forEach(function(ie){ie._g.forEach(function(x){if(x.j===j&&modMatch(x.m,m.k))e+=x.e;});});return '<td>'+(e?fmtN(e):'–')+'</td>';}).join('')+'</tr>';}).join('')+'</table>'
     +'<p class="mini-note">Estudiantes por jornada y modelo.</p>',
     MF_JORS.map(function(j){return [j,{jor:j}];}));
-  add('mf-datos','Sobre los datos','Sobre el archivo de modelos flexibles',
-    '<p>Fuente: <b>'+H(MF_META.fuente)+'</b> de la Secretaría de Educación de Medellín. Trae una fila por grupo: institución, sede, comuna, jornada, modelo y número de estudiantes. En total: <b>'+MF_META.instituciones+' instituciones</b>, <b>'+fmtN(MF_META.grupos)+' grupos</b> y <b>'+fmtN(MF_META.estudiantes)+' estudiantes</b>.</p><ul>'
-    +'<li><b>Instituciones sin ubicación</b>: '+MF_EXTRA.length+' instituciones del archivo no estaban en el buscador ('+MF_EXTRA.map(function(d){return H(tc(d.nombre));}).join(', ')+'). Se agregaron con los datos de SINEB, pero no tienen coordenadas y no aparecen en el mapa.</li>'
-    +'<li><b>Grupo mixto</b>: un grupo figura como «Aceleración + Brújula» (16 estudiantes). Se cuenta en los dos modelos al filtrar, pero una sola vez en los totales.</li>'
-    +'<li><b>Hoja de resumen</b>: la hoja «Cantidad de estudiantes» del archivo suma 11.548 estudiantes en 416 grupos; el detalle por grupo suma '+fmtN(MF_META.estudiantes)+' en '+MF_META.grupos+'. El buscador usa el detalle.</li>'
-    +'<li><b>Comuna</b>: en 4 instituciones alguna sede figura en una comuna distinta a la de la institución. Los filtros y gráficos usan la comuna de la institución; la ficha muestra la sede.</li>'
-    +'<li>Se quitaron las filas de «Total general» y se unificaron nombres escritos de forma distinta (por ejemplo, «BRUJULA» con espacio final).</li></ul>',
-    [],'Si un dato del archivo no coincide con lo que reporta la institución, prevalece la institución: confírmalo antes de remitir a un estudiante.');
-  /* Jornadas */
   add('jornadas','La institución','Jornadas de la institución (SINEB)',
     '<p>En la pestaña «Oferta» la ficha muestra todas las jornadas escolares que la institución registra en SINEB, no solo las de los modelos flexibles. Para la jornada de cada grupo de modelo flexible, mira la pestaña «Modelos flexibles» o el artículo <a href="#kb-mf-jornadas" data-kb="mf-jornadas">Modelos flexibles por jornada</a>.</p>');
   /* Niveles */
@@ -1653,15 +1643,6 @@ function kbArticles(){
     '<p><b>CLEI</b> significa <i>Ciclos Lectivos Especiales Integrados</i>. Es la forma en que se organiza la educación formal de jóvenes y adultos: los grados se agrupan en ciclos en lugar de cursarse uno por año. Están regulados por el Decreto 3011 de 1997 (hoy en el Decreto 1075 de 2015).</p>'
     +'<table><tr><th>Ciclo</th><th>Equivale a</th></tr><tr><td>CLEI 1</td><td>1° a 3°</td></tr><tr><td>CLEI 2</td><td>4° y 5°</td></tr><tr><td>CLEI 3</td><td>6° y 7°</td></tr><tr><td>CLEI 4</td><td>8° y 9°</td></tr><tr><td>CLEI 5</td><td>10°</td></tr><tr><td>CLEI 6</td><td>11°</td></tr></table>',
     [['Cualquier ciclo CLEI',{gr:'clei'}]].concat([21,22,23,24,25,26].map(function(g){return [grLbl(g),{gr:String(g)}];})));
-  add('adultos-clei','Referencia','Educación para adultos y CLEI: ¿cuál es la diferencia?',
-    '<p>Son dos datos distintos que la base oficial registra por separado:</p>'
-    +'<table><tr><th></th><th>Educación para adultos</th><th>CLEI</th></tr>'
-    +'<tr><td><b>Qué indica</b></td><td>Que la institución usa un <b>modelo educativo</b> dirigido a adultos</td><td>Qué <b>grados</b> ofrece para jóvenes y adultos, agrupados en ciclos</td></tr>'
-    +'<tr><td><b>Responde a</b></td><td>¿Con qué metodología se enseña?</td><td>¿Qué grados puede cursar un adulto?</td></tr>'
-    +'<tr><td><b>Ejemplo</b></td><td>Programa para Jóvenes en Extraedad y Adultos</td><td>CLEI 3 a 6 (6° a 11°)</td></tr></table>'
-    +'<p>Normalmente van juntos. <b>Para saber si un adulto puede terminar un grado en una institución, fíjate en los ciclos CLEI.</b> En la ficha, la sección «Educación de jóvenes y adultos» une los dos datos y avisa cuando falta uno.</p>',
-    [['Con ciclos CLEI',{gr:'clei'}]],
-    'En unas pocas instituciones los dos datos no coinciden: registran ciclos CLEI sin modelo para adultos, o al revés. Probablemente son vacíos del registro; conviene confirmarlo con la institución.');
   add('normal','Referencia','Normal superior (formación complementaria)',
     '<p>Las escuelas normales superiores ofrecen, después del grado 11°, el <b>Programa de Formación Complementaria</b> (grados 12° y 13°, por semestres), que forma docentes para preescolar y básica primaria.</p>',
     [['Con formación complementaria',{gr:'pfc'}]]);
@@ -1693,7 +1674,7 @@ function kbArticles(){
     []);
   /* Datos */
   add('fuentes','Sobre los datos','Fuentes y actualización',
-    '<ul><li><b>Modelos flexibles 2026</b> (Secretaría de Educación de Medellín): grupos, jornadas y estudiantes de cada institución con modelos flexibles. Ver <a href="#kb-mf-datos" data-kb="mf-datos">Sobre el archivo de modelos flexibles</a>.</li>'
+    '<ul><li><b>Modelos flexibles 2026</b> (Secretaría de Educación de Medellín): grupos, jornadas y estudiantes de cada institución con modelos flexibles.</li>'
     +'<li><b>Datos del buscador</b>: contacto, ubicación en el mapa y servicios (transporte, media técnica, jornada complementaria y PAE) de las instituciones oficiales.</li>'
     +'<li><b>SINEB – Ministerio de Educación</b> («Buscando Colegio»), consulta del '+(typeof SINEB_META!=='undefined'?SINEB_META.fecha:'')+': jornadas, grados, modelos, inclusión, perfil y sedes. Cada institución se cruza por su código DANE.</li></ul>');
   add('privacidad','Sobre los datos','Privacidad y datos de contacto',
@@ -1705,7 +1686,7 @@ function kbArticles(){
   add('aclaraciones','Sobre los datos','Aclaraciones y limitaciones',
     '<ul><li><b>Dos fuentes</b>: los modelos flexibles salen del archivo 2026 de la Secretaría; la pestaña «Oferta» sale de SINEB y puede listar otros modelos o jornadas que la institución registra allí.</li>'
     +'<li><b>Datos de contacto</b>: en muchas instituciones el teléfono o el correo de SINEB difieren de los del buscador. La ficha muestra los del buscador y, aparte, «Otros contactos institucionales registrados en SINEB».</li>'
-    +'<li><b>Adultos y CLEI</b>: en unas pocas instituciones el modelo para adultos y los ciclos CLEI no coinciden (ver el artículo sobre la diferencia).</li>'
+    +'<li><b>Adultos y CLEI</b>: en unas pocas instituciones el modelo para adultos y los ciclos CLEI no coinciden. Conviene confirmarlo con la institución.</li>'
     +'<li><b>Sedes sin coordenadas</b>: solo la sede principal está en el mapa.</li>'
     +'<li><b>Datos no publicados</b>: tarifas, resultados ICFES, computadores, internet y estrato vienen vacíos para las instituciones oficiales y no se muestran.</li></ul>',
     [],'Ante cualquier diferencia, la institución es la fuente más actualizada: confirma por teléfono o correo antes de hacer un trámite.');
