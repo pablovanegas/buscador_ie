@@ -1069,7 +1069,7 @@ function renderCards(lista){
       +'<div class="cbody">'
       +'<div class="ctop"><span class="ccom" title="'+H(ie.comuna)+'">'+H(com||'Sin comuna')+'</span><span class="cdane">Núcleo '+H(ie.nucleo)+dist+'</span></div>'
       +'<button class="cname" data-open="'+H(ie.dane)+'">'+H(tc(ie.nombre))+'</button>'
-      +(ie.privada?'<div><span class="badge-priv">Institución privada · sin ubicación en el mapa</span></div>':'')
+      +(ie.privada?'<div><span class="badge-priv">Institución privada</span></div>':'')
       +mfBox(ie)
       +'<div class="svc-row">'+svBadges(ie)+'</div>'
       +'<div class="cinfo">'
@@ -1217,7 +1217,7 @@ function renderMap(lista,keepView){
     var m=L.marker([ie.lat,ie.lon],{icon:pinIcon(ie,isSel),zIndexOffset:isSel?1000:0,title:tc(ie.nombre),riseOnHover:true}).bindPopup(popHtml(ie),{maxWidth:280,closeButton:true,autoPanPaddingTopLeft:[60,70],autoPanPaddingBottomRight:[20,60]});
     MK[ie.dane]=m;ML.addLayer(m);
   });
-  var sinU=lista.length-bnds.length;$('map-cnt').innerHTML='<b>'+bnds.length+'</b> IEs en el mapa'+(sinU?' · '+sinU+' sin ubicación':'');
+  $('map-cnt').innerHTML='<b>'+bnds.length+'</b> IEs en el mapa';
   drawLegend();
   LASTB=bnds;
   if(!keepView)fitAll();

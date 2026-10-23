@@ -22,7 +22,7 @@ Los tres enlaces también están en la parte superior del buscador.
 2. **Filtra** debajo de la caja de búsqueda por comuna o corregimiento, núcleo educativo, modelo flexible (menú desplegable, con «Con algún modelo flexible») y jornada. El panel lateral suma grado, tipo y especialidad y servicios.
 3. **Elige la vista**:
    - **Tarjetas**: resumen de cada institución; las que tienen modelos flexibles muestran cuáles ofrecen y en qué jornadas.
-   - **Mapa**: ubicación de la sede principal. 4 instituciones privadas no tienen coordenadas.
+   - **Mapa**: ubicación de la sede principal de cada institución.
    - **Guía**: qué es cada modelo y cómo leer los datos.
 4. **Ficha**: abre el detalle de la institución: contacto, oferta educativa (modelos flexibles con sus jornadas y sedes, jornadas y grados regulares), sedes y servicios.
 5. **Busca tu cupo**: el botón amarillo está en cada tarjeta, ficha y punto del mapa.
