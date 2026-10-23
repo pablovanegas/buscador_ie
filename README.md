@@ -4,7 +4,7 @@ Buscador de instituciones educativas de la Secretaría de Educación de Medellí
 
 ### 👉 [Abrir el buscador](https://pablovanegas.github.io/buscador_ie/)
 
-**234 instituciones** · de ellas, **104 con modelos flexibles 2026**
+**230 instituciones oficiales** · de ellas, **100 con modelos flexibles 2026**
 
 ## Enlaces útiles
 
@@ -22,7 +22,7 @@ Los tres enlaces también están en la parte superior del buscador.
 2. **Filtra** debajo de la caja de búsqueda por comuna o corregimiento, núcleo educativo, modelo flexible (menú desplegable, con «Con algún modelo flexible») y jornada. El panel lateral suma grado, tipo y especialidad y servicios.
 3. **Elige la vista**:
    - **Tarjetas**: resumen de cada institución; las que tienen modelos flexibles muestran cuáles ofrecen y en qué jornadas.
-   - **Mapa**: ubicación de la sede principal. 4 instituciones privadas no tienen coordenadas.
+   - **Mapa**: ubicación de la sede principal de cada institución.
    - **Guía**: qué es cada modelo y cómo leer los datos.
 4. **Ficha**: abre el detalle de la institución: contacto, oferta educativa (modelos flexibles con sus jornadas y sedes, jornadas y grados regulares), sedes y servicios.
 5. **Busca tu cupo**: el botón amarillo está en cada tarjeta, ficha y punto del mapa.
@@ -42,8 +42,9 @@ Son para estudiantes en **extraedad** (dos o más años por encima de la edad de
 ## Datos
 
 - **Datos del buscador**: contacto, ubicación y servicios de las instituciones.
-- **Modelos flexibles 2026**, Secretaría de Educación de Medellín: qué modelos ofrece cada una de las 104 instituciones, en qué sedes y jornadas.
+- **Modelos flexibles 2026**, Secretaría de Educación de Medellín: qué modelos ofrece cada una de las 100 instituciones oficiales, en qué sedes y jornadas.
 - **SINEB – MinEducación**: jornadas, grados, sedes e inclusión de cada institución.
+- Solo se publican **instituciones oficiales**: las privadas no aparecen.
 - Solo se publican **contactos institucionales**: no hay nombres de rectores, correos personales ni celulares.
 - No se publican la **jornada nocturna** (ni en la página ni en los Excel) ni la **jornada completa**, ni cifras de grupos o estudiantes.
 
