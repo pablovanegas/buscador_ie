@@ -229,13 +229,15 @@ def main():
     missing_html = [k for k in html_by_key if k not in cons_k.index]
     print(f"HTML: {len(data)} | SINEB: {len(cons)} | cruzan: {len(matched)} | HTML sin SINEB: {len(missing_html)}")
 
-    # Modelos flexibles 2026: instituciones del archivo que no están en el buscador (privadas) se agregan
-    # con los datos de SINEB, sin coordenadas.
+    # Modelos flexibles 2026: las instituciones OFICIALES del archivo que no están en el buscador se agregan
+    # con los datos de SINEB, sin coordenadas. Las privadas (NO OFICIAL) no se publican.
     mf12 = cargar_modelos_flexibles(cons) if SRC_MF.exists() else {}
     comuna_lbl = {r["comuna"].split(" - ")[0]: r["comuna"] for r in data if r.get("comuna")}
     extras, dkey = [], {k: html_by_key[k]["dane"] for k in matched}
     for k in sorted(set(mf12) - set(html_by_key)):
         c = cons_k.loc[k]
+        if c["Sector"] != "OFICIAL":
+            continue
         num = str(mf12[k][0][1])
         dkey[k] = k + "01"
         extras.append({
@@ -244,7 +246,7 @@ def main():
             "dir": c["Dirección"] if isinstance(c["Dirección"], str) else "", "barrio": "",
             "comuna": comuna_lbl.get(num, num), "rector": None,
             "trans": False, "trans_t": "", "mt": False, "jc": False, "pae": False, "prg_mt": [], "prg_jc": [],
-            "lat": None, "lon": None, "privada": c["Sector"] == "NO OFICIAL",
+            "lat": None, "lon": None,
         })
         extras[-1].pop("rector")
 
@@ -302,7 +304,7 @@ def main():
     lines = [l for l in lines if not l.startswith(("var SINEB=", "var SINEB_META=", "var MF=", "var MF_EXTRA=", "var MF_META="))]
     i = next(n for n, l in enumerate(lines) if l.startswith("var DATA="))
     lines[i] = "var DATA=" + json.dumps(data, ensure_ascii=False) + ";"
-    mf = {dkey[k]: v for k, v in mf12.items()}
+    mf = {dkey[k]: v for k, v in mf12.items() if k in dkey}
     mf_meta = {"fuente": "Secretaría de Educación de Medellín – IE con modelos flexibles 2026 (V2)", "instituciones": len(mf)}
     lines[i + 1:i + 1] = [line, meta_line,
                           "var MF=" + json.dumps(mf, ensure_ascii=False, separators=(",", ":")) + ";",

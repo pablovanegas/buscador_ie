@@ -27,10 +27,10 @@
 
 ## Modelos flexibles 2026 (página)
 
-La página muestra todas las instituciones (230 del buscador más 4 privadas que solo están en este archivo) y permite filtrar las 104 que ofrecen modelos flexibles 2026. La página no publica cifras de grupos ni de estudiantes. El script lee el archivo así:
+La página muestra las 230 instituciones oficiales del buscador y permite filtrar las 100 que ofrecen modelos flexibles 2026. La página no publica cifras de grupos ni de estudiantes. El script lee el archivo así:
 
 1. Toma las hojas de Brújula/Aceleración y de Pensar, quita las filas de «Total general» y normaliza el modelo (`BRUJULA ` con espacio final, `AA./BRUJ` = grupo mixto Aceleración + Brújula).
-2. Cruza cada institución por nombre con el Consolidado de SINEB para obtener su DANE. Las 104 cruzan: 100 ya estaban en el buscador y 4 privadas no (se agregan en `MF_EXTRA` con datos de SINEB y sin coordenadas).
+2. Cruza cada institución por nombre con el Consolidado de SINEB para obtener su DANE. Las 104 cruzan: 100 son oficiales y ya estaban en el buscador; las otras 4 son privadas (no oficiales) y no se publican. Si el archivo trae una institución oficial que no esté en el buscador, se agrega en `MF_EXTRA` con datos de SINEB y sin coordenadas.
 3. Escribe en `index.html` las variables `MF` (por institución: sede, comuna, jornada y modelo, sin repetir y sin cifras), `MF_EXTRA` y `MF_META`. La jornada `COMPLETA` se deja vacía.
 
 

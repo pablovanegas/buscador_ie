@@ -4,7 +4,7 @@ Buscador de instituciones educativas de la Secretaría de Educación de Medellí
 
 ### 👉 [Abrir el buscador](https://pablovanegas.github.io/buscador_ie/)
 
-**234 instituciones** · de ellas, **104 con modelos flexibles 2026**
+**230 instituciones oficiales** · de ellas, **100 con modelos flexibles 2026**
 
 ## Enlaces útiles
 
@@ -42,8 +42,9 @@ Son para estudiantes en **extraedad** (dos o más años por encima de la edad de
 ## Datos
 
 - **Datos del buscador**: contacto, ubicación y servicios de las instituciones.
-- **Modelos flexibles 2026**, Secretaría de Educación de Medellín: qué modelos ofrece cada una de las 104 instituciones, en qué sedes y jornadas.
+- **Modelos flexibles 2026**, Secretaría de Educación de Medellín: qué modelos ofrece cada una de las 100 instituciones oficiales, en qué sedes y jornadas.
 - **SINEB – MinEducación**: jornadas, grados, sedes e inclusión de cada institución.
+- Solo se publican **instituciones oficiales**: las privadas no aparecen.
 - Solo se publican **contactos institucionales**: no hay nombres de rectores, correos personales ni celulares.
 - No se publican la **jornada nocturna** (ni en la página ni en los Excel) ni la **jornada completa**, ni cifras de grupos o estudiantes.
 
