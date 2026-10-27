@@ -43,7 +43,7 @@ Son para estudiantes en **extraedad** (dos o más años por encima de la edad de
 
 - **Datos del buscador**: contacto, ubicación y servicios de las instituciones.
 - **Modelos flexibles 2026**, Secretaría de Educación de Medellín: qué modelos ofrece cada una de las 100 instituciones oficiales, en qué sedes y jornadas.
-- **SINEB – MinEducación**: jornadas, grados, sedes e inclusión de cada institución.
+- **SINEB – MinEducación**: jornadas, grados y sedes de cada institución.
 - Solo se publican **instituciones oficiales**: las privadas no aparecen.
 - Solo se publican **contactos institucionales**: no hay nombres de rectores, correos personales ni celulares.
 - No se publican la **jornada nocturna** (ni en la página ni en los Excel) ni la **jornada completa**, ni cifras de grupos o estudiantes.
