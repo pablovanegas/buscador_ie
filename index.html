@@ -951,7 +951,7 @@ function init(){
 function fromHash(){
   var k=location.hash.match(/^#kb-([\w-]+)/);if(k){openKB(k[1],true);return;}
   var m=location.hash.match(/^#ie-(\d+)/);
-  if(m){var ie=byDane(m[1]);if(ie&&(!SEL||SEL.dane!==ie.dane))openM(ie,'mf',true);}
+  if(m){var ie=byDane(m[1]);if(ie&&(!SEL||SEL.dane!==ie.dane))openM(ie,null,true);}
   else if(SEL)closeM(true);
 }
 
@@ -1163,7 +1163,7 @@ function popHtml(ie){
     +'<div class="svc-row">'+svBadges(ie,true)+'</div>'
     +'<p>'+H(ie.dir||'')+'<br>'+H(phones(ie.tel)[0]||'Tel. N/D')+'</p>'
     +(ie.s.gr?'<p>'+(ie.s.jor?'<b>Jornadas:</b> '+H(ie.s.jor.join(', '))+'<br>':'')+'<b>Grados:</b> '+H(grSummary(ie.s.gr))+'</p>':'')
-    +'<button class="mpop-btn" data-open="'+H(ie.dane)+'" data-tab="'+(ie._g.length?'ofe':'info')+'">Ver ficha '+ico('arrow',13)+'</button>'+cupoA('mpop-cupo')+'</div>';
+    +'<button class="mpop-btn" data-open="'+H(ie.dane)+'">Ver ficha '+ico('arrow',13)+'</button>'+cupoA('mpop-cupo')+'</div>';
 }
 function mapBtn(title,icon,fn){
   var C=L.Control.extend({options:{position:'topleft'},onAdd:function(){
@@ -1245,7 +1245,7 @@ function locateMe(){
 /* ── MODAL ── */
 function openM(ie,tab,fromH){
   if(!SEL)LASTFOCUS=document.activeElement;
-  SEL=ie;ATAB=tab||(ie._g.length?'ofe':'info');
+  SEL=ie;ATAB=tab||'svc';
   $('m-nombre').textContent=tc(ie.nombre);
   $('m-meta').textContent='DANE '+ie.dane+(ie.nit?' · NIT '+ie.nit:'')+(ie.nucleo?' · Núcleo '+ie.nucleo:'');
   var tel=phones(ie.tel)[0],a='';
@@ -1514,7 +1514,7 @@ function kbArticles(){
     +'<li>Escribe en la <b>caja de búsqueda</b> el nombre de la institución, de la sede, el barrio o el código DANE.</li>'
     +'<li>Debajo de la caja de búsqueda filtra por <b>comuna o corregimiento</b>, <b>núcleo educativo</b>, <b>modelo flexible</b> y <b>jornada</b>. En el panel de filtros hay más: grado, tipo y especialidad y servicios.</li>'
     +'<li>Cambia de vista: <b>Tarjetas</b>, <b>Mapa</b> o esta <b>Guía</b>.</li></ol>'
-    +'<p>La <b>Ficha</b> de cada institución trae su información de contacto y su <b>oferta educativa</b>: los modelos flexibles (con sus jornadas y sedes), las jornadas y los grados regulares. Desde cada institución está el botón <b>Busca tu cupo</b>.</p>');
+    +'<p>La <b>Ficha</b> de cada institución se abre en <b>Servicios</b> y trae también su información de contacto y su <b>oferta educativa</b>: los modelos flexibles (con sus jornadas y sedes), las jornadas y los grados regulares. Desde cada institución está el botón <b>Busca tu cupo</b>.</p>');
   add('enlaces','Empezar','Enlaces útiles',
     '<p>Están en la parte superior de la página:</p><ul>'
     +'<li><a href="'+TUCUPO+'" target="_blank" rel="noopener"><b>Busca tu cupo</b></a> (Secretaría de Educación de Medellín): para solicitar o consultar un cupo escolar en una institución oficial de Medellín.</li>'

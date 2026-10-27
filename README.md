@@ -24,7 +24,7 @@ Los tres enlaces también están en la parte superior del buscador.
    - **Tarjetas**: resumen de cada institución; las que tienen modelos flexibles muestran cuáles ofrecen y en qué jornadas.
    - **Mapa**: ubicación de la sede principal de cada institución.
    - **Guía**: qué es cada modelo y cómo leer los datos.
-4. **Ficha**: abre el detalle de la institución: contacto, oferta educativa (modelos flexibles con sus jornadas y sedes, jornadas y grados regulares), sedes y servicios.
+4. **Ficha**: abre el detalle de la institución en la pestaña **Servicios**; también trae contacto, oferta educativa (modelos flexibles con sus jornadas y sedes, jornadas y grados regulares), sedes y servicios.
 5. **Busca tu cupo**: el botón amarillo está en cada tarjeta, ficha y punto del mapa.
 
 ### Los modelos
