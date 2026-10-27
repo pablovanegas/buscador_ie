@@ -24,7 +24,7 @@ Los tres enlaces también están en la parte superior del buscador.
    - **Tarjetas**: resumen de cada institución; las que tienen modelos flexibles muestran cuáles ofrecen y en qué jornadas.
    - **Mapa**: ubicación de la sede principal de cada institución.
    - **Guía**: qué es cada modelo y cómo leer los datos.
-4. **Ficha**: abre el detalle de la institución: contacto, oferta educativa (modelos flexibles con sus jornadas y sedes, jornadas y grados regulares), sedes y servicios.
+4. **Ficha**: abre el detalle de la institución en la pestaña **Servicios**; también trae contacto, oferta educativa (modelos flexibles con sus jornadas y sedes, jornadas y grados regulares), sedes y servicios.
 5. **Busca tu cupo**: el botón amarillo está en cada tarjeta, ficha y punto del mapa.
 
 ### Los modelos
@@ -43,7 +43,7 @@ Son para estudiantes en **extraedad** (dos o más años por encima de la edad de
 
 - **Datos del buscador**: contacto, ubicación y servicios de las instituciones.
 - **Modelos flexibles 2026**, Secretaría de Educación de Medellín: qué modelos ofrece cada una de las 100 instituciones oficiales, en qué sedes y jornadas.
-- **SINEB – MinEducación**: jornadas, grados, sedes e inclusión de cada institución.
+- **SINEB – MinEducación**: jornadas, grados y sedes de cada institución.
 - Solo se publican **instituciones oficiales**: las privadas no aparecen.
 - Solo se publican **contactos institucionales**: no hay nombres de rectores, correos personales ni celulares.
 - No se publican la **jornada nocturna** (ni en la página ni en los Excel) ni la **jornada completa**, ni cifras de grupos o estudiantes.

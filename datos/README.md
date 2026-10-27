@@ -14,10 +14,9 @@
 2. **Qué se agregó a cada institución** (variable `SINEB` en `index.html`):
    - jornadas escolares;
    - grados ofrecidos, incluidos los ciclos para adultos (CLEI), Aceleración del aprendizaje y la formación complementaria de la Normal;
-   - modelos educativos flexibles, separando los dirigidos a adultos (población «ADULTOS» de la hoja Modelos), y si atiende adultos;
-   - discapacidades atendidas, capacidades excepcionales, etnias e idiomas;
+   - si atiende adultos y su modelo para adultos (población «ADULTOS» de la hoja Modelos). Los demás modelos de SINEB y los datos de inclusión (discapacidades, capacidades excepcionales, etnias e idiomas) no se publican;
    - tipo, carácter, especialidad, género, zona y prestador del servicio;
-   - todas las sedes activas, con su dirección, teléfono fijo, jornadas, grados y modelos;
+   - todas las sedes activas, con su dirección, teléfono fijo, jornadas y grados;
    - teléfonos fijos y correos institucionales según SINEB.
 3. **Privacidad:** no se publica ningún dato personal, ni en la página ni en los Excel. Se eliminan los nombres de rectores, los correos que no son de un dominio institucional (`.gov.co` o `.edu.co`), los correos institucionales con el nombre de una persona (lista `CORREOS_PERSONALES` del script) y los números de celular. Solo quedan teléfonos fijos y correos institucionales.
 4. **Datos de contacto:** se conservan los datos de contacto del buscador. Cuando SINEB tiene otros, la ficha los muestra aparte, marcados como «según SINEB».

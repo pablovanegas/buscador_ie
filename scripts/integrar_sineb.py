@@ -170,10 +170,6 @@ def jornadas(v):
     return [lbl for k, lbl in JORNADAS if k in got]
 
 
-def modelos_flexibles(v):
-    return [tc(m) for m in split_list(v) if m.upper() != "EDUCACIÓN TRADICIONAL"]
-
-
 # ── carga ────────────────────────────────────────────────────────────
 def load_html_data():
     html = HTML.read_text(encoding="utf-8")
@@ -266,7 +262,6 @@ def main():
                 "e": tc(s["Estado sede"]),
                 "jor": jornadas(s["Jornadas"]),
                 "gr": grades(s["Grados (códigos)"]),
-                "mf": modelos_flexibles(s["Modelos flexibles"]),
             })
         esp = [tc(e) for e in split_list(c["Especialidad"]) if e not in ("OTRO", "NO APLICA")]
         rec = {
@@ -278,13 +273,8 @@ def main():
             "prest": "Concesión" if c["Prestador del servicio"] == "CONCESION" else "Oficial",
             "jor": [lbl for key, lbl in JORNADAS if f.get("JOR · " + key) == "Sí"],
             "gr": grades(c["Grados (códigos)"]),
-            "mf": modelos_flexibles(c["Modelos flexibles"]),
             "adu": c["Atiende adultos"] == "Sí",
             "mfad": mod_adultos.get(k, []),  # modelos flexibles dirigidos a adultos
-            "disc": [tc(d) for d in split_list(c["Discapacidades"])],
-            "cap": [tc(d) for d in split_list(c["Capacidades excepcionales"])],
-            "etn": [tc(d) for d in split_list(c["Etnias"])],
-            "idi": [tc(d) for d in split_list(c["Idiomas"])],
             "mail": correos_inst(c["Correo electrónico"]),
             "tel": fijos(c["Teléfono"]),
             "nsed": int(c["Sedes activas"]),
