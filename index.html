@@ -602,15 +602,13 @@ button.gbar:hover{background:var(--sur2);}
       <span class="sbl-lbl">Modelos flexibles 2026 <span class="src-tag">SE Medellín</span></span>
       <div class="field"><label for="f-mf">Modelo</label><select id="f-mf"><option value="">Todas las instituciones</option></select></div>
       <div class="field"><label>Jornada</label><div class="jchips" id="mjchips"></div></div>
-      <p class="hint-txt">Al combinar modelo y jornada quedan las instituciones que tienen ese modelo en esa jornada. <button class="kb-link" data-kb="mf-guia">¿Qué es cada modelo?</button></p>
     </div>
 
     <div class="sbl">
       <span class="sbl-lbl">Oferta educativa <span class="src-tag">SINEB</span></span>
       <div class="field"><label for="f-gr">Grado o programa</label><select id="f-gr"><option value="">Todos los grados</option></select></div>
       <details class="more-f">
-        <summary>Más filtros (tipo, especialidad, género)</summary>
-        <div class="field"><label for="f-tipo">Tipo</label><select id="f-tipo"><option value="">Todos</option><option value="IE">Institución educativa</option><option value="CE">Centro educativo</option></select></div>
+        <summary>Más filtros (especialidad, género)</summary>
         <div class="field"><label for="f-esp">Especialidad de la media</label><select id="f-esp"><option value="">Todas</option></select></div>
         <div class="field"><label for="f-gen">Población por género</label><select id="f-gen"><option value="">Todas</option></select></div>
       </details>
@@ -740,7 +738,7 @@ var MF_META={"fuente": "Secretaría de Educación de Medellín – IE con modelo
 </script>
 <script>
 var EMPTY_F={q:'',com:'',nuc:'',trans:false,mt:false,jc:false,pae:false,pmt:'',pjc:'',trt:'',
-  jor:'',gr:'',mf:'',clei:false,adu:false,rural:false,tipo:'',esp:'',gen:''};
+  jor:'',gr:'',mf:'',clei:false,adu:false,rural:false,esp:'',gen:''};
 var F=Object.assign({},EMPTY_F);
 var VIEW='cards',SORT='nombre',ME=null,MAP=null,ML=null,MINI=null,SEL=null,ATAB='info',PAGE=60,SHOWN=PAGE,LASTFOCUS=null;
 var SVC=[
@@ -904,7 +902,7 @@ function init(){
   $('mleg').innerHTML='';
   $('map-color').addEventListener('change',function(){MAPCOLOR=this.value;if(MAP)renderMap(filtrar(),true);});
 
-  [['f-com','com'],['f-gr','gr'],['f-nuc','nuc'],['f-pmt','pmt'],['f-pjc','pjc'],['f-tipo','tipo'],['f-esp','esp'],['f-gen','gen']].forEach(function(p){
+  [['f-com','com'],['f-gr','gr'],['f-nuc','nuc'],['f-pmt','pmt'],['f-pjc','pjc'],['f-esp','esp'],['f-gen','gen']].forEach(function(p){
     $(p[0]).addEventListener('change',function(){F[p[1]]=this.value;update();});
   });
   var runSearch=debounce(function(v){F.q=nq(v);update();},160);
@@ -965,9 +963,9 @@ function syncControls(){
   ['q-nuc','f-nuc'].forEach(function(id){Array.prototype.forEach.call($(id).options,function(o){o.hidden=!!(o.value&&F.com&&!DATA.some(function(ie){return ie.comuna===F.com&&ie.nucleo===o.value;}));});});
   $('q-jor').value=F.jor;$('q-mf').value=F.mf;$('q-com').value=F.com;$('q-nuc').value=F.nuc;$('f-mf').value=F.mf;$('f-gr').value=F.gr;
   [['q-jor',F.jor],['q-mf',F.mf],['q-com',F.com],['q-nuc',F.nuc],['f-mf',F.mf]].forEach(function(x){$(x[0]).classList.toggle('set',!!x[1]);});
-  var nq_=(F.jor?1:0)+(F.mf?1:0)+(F.com?1:0)+(F.nuc?1:0);$('fd-clear').disabled=!nq_;$('fd-n').textContent=nq_;$('fd-n').hidden=!nq_;$('f-tipo').value=F.tipo;$('f-esp').value=F.esp;$('f-gen').value=F.gen;
+  var nq_=(F.jor?1:0)+(F.mf?1:0)+(F.com?1:0)+(F.nuc?1:0);$('fd-clear').disabled=!nq_;$('fd-n').textContent=nq_;$('fd-n').hidden=!nq_;$('f-esp').value=F.esp;$('f-gen').value=F.gen;
   document.querySelectorAll('#mjchips .jchip').forEach(function(b){b.setAttribute('aria-pressed',F.jor===b.dataset.j?'true':'false');});
-  if(F.tipo||F.esp||F.gen)document.querySelector('details.more-f').open=true;
+  if(F.esp||F.gen)document.querySelector('details.more-f').open=true;
   var n=activeCount();$('fcount').textContent=n;$('fcount').hidden=!n;
 }
 function resetAll(){F=Object.assign({},EMPTY_F);$('srch').value='';$('srch-clr').classList.remove('show');update();}
@@ -991,7 +989,6 @@ function filtrar(){
     if(F.clei&&!ie._f.clei)return false;
     if(F.adu&&!s.adu)return false;
     if(F.rural&&!ie._rural)return false;
-    if(F.tipo&&s.tipo!==F.tipo)return false;
     if(F.esp&&(s.esp||[]).indexOf(F.esp)===-1)return false;
     if(F.gen&&s.gen!==F.gen)return false;
     return true;
@@ -1486,7 +1483,6 @@ function makeTags(){
   if(F.clei)ft('clei','Ciclos CLEI');
   if(F.adu)ft('adu','Adultos');
   if(F.rural)ft('rural','Zona rural');
-  if(F.tipo)ft('tipo',F.tipo==='CE'?'Centros educativos':'Instituciones educativas');
   if(F.esp)ft('esp','Especialidad: '+F.esp);
   if(F.gen)ft('gen',F.gen);
   w.innerHTML=h.join('');
@@ -1512,7 +1508,7 @@ function kbArticles(){
   add('como-buscar','Empezar','Cómo encontrar una institución',
     '<p>El buscador reúne todas las instituciones educativas e indica cuáles ofrecen <b>modelos flexibles</b> en 2026 (Brújula, Aceleración del Aprendizaje y Pensar 1, 2 y 3).</p><ol>'
     +'<li>Escribe en la <b>caja de búsqueda</b> el nombre de la institución, de la sede, el barrio o el código DANE.</li>'
-    +'<li>Debajo de la caja de búsqueda filtra por <b>comuna o corregimiento</b>, <b>núcleo educativo</b>, <b>modelo flexible</b> y <b>jornada</b>. En el panel de filtros hay más: grado, tipo y especialidad y servicios.</li>'
+    +'<li>Debajo de la caja de búsqueda filtra por <b>comuna o corregimiento</b>, <b>núcleo educativo</b>, <b>modelo flexible</b> y <b>jornada</b>. En el panel de filtros hay más: grado, especialidad y servicios.</li>'
     +'<li>Cambia de vista: <b>Tarjetas</b>, <b>Mapa</b> o esta <b>Guía</b>.</li></ol>'
     +'<p>La <b>Ficha</b> de cada institución se abre en <b>Servicios</b> y trae también su información de contacto y su <b>oferta educativa</b>: los modelos flexibles (con sus jornadas y sedes), las jornadas y los grados regulares. Desde cada institución está el botón <b>Busca tu cupo</b>.</p>');
   add('enlaces','Empezar','Enlaces útiles',
